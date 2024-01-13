@@ -1,0 +1,13 @@
+# IDE Settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/shelf
+.idea/**/contentModel.xml
+
+# Artifacts
+bin/
+obj/
