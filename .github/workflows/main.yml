@@ -70,6 +70,8 @@ jobs:
         source: ['nuget', 'github']
     env:
       PACKAGE_PATTERN: UnMango.CliWrap.FSharp.*.nupkg
+    permissions:
+      packages: write
     steps:
       - uses: actions/download-artifact@v4
         with:
