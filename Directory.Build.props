@@ -1,0 +1,25 @@
+<Project>
+	<PropertyGroup>
+		<Authors>UnstoppableMango</Authors>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<PackageProjectUrl>https://github.com/UnstoppableMango/CliWrap.FSharp</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/UnstoppableMango/CliWrap.FSharp</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<DebugType>portable</DebugType>
+		<IncludeSource>true</IncludeSource>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<LangVersion>preview</LangVersion>
+		<EnableCodeStyleInBuild>true</EnableCodeStyleInBuild>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<MinVerTagPrefix>v</MinVerTagPrefix>
+	</PropertyGroup>
+</Project>

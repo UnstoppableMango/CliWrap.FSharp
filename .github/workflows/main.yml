@@ -1,0 +1,102 @@
+name: Build, Test, and Publish
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+    tags: ['v*.*.*']
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: tree:0
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          
+      - name: Restore tools
+        if: github.event_name == 'pull_request'
+        run: dotnet tool restore
+
+      - name: Restore dependencies
+        run: dotnet restore --locked-mode
+          
+      - name: Build solution
+        run: dotnet build -c Release --no-restore
+          
+      - name: Run tests
+        if: github.event_name == 'pull_request'
+        run: dotnet test -c Release --collect:"XPlat Code Coverage" --no-build
+        
+      - name: Upload coverage reports to Codecov
+        if: github.event_name == 'pull_request'
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          
+      - name: Lint solution
+        if: github.event_name == 'pull_request'
+        run: dotnet fantomas --check src
+          
+      - name: Package library
+        if: github.event_name == 'push'
+        run: dotnet pack src/CliWrap.FSharp -c Release -o out --no-build
+        
+      - name: Upload artifact
+        id: upload
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget
+          path: out/*.nupkg
+          if-no-files-found: error
+          
+    outputs: 
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    needs: ['build']
+    strategy:
+      matrix:
+        source: ['nuget', 'github']
+    env:
+      PACKAGE_PATTERN: CliWrap.FSharp.*.nupkg
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nuget
+
+      - name: Publish to NuGet.org
+        if: matrix.source == 'nuget'
+        run: |
+          dotnet nuget push \
+            "out/$PACKAGE_PATTERN" \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --skip-duplicate
+
+      - name: Authenticate to GitHub Packages
+        if: matrix.source == 'github'
+        run: |
+          dotnet nuget add source \
+            --username ${{ github.repository_owner }} \
+            --password ${{ secrets.GITHUB_TOKEN }} \
+            --store-password-in-clear-text \
+            --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+
+      - name: Publish to GitHub Packages
+        if: matrix.source == 'github'
+        run: |
+          dotnet nuget push \
+            "out/$PACKAGE_PATTERN" \
+            --source ${{ matrix.source }} \
+            --skip-duplicate

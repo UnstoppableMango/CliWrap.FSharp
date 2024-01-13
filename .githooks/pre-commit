@@ -1,0 +1,3 @@
+#!/bin/sh
+git diff --cached --name-only --diff-filter=ACM -z | xargs -0 dotnet fantomas 
+git diff --cached --name-only --diff-filter=ACM -z | xargs -0 git add
