@@ -3,6 +3,7 @@ root = true
 [*]
 indent_style = tab
 insert_final_newline = true
+trim_trailing_whitespace = true
 charset = utf-8
 
 [*.fs]
@@ -11,3 +12,4 @@ fsharp_newline_before_multiline_computation_expression = false
 
 [*.yml]
 indent_style = space
+indent_size = 2
