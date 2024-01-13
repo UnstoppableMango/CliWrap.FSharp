@@ -3,6 +3,7 @@ module CommandBuilderTests
 open System.Collections.Generic
 open System.IO
 open System.Linq
+open System.Text
 open CliWrap
 open FsCheck
 open FsCheck.Xunit
@@ -49,3 +50,43 @@ let ``Should configure stdin`` (input: NonNull<string>) =
     result.StandardInputPipe.CopyToAsync(b).Wait()
 
     a.ToArray() = b.ToArray()
+
+
+[<Property>]
+let ``Should configure stdout`` () =
+    let a, b = StringBuilder(), StringBuilder()
+
+    let expected =
+        Command("echo")
+            .WithArguments([ "testing" ])
+            .WithStandardOutputPipe(PipeTarget.ToStringBuilder(a))
+
+    let result = command "echo" {
+        args [ "testing" ]
+        stdout (PipeTarget.ToStringBuilder(b))
+    }
+
+    expected.ExecuteAsync().Task.Wait()
+    result.ExecuteAsync().Task.Wait()
+    a.ToString() = b.ToString()
+
+
+[<Property>]
+let ``Should configure stderr`` () =
+    let a, b = StringBuilder(), StringBuilder()
+
+    let expected =
+        Command("echo")
+            .WithArguments([ "testing" ])
+            .WithValidation(CommandResultValidation.None)
+            .WithStandardErrorPipe(PipeTarget.ToStringBuilder(a))
+
+    let result = command "echo" {
+        args [ "testing" ]
+        stderr (PipeTarget.ToStringBuilder(b))
+    }
+
+    expected.ExecuteAsync().Task.Wait()
+    result.WithValidation(CommandResultValidation.None).ExecuteAsync().Task.Wait()
+
+    a.ToString() = b.ToString()
