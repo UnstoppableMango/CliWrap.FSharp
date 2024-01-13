@@ -69,7 +69,7 @@ jobs:
       matrix:
         source: ['nuget', 'github']
     env:
-      PACKAGE_PATTERN: CliWrap.FSharp.*.nupkg
+      PACKAGE_PATTERN: UnMango.CliWrap.FSharp.*.nupkg
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -78,8 +78,7 @@ jobs:
       - name: Publish to NuGet.org
         if: matrix.source == 'nuget'
         run: |
-          dotnet nuget push \
-            "out/$PACKAGE_PATTERN" \
+          dotnet nuget push "$PACKAGE_PATTERN" \
             --source https://api.nuget.org/v3/index.json \
             --api-key ${{ secrets.NUGET_API_KEY }} \
             --skip-duplicate
@@ -96,7 +95,6 @@ jobs:
       - name: Publish to GitHub Packages
         if: matrix.source == 'github'
         run: |
-          dotnet nuget push \
-            "out/$PACKAGE_PATTERN" \
+          dotnet nuget push "$PACKAGE_PATTERN" \
             --source ${{ matrix.source }} \
             --skip-duplicate
