@@ -7,6 +7,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/shelf
 .idea/**/contentModel.xml
+.idea/**/codeStyleConfig.xml
+.idea/**/discord.xml
 
 # Artifacts
 bin/
