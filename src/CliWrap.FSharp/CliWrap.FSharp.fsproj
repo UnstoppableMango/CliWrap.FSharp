@@ -8,10 +8,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="Types.fs" />
+		<Compile Include="Cli.fs" />
+		<Compile Include="Pipes.fs" />
+		<Compile Include="PipeBuilder.fs" />
 		<Compile Include="CommandBuilder.fs" />
 		<Compile Include="ExecBuilder.fs" />
-		<Compile Include="Cli.fs" />
 		<None Include="packages.lock.json" />
 	</ItemGroup>
 

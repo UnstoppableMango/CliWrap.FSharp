@@ -9,12 +9,12 @@ It attempts to mimic the builder pattern and `.With*` style methods.
 
 ```fsharp
 let main args =
-	let built = command "dotnet" {
+	let cmd = command "dotnet" {
 		args = [ "build" ]
 		workingDirectory = "~/src/CliWrap.FSharp"
 	}
 
-	built.ExecuteAsync()
+	cmd.ExecuteAsync()
 ```
 
 ```fsharp
@@ -23,9 +23,19 @@ let main args = async {
 		args = [ "build" ]
 		workingDirectory = "~/src/CliWrap.FSharp"
 	}
-	
+
 	result.ExitCode
 }
+```
+
+```fsharp
+let main args =
+	let cmd = pipeline {
+		"an inline string source"
+		Cli.wrap "echo"
+	}
+
+	cmd.ExecuteAsync()
 ```
 
 ## Idiomatic? This looks nothing like normal F# code!

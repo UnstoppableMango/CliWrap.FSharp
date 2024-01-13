@@ -1,52 +1,50 @@
 [<AutoOpen>]
 module UnMango.CliWrap.FSharp.CommandBuilder
 
-open System.Collections.Generic
 open System.ComponentModel
 open CliWrap
 
 type CommandBuilder(target: string) =
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    member _.Yield(_: unit) = Command(target)
+    member _.Yield(_: unit) = Cli.wrap target
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     member _.Run(command: Command) = command
 
     [<CustomOperation("env")>]
-    member _.Env(command: Command, env) =
-        command.WithEnvironmentVariables((dict env).AsReadOnly())
+    member _.Env(command: Command, env) = Cli.env env command
 
     [<CustomOperation("workingDirectory")>]
-    member _.WorkingDirectory(command: Command, directory) = command.WithWorkingDirectory(directory)
+    member _.WorkingDirectory(command: Command, directory) = Cli.workDir directory command
 
     [<CustomOperation("args")>]
-    member _.Args(command: Command, args: string) = command.WithArguments(args)
+    member _.Args(command: Command, args: string) = Cli.arg args command
 
     [<CustomOperation("args")>]
-    member _.Args(command: Command, args: string seq) = command.WithArguments(args)
+    member _.Args(command: Command, args: string seq) = Cli.args args command
 
     [<CustomOperation("stderr")>]
-    member _.StdErr(command: Command, pipe) = command.WithStandardErrorPipe(pipe)
+    member _.StdErr(command: Command, pipe) = Cli.stderr pipe command
 
     [<CustomOperation("stderr")>]
     member _.StdErr(command: Command, stream) =
-        PipeTarget.ToStream(stream) |> command.WithStandardErrorPipe
+        Cli.stderr (PipeTarget.ToStream(stream)) command
 
     [<CustomOperation("stdin")>]
-    member _.StdIn(command: Command, pipe) = command.WithStandardInputPipe(pipe)
+    member _.StdIn(command: Command, pipe) = Cli.stdin pipe command
 
     [<CustomOperation("stdin")>]
     member _.StdIn(command: Command, stream) =
-        PipeSource.FromStream(stream) |> command.WithStandardInputPipe
+        Cli.stdin (PipeSource.FromStream(stream)) command
 
     [<CustomOperation("stdout")>]
-    member _.StdOut(command: Command, pipe) = command.WithStandardOutputPipe(pipe)
+    member _.StdOut(command: Command, pipe) = Cli.stdout pipe command
 
     [<CustomOperation("stdout")>]
     member _.StdOut(command: Command, stream) =
-        PipeTarget.ToStream(stream) |> command.WithStandardOutputPipe
+        Cli.stdout (PipeTarget.ToStream(stream)) command
 
     [<CustomOperation("validation")>]
-    member _.Validation(command: Command, validation) = command.WithValidation(validation)
+    member _.Validation(command: Command, validation) = Cli.validation validation command
 
 let command target = CommandBuilder(target)
