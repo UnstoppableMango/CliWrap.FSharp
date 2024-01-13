@@ -11,3 +11,4 @@
 # Artifacts
 bin/
 obj/
+*.nupkg

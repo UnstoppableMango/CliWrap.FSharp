@@ -7,7 +7,6 @@
 		<RepositoryUrl>https://github.com/UnstoppableMango/CliWrap.FSharp</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<DebugType>portable</DebugType>
-		<IsPackable>false</IsPackable>
 		<IncludeSource>true</IncludeSource>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
 	</PropertyGroup>

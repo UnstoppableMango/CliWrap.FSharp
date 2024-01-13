@@ -1043,7 +1043,7 @@
           "xunit.extensibility.core": "[2.6.5]"
         }
       },
-      "cliwrap.fsharp": {
+      "UnMango.CliWrap.FSharp": {
         "type": "Project",
         "dependencies": {
           "CliWrap": "[3.6.4, )",
