@@ -1,5 +1,6 @@
 module UnMango.CliWrap.FSharp.Cli
 
+open System
 open System.Collections.Generic
 open CliWrap
 open CliWrap.Builders
