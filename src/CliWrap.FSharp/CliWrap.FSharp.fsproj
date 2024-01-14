@@ -12,7 +12,6 @@
 		<Compile Include="Pipes.fs" />
 		<Compile Include="PipeBuilder.fs" />
 		<Compile Include="CommandBuilder.fs" />
-		<Compile Include="ExecBuilder.fs" />
 		<None Include="packages.lock.json" />
 	</ItemGroup>
 

@@ -1,6 +1,6 @@
 # CliWrap.FSharp
 
-Idiomatic F# support for CliWrap
+Idiomatic F# support for CliWrap.
 
 ## Usage
 
@@ -17,11 +17,59 @@ let main args =
 	cmd.ExecuteAsync()
 ```
 
+The computation expression also supports executing the command with `exec`.
+
 ```fsharp
-let main args = async {
-	let! result = exec "dotnet" {
+let main args = task {
+	let! result = command "dotnet" {
 		args = [ "build" ]
 		workingDirectory = "~/src/CliWrap.FSharp"
+		exec
+	}
+
+	result.ExitCode
+}
+```
+
+Cancellation is also supported.
+
+```fsharp
+let main args = task {
+	use cts = new CancellationTokenSource()
+	let! result = command "dotnet" {
+		args = [ "build" ]
+		workingDirectory = "~/src/CliWrap.FSharp"
+		exec cts.Token
+	}
+
+	result.ExitCode
+}
+```
+
+CliWrap's buffered execution is supported with `buffered`.
+
+```fsharp
+let main args = task {
+	use cts = new CancellationTokenSource()
+	let! result = command "dotnet" {
+		args = [ "build" ]
+		workingDirectory = "~/src/CliWrap.FSharp"
+		buffered Encoding.UTF8 cts.Token
+	}
+
+	result.ExitCode
+}
+```
+
+Asynchrony with F#'s `Async<'T>` is supported with `async`.
+
+```fsharp
+let main args = async {
+	use cts = new CancellationTokenSource()
+	let! result = command "dotnet" {
+		args = [ "build" ]
+		workingDirectory = "~/src/CliWrap.FSharp"
+		async cts.Token
 	}
 
 	result.ExitCode
@@ -38,10 +86,12 @@ let main args =
 	cmd.ExecuteAsync()
 ```
 
-## Idiomatic? This looks nothing like normal F# code!
+## Q/A
 
-I've only recently been diving further into the F# ecosystem, if something looks off please open an issue!
+### Idiomatic? This looks nothing like the F# I write!
 
-## Why not paket?
+If something looks off please open an issue! I've only recently been diving further into the F# ecosystem.
+
+### Why not paket?
 
 If renovate ever [supports it](https://github.com/renovatebot/renovate/issues/11211)!
