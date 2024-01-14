@@ -13,3 +13,6 @@ fsharp_newline_before_multiline_computation_expression = false
 [*.yml]
 indent_style = space
 indent_size = 2
+
+[*.md]
+indent_style = space

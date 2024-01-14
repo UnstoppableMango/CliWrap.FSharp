@@ -9,25 +9,25 @@ It attempts to mimic the builder pattern and `.With*` style methods.
 
 ```fsharp
 let main args =
-	let cmd = command "dotnet" {
-		args = [ "build" ]
-		workingDirectory = "~/src/CliWrap.FSharp"
-	}
+  let cmd = command "dotnet" {
+    args = [ "build" ]
+    workingDirectory = "~/src/CliWrap.FSharp"
+  }
 
-	cmd.ExecuteAsync()
+  cmd.ExecuteAsync()
 ```
 
 The computation expression also supports executing the command with `exec`.
 
 ```fsharp
 let main args = task {
-	let! result = command "dotnet" {
-		args = [ "build" ]
-		workingDirectory = "~/src/CliWrap.FSharp"
-		exec
-	}
+  let! result = command "dotnet" {
+    args = [ "build" ]
+    workingDirectory = "~/src/CliWrap.FSharp"
+    exec
+  }
 
-	result.ExitCode
+  result.ExitCode
 }
 ```
 
@@ -35,14 +35,14 @@ Cancellation is also supported.
 
 ```fsharp
 let main args = task {
-	use cts = new CancellationTokenSource()
-	let! result = command "dotnet" {
-		args = [ "build" ]
-		workingDirectory = "~/src/CliWrap.FSharp"
-		exec cts.Token
-	}
+  use cts = new CancellationTokenSource()
+  let! result = command "dotnet" {
+    args = [ "build" ]
+    workingDirectory = "~/src/CliWrap.FSharp"
+    exec cts.Token
+  }
 
-	result.ExitCode
+  result.ExitCode
 }
 ```
 
@@ -50,14 +50,14 @@ CliWrap's buffered execution is supported with `buffered`.
 
 ```fsharp
 let main args = task {
-	use cts = new CancellationTokenSource()
-	let! result = command "dotnet" {
-		args = [ "build" ]
-		workingDirectory = "~/src/CliWrap.FSharp"
-		buffered Encoding.UTF8 cts.Token
-	}
+  use cts = new CancellationTokenSource()
+  let! result = command "dotnet" {
+    args = [ "build" ]
+    workingDirectory = "~/src/CliWrap.FSharp"
+    buffered Encoding.UTF8 cts.Token
+  }
 
-	result.ExitCode
+  result.ExitCode
 }
 ```
 
@@ -65,25 +65,25 @@ Asynchrony with F#'s `Async<'T>` is supported with `async`.
 
 ```fsharp
 let main args = async {
-	use cts = new CancellationTokenSource()
-	let! result = command "dotnet" {
-		args = [ "build" ]
-		workingDirectory = "~/src/CliWrap.FSharp"
-		async cts.Token
-	}
+  use cts = new CancellationTokenSource()
+  let! result = command "dotnet" {
+    args = [ "build" ]
+    workingDirectory = "~/src/CliWrap.FSharp"
+    async cts.Token
+  }
 
-	result.ExitCode
+  result.ExitCode
 }
 ```
 
 ```fsharp
 let main args =
-	let cmd = pipeline {
-		"an inline string source"
-		Cli.wrap "echo"
-	}
+  let cmd = pipeline {
+    "an inline string source"
+    Cli.wrap "echo"
+  }
 
-	cmd.ExecuteAsync()
+  cmd.ExecuteAsync()
 ```
 
 ## Q/A
