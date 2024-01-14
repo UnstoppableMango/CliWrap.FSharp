@@ -18,39 +18,66 @@ let ``Should configure target file path`` target =
 [<Property>]
 let ``Should configure args`` (a: NonNull<string> list) =
     let input = a |> List.map _.Get
-    let expected = Command("").WithArguments(input)
-    let result = command "/dev/null" { args input }
+    let expected = Command("expected").WithArguments(input)
+    let result = command "actual" { args input }
     result.Arguments = expected.Arguments
 
 [<Property>]
 let ``Should configure string args`` (a: NonNull<string>) =
-    let expected = Command("").WithArguments(a.Get)
-    let result = command "/dev/null" { args a.Get }
+    let expected = Command("expected").WithArguments(a.Get)
+    let result = command "actual" { args a.Get }
     result.Arguments = expected.Arguments
 
 [<Property>]
-let ``Should configure working directory`` directory =
-    let expected = Command("").WithWorkingDirectory(directory)
-    let result = command "/dev/null" { workingDirectory directory }
-    result.WorkingDirPath = expected.WorkingDirPath
+let ``Should execute CommandTask asynchronously`` () =
+    let expected =
+        Command("echo").WithArguments([ "testing" ]).ExecuteAsync().Task.Result
+
+    let result =
+        command "actual" {
+            args [ "testing" ]
+            exec
+            async
+        }
+        |> Async.RunSynchronously
+
+    // TODO: Better assertion. Can this be tested w/o using `stdout`?
+    result.ExitCode = expected.ExitCode
+
+[<Property>]
+let ``Should execute asynchronously`` () =
+    let expected =
+        Command("echo").WithArguments([ "testing" ]).ExecuteAsync().Task.Result
+
+    let result =
+        command "actual" {
+            args [ "testing" ]
+            async
+        }
+        |> Async.RunSynchronously
+
+    // TODO: Better assertion. Can this be tested w/o using `stdout`?
+    result.ExitCode = expected.ExitCode
 
 [<Property>]
 let ``Should configure environment variables`` var =
-    let expected = Command("").WithEnvironmentVariables((dict [ var ]).AsReadOnly())
-    let result = command "/dev/null" { env [ var ] }
+    let expected =
+        Command("expected").WithEnvironmentVariables((dict [ var ]).AsReadOnly())
+
+    let result = command "actual" { env [ var ] }
     result.EnvironmentVariables.SequenceEqual(expected.EnvironmentVariables)
 
 [<Property>]
 let ``Should configure stdin`` (input: NonNull<string>) =
-    let expected = Command("").WithStandardInputPipe(input.Get |> PipeSource.FromString)
+    let expected =
+        Command("expected").WithStandardInputPipe(input.Get |> PipeSource.FromString)
 
-    let result = command "/dev/null" { stdin (input.Get |> PipeSource.FromString) }
+    let result = command "actual" { stdin (input.Get |> PipeSource.FromString) }
     let a, b = new MemoryStream(), new MemoryStream()
     expected.StandardInputPipe.CopyToAsync(a).Wait()
     result.StandardInputPipe.CopyToAsync(b).Wait()
 
     a.ToArray() = b.ToArray()
-
 
 [<Property>]
 let ``Should configure stdout`` () =
@@ -69,7 +96,6 @@ let ``Should configure stdout`` () =
     expected.ExecuteAsync().Task.Wait()
     result.ExecuteAsync().Task.Wait()
     a.ToString() = b.ToString()
-
 
 [<Property>]
 let ``Should configure stderr`` () =
@@ -90,3 +116,9 @@ let ``Should configure stderr`` () =
     result.WithValidation(CommandResultValidation.None).ExecuteAsync().Task.Wait()
 
     a.ToString() = b.ToString()
+
+[<Property>]
+let ``Should configure working directory`` directory =
+    let expected = Command("expected").WithWorkingDirectory(directory)
+    let result = command "actual" { workingDirectory directory }
+    result.WorkingDirPath = expected.WorkingDirPath
