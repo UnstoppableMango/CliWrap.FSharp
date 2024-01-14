@@ -5,6 +5,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<RootNamespace>UnMango.CliWrap.FSharp</RootNamespace>
 		<AssemblyName>UnMango.CliWrap.FSharp</AssemblyName>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,7 +13,8 @@
 		<Compile Include="Pipes.fs" />
 		<Compile Include="PipeBuilder.fs" />
 		<Compile Include="CommandBuilder.fs" />
-		<None Include="packages.lock.json" />
+		<None Include="packages.lock.json" Pack="false" />
+		<None Include="../../README.md" Pack="true" PackagePath="/" />
 	</ItemGroup>
 
 	<ItemGroup>
