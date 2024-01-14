@@ -21,13 +21,13 @@ Bindings for normal CliWrap commands are available in the `Cli` module.
 
 ```fsharp
 let main args = async {
-    let! result =
-        Cli.wrap "dotnet"
-        |> Cli.args [ "build" ]
-        |> Cli.workDir "~/src/CliWrap.FSharp"
-        |> Cli.exec
+  let! result =
+    Cli.wrap "dotnet"
+    |> Cli.args [ "build" ]
+    |> Cli.workDir "~/src/CliWrap.FSharp"
+    |> Cli.exec
 
-    result.ExitCode
+  result.ExitCode
 }
 ```
 
@@ -35,28 +35,28 @@ Cancellation token overloads are available in `Cli.Tasks`.
 
 ```fsharp
 let main args = task {
-    use cts = new CancellationTokenSource()
-    let! result =
-        Cli.wrap "dotnet"
-        |> Cli.args [ "build" ]
-        |> Cli.workDir "~/src/CliWrap.FSharp"
-        |> Cli.Task.exec cts.Token
+  use cts = new CancellationTokenSource()
+  let! result =
+    Cli.wrap "dotnet"
+    |> Cli.args [ "build" ]
+    |> Cli.workDir "~/src/CliWrap.FSharp"
+    |> Cli.Task.exec cts.Token
 
-    result.ExitCode
+  result.ExitCode
 }
 ```
 
 ```fsharp
 let main args = task {
-    use graceful = new CancellationTokenSource()
-    use forceful = new CancellationTokenSource()
-    let! result =
-        Cli.wrap "dotnet"
-        |> Cli.args [ "build" ]
-        |> Cli.workDir "~/src/CliWrap.FSharp"
-        |> Cli.Task.execf forceful.Token graceful.Token
+  use graceful = new CancellationTokenSource()
+  use forceful = new CancellationTokenSource()
+  let! result =
+    Cli.wrap "dotnet"
+    |> Cli.args [ "build" ]
+    |> Cli.workDir "~/src/CliWrap.FSharp"
+    |> Cli.Task.execf forceful.Token graceful.Token
 
-    result.ExitCode
+  result.ExitCode
 }
 ```
 
