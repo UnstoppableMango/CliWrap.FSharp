@@ -104,7 +104,6 @@ let ``Should configure stderr`` () =
     let expected =
         Command("echo")
             .WithArguments([ "testing" ])
-            .WithValidation(CommandResultValidation.None)
             .WithStandardErrorPipe(PipeTarget.ToStringBuilder(a))
 
     let result = command "echo" {
@@ -113,7 +112,7 @@ let ``Should configure stderr`` () =
     }
 
     expected.ExecuteAsync().Task.Wait()
-    result.WithValidation(CommandResultValidation.None).ExecuteAsync().Task.Wait()
+    result.ExecuteAsync().Task.Wait()
 
     a.ToString() = b.ToString()
 
