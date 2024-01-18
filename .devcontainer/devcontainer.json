@@ -1,4 +1,13 @@
 {
 	"name": "CliWrap.FSharp",
-	"image": "mcr.microsoft.com/devcontainers/dotnet:8.0"
+	"image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
+	"containerUser": "vscode",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Ionide.Ionide-fsharp",
+				"EditorConfig.EditorConfig"
+			]
+		}
+	}
 }
