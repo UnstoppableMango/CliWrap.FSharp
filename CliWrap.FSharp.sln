@@ -34,6 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{BC5059
 		.gitignore = .gitignore
 		.githooks\pre-commit = .githooks\pre-commit
 		CliWrap.FSharp.sln.DotSettings = CliWrap.FSharp.sln.DotSettings
+		.devcontainer\devcontainer.json = .devcontainer\devcontainer.json
 	EndProjectSection
 EndProject
 Global

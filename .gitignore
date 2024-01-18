@@ -9,6 +9,7 @@
 .idea/**/contentModel.xml
 .idea/**/codeStyleConfig.xml
 .idea/**/discord.xml
+.idea/**/aws.xml
 
 # Artifacts
 bin/
