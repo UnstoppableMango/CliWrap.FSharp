@@ -35,6 +35,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{BC5059
 		.githooks\pre-commit = .githooks\pre-commit
 		CliWrap.FSharp.sln.DotSettings = CliWrap.FSharp.sln.DotSettings
 		.devcontainer\devcontainer.json = .devcontainer\devcontainer.json
+		.fantomasignore = .fantomasignore
+		.git-blame-ignore-revs = .git-blame-ignore-revs
+		.gitmodules = .gitmodules
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vendor", "vendor", "{711E438A-D184-4513-921C-C4D7AE85E2B9}"
