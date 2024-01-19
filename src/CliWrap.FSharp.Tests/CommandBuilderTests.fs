@@ -6,6 +6,7 @@ open System.Linq
 open System.Text
 open CliWrap
 open CliWrap.Tests
+open Xunit
 open FsCheck
 open FsCheck.Xunit
 open UnMango.CliWrap.FSharp
@@ -29,24 +30,26 @@ let ``Should configure string args`` (a: NonNull<string>) =
     let actual = command Dummy.Program.FilePath { args a.Get }
     actual.Arguments = expected.Arguments
 
-[<Property>]
-let ``Should execute CommandTask asynchronously`` () =
-    let expected = Command(Dummy.Program.FilePath).ExecuteAsync().Task.Result
+[<Fact>]
+let ``Should execute CommandTask asynchronously`` () = task {
+    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
 
-    let actual =
+    let! actual =
         command Dummy.Program.FilePath {
             exec
             async
         }
-        |> Async.RunSynchronously
+        |> Async.StartAsTask
 
-    actual.ExitCode = expected.ExitCode
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
 
-[<Property>]
-let ``Should execute asynchronously`` () =
-    let expected = Command(Dummy.Program.FilePath).ExecuteAsync().Task.Result
-    let actual = command Dummy.Program.FilePath { async } |> Async.RunSynchronously
-    actual.ExitCode = expected.ExitCode
+[<Fact>]
+let ``Should execute asynchronously`` () = task {
+    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
+    let! actual = command Dummy.Program.FilePath { async } |> Async.StartAsTask
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
 
 [<Property>]
 let ``Should configure environment variables`` var =
@@ -70,43 +73,44 @@ let ``Should configure stdin`` (input: NonNull<string>) =
 
     a.ToArray() = b.ToArray()
 
-[<Property>]
-let ``Should configure stdout`` () =
+[<Fact>]
+let ``Should configure stdout`` () = task {
     let a, b = StringBuilder(), StringBuilder()
 
-    let expected =
+    let! _ =
         Command(Dummy.Program.FilePath)
             .WithArguments([ "generate binary"; "--target"; "all" ])
             .WithStandardOutputPipe(PipeTarget.ToStringBuilder(a))
+            .ExecuteAsync()
 
-    let actual = command Dummy.Program.FilePath {
+    let! _ = command Dummy.Program.FilePath {
         args [ "generate binary"; "--target"; "all" ]
         stdout (PipeTarget.ToStringBuilder(b))
+        exec
     }
 
-    expected.ExecuteAsync().Task.Wait()
-    actual.ExecuteAsync().Task.Wait()
-    a.ToString() = b.ToString()
+    Assert.Equal(a.ToString(), b.ToString())
+}
 
-[<Property>]
-let ``Should configure stderr`` () =
+[<Fact>]
+let ``Should configure stderr`` () = task {
     let a, b = StringBuilder(), StringBuilder()
 
-    let expected =
+    let! _ =
         Command(Dummy.Program.FilePath)
             .WithArguments([ "generate binary"; "--target"; "all" ])
             .WithStandardErrorPipe(PipeTarget.ToStringBuilder(a))
+            .ExecuteAsync()
 
-    let actual = command Dummy.Program.FilePath {
+    let! _ = command Dummy.Program.FilePath {
         args [ "generate binary"; "--target"; "all" ]
         validation CommandResultValidation.None
         stderr (PipeTarget.ToStringBuilder(b))
+        exec
     }
 
-    expected.ExecuteAsync().Task.Wait()
-    actual.ExecuteAsync().Task.Wait()
-
-    a.ToString() = b.ToString()
+    Assert.Equal(a.ToString(), b.ToString())
+}
 
 [<Property>]
 let ``Should configure working directory`` directory =
