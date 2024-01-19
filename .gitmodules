@@ -1,0 +1,3 @@
+[submodule "vendor/CliWrap"]
+	path = vendor/CliWrap
+	url = git@github.com:Tyrrrz/CliWrap.git
