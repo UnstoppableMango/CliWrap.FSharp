@@ -1,6 +1,5 @@
 module UnMango.CliWrap.FSharp.Cli
 
-open System
 open System.Collections.Generic
 open CliWrap
 open CliWrap.Builders
@@ -40,7 +39,8 @@ let argse args escape (command: Command) = command.WithArguments(args, escape)
 /// <param name="f">The function that builds the arguments using an ArgumentsBuilder.</param>
 /// <param name="command">The command for which the arguments are being built.</param>
 /// <returns>A new command object with the arguments added.</returns>
-let argsf (f: ArgumentsBuilder -> unit) (command: Command) = command.WithArguments(f)
+let argsf (f: ArgumentsBuilder -> 'a) (command: Command) =
+    command.WithArguments(fun b -> f b |> ignore)
 
 /// <summary>
 /// Creates a new command with the specified parameters.
@@ -56,7 +56,7 @@ let argsf (f: ArgumentsBuilder -> unit) (command: Command) = command.WithArgumen
 /// <param name="stderr">The error pipe target for the command.</param>
 /// <returns>A new Command instance.</returns>
 /// <remarks>
-/// v = verbose. Idk why you would use this, but its there if you want to
+/// v = verbose. Idk why you would use this, but it's there if you want to
 /// </remarks>
 let commandv target args workDir creds env v stdin stdout stderr =
     Command(target, args, workDir, creds, env, v, stdin, stdout, stderr)
@@ -75,7 +75,8 @@ let creds (credentials: Credentials) (command: Command) = command.WithCredential
 /// <param name="f">The function that builds the credentials with a CredentialsBuilder.</param>
 /// <param name="command">The command for which the credentials are being built.</param>
 /// <returns>The modified command with the credentials applied.</returns>
-let credsf (f: CredentialsBuilder -> unit) (command: Command) = command.WithCredentials(f)
+let credsf (f: CredentialsBuilder -> 'a) (command: Command) =
+    command.WithCredentials(fun b -> f b |> ignore)
 
 /// <summary>
 /// Creates a copy of this command, setting the environment variables to the specified value.
@@ -92,7 +93,8 @@ let env (env: (string * string) seq) (command: Command) =
 /// <param name="f">The function that builds environment variables using an EnvironmentVariablesBuilder.</param>
 /// <param name="command">The command to which the environment variables should be applied.</param>
 /// <returns>The modified command with the updated environment variables.</returns>
-let envf (f: EnvironmentVariablesBuilder -> unit) (command: Command) = command.WithEnvironmentVariables(f)
+let envf (f: EnvironmentVariablesBuilder -> 'a) (command: Command) =
+    command.WithEnvironmentVariables(fun b -> f b |> ignore)
 
 /// <summary>
 /// Executes the command asynchronously.
