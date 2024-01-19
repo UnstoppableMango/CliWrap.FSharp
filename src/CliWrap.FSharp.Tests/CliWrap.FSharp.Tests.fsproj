@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\vendor\CliWrap\CliWrap.Tests.Dummy\CliWrap.Tests.Dummy.csproj" />
 		<ProjectReference Include="..\CliWrap.FSharp\CliWrap.FSharp.fsproj"/>
 	</ItemGroup>
 

@@ -5,6 +5,7 @@ open System.IO
 open System.Linq
 open System.Text
 open CliWrap
+open CliWrap.Tests
 open FsCheck
 open FsCheck.Xunit
 open UnMango.CliWrap.FSharp
@@ -12,70 +13,60 @@ open UnMango.CliWrap.FSharp
 [<Property>]
 let ``Should configure target file path`` target =
     let expected = Command(target)
-    let result = command target { args [] }
-    result.TargetFilePath = expected.TargetFilePath
+    let actual = command target { args [] }
+    actual.TargetFilePath = expected.TargetFilePath
 
 [<Property>]
 let ``Should configure args`` (a: NonNull<string> list) =
     let input = a |> List.map _.Get
-    let expected = Command("expected").WithArguments(input)
-    let result = command "actual" { args input }
-    result.Arguments = expected.Arguments
+    let expected = Command(Dummy.Program.FilePath).WithArguments(input)
+    let actual = command Dummy.Program.FilePath { args input }
+    actual.Arguments = expected.Arguments
 
 [<Property>]
 let ``Should configure string args`` (a: NonNull<string>) =
-    let expected = Command("expected").WithArguments(a.Get)
-    let result = command "actual" { args a.Get }
-    result.Arguments = expected.Arguments
+    let expected = Command(Dummy.Program.FilePath).WithArguments(a.Get)
+    let actual = command Dummy.Program.FilePath { args a.Get }
+    actual.Arguments = expected.Arguments
 
 [<Property>]
 let ``Should execute CommandTask asynchronously`` () =
-    let expected =
-        Command("echo").WithArguments([ "testing" ]).ExecuteAsync().Task.Result
+    let expected = Command(Dummy.Program.FilePath).ExecuteAsync().Task.Result
 
-    let result =
-        command "actual" {
-            args [ "testing" ]
+    let actual =
+        command Dummy.Program.FilePath {
             exec
             async
         }
         |> Async.RunSynchronously
 
-    // TODO: Better assertion. Can this be tested w/o using `stdout`?
-    result.ExitCode = expected.ExitCode
+    actual.ExitCode = expected.ExitCode
 
 [<Property>]
 let ``Should execute asynchronously`` () =
-    let expected =
-        Command("echo").WithArguments([ "testing" ]).ExecuteAsync().Task.Result
-
-    let result =
-        command "actual" {
-            args [ "testing" ]
-            async
-        }
-        |> Async.RunSynchronously
-
-    // TODO: Better assertion. Can this be tested w/o using `stdout`?
-    result.ExitCode = expected.ExitCode
+    let expected = Command(Dummy.Program.FilePath).ExecuteAsync().Task.Result
+    let actual = command Dummy.Program.FilePath { async } |> Async.RunSynchronously
+    actual.ExitCode = expected.ExitCode
 
 [<Property>]
 let ``Should configure environment variables`` var =
     let expected =
-        Command("expected").WithEnvironmentVariables((dict [ var ]).AsReadOnly())
+        Command(Dummy.Program.FilePath)
+            .WithEnvironmentVariables((dict [ var ]).AsReadOnly())
 
-    let result = command "actual" { env [ var ] }
-    result.EnvironmentVariables.SequenceEqual(expected.EnvironmentVariables)
+    let actual = command Dummy.Program.FilePath { env [ var ] }
+    actual.EnvironmentVariables.SequenceEqual(expected.EnvironmentVariables)
 
 [<Property>]
 let ``Should configure stdin`` (input: NonNull<string>) =
     let expected =
-        Command("expected").WithStandardInputPipe(input.Get |> PipeSource.FromString)
+        Command(Dummy.Program.FilePath)
+            .WithStandardInputPipe(input.Get |> PipeSource.FromString)
 
-    let result = command "actual" { stdin (input.Get |> PipeSource.FromString) }
+    let actual = command Dummy.Program.FilePath { stdin (input.Get |> PipeSource.FromString) }
     let a, b = new MemoryStream(), new MemoryStream()
     expected.StandardInputPipe.CopyToAsync(a).Wait()
-    result.StandardInputPipe.CopyToAsync(b).Wait()
+    actual.StandardInputPipe.CopyToAsync(b).Wait()
 
     a.ToArray() = b.ToArray()
 
@@ -84,17 +75,17 @@ let ``Should configure stdout`` () =
     let a, b = StringBuilder(), StringBuilder()
 
     let expected =
-        Command("echo")
-            .WithArguments([ "testing" ])
+        Command(Dummy.Program.FilePath)
+            .WithArguments([ "generate binary"; "--target"; "all" ])
             .WithStandardOutputPipe(PipeTarget.ToStringBuilder(a))
 
-    let result = command "echo" {
-        args [ "testing" ]
+    let actual = command Dummy.Program.FilePath {
+        args [ "generate binary"; "--target"; "all" ]
         stdout (PipeTarget.ToStringBuilder(b))
     }
 
     expected.ExecuteAsync().Task.Wait()
-    result.ExecuteAsync().Task.Wait()
+    actual.ExecuteAsync().Task.Wait()
     a.ToString() = b.ToString()
 
 [<Property>]
@@ -102,22 +93,23 @@ let ``Should configure stderr`` () =
     let a, b = StringBuilder(), StringBuilder()
 
     let expected =
-        Command("echo")
-            .WithArguments([ "testing" ])
+        Command(Dummy.Program.FilePath)
+            .WithArguments([ "generate binary"; "--target"; "all" ])
             .WithStandardErrorPipe(PipeTarget.ToStringBuilder(a))
 
-    let result = command "echo" {
-        args [ "testing" ]
+    let actual = command Dummy.Program.FilePath {
+        args [ "generate binary"; "--target"; "all" ]
+        validation CommandResultValidation.None
         stderr (PipeTarget.ToStringBuilder(b))
     }
 
     expected.ExecuteAsync().Task.Wait()
-    result.ExecuteAsync().Task.Wait()
+    actual.ExecuteAsync().Task.Wait()
 
     a.ToString() = b.ToString()
 
 [<Property>]
 let ``Should configure working directory`` directory =
-    let expected = Command("expected").WithWorkingDirectory(directory)
-    let result = command "actual" { workingDirectory directory }
-    result.WorkingDirPath = expected.WorkingDirPath
+    let expected = Command(Dummy.Program.FilePath).WithWorkingDirectory(directory)
+    let actual = command Dummy.Program.FilePath { workingDirectory directory }
+    actual.WorkingDirPath = expected.WorkingDirPath
