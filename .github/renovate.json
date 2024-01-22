@@ -3,5 +3,8 @@
 	"extends": [
 		"config:base"
 	],
-	"automerge": true
+	"automerge": true,
+	"git-submodules": {
+		"enabled": true
+	}
 }

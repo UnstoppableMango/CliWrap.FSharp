@@ -13,7 +13,6 @@
 
 	<PropertyGroup>
 		<LangVersion>preview</LangVersion>
-		<EnableCodeStyleInBuild>true</EnableCodeStyleInBuild>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>

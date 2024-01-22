@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FsCheck" Version="2.16.6"/>
+		<PackageReference Include="FsCheck" Version="2.16.6" />
 		<PackageReference Include="FsCheck.Xunit" Version="2.16.6"/>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
 		<PackageReference Include="xunit" Version="2.6.6"/>
@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\vendor\CliWrap\CliWrap.Tests.Dummy\CliWrap.Tests.Dummy.csproj" />
 		<ProjectReference Include="..\CliWrap.FSharp\CliWrap.FSharp.fsproj"/>
 	</ItemGroup>
 

@@ -15,6 +15,7 @@ jobs:
         with:
           fetch-depth: 0
           filter: tree:0
+          submodules: true
 
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
@@ -28,8 +29,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore --locked-mode
 
+      # The vendored dummy program uses CSharpier, we don't want to touch it
       - name: Build solution
-        run: dotnet build -c Release --no-restore
+        run: dotnet build -c Release --no-restore /p:CSharpier_Bypass=true
 
       - name: Run tests
         run: dotnet test -c Release --collect:"XPlat Code Coverage" --no-build
