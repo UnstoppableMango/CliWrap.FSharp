@@ -4,7 +4,9 @@ open System.Collections.Generic
 open System.IO
 open System.Linq
 open System.Text
+open System.Threading
 open CliWrap
+open CliWrap.Buffered
 open CliWrap.Tests
 open Xunit
 open FsCheck
@@ -48,6 +50,45 @@ let ``Should execute CommandTask asynchronously`` () = task {
 let ``Should execute asynchronously`` () = task {
     let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
     let! actual = command Dummy.Program.FilePath { async } |> Async.StartAsTask
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
+
+[<Fact>]
+let ``Should execute asynchronously with cancellation`` () = task {
+    use cts = new CancellationTokenSource()
+    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync(cts.Token)
+    let! actual = command Dummy.Program.FilePath { async cts.Token } |> Async.StartAsTask
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
+
+[<Fact>]
+let ``Should execute asynchronously as task`` () = task {
+    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
+    let! actual = command Dummy.Program.FilePath { exec }
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
+
+[<Fact>]
+let ``Should execute buffered`` () = task {
+    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync()
+    let! actual = command Dummy.Program.FilePath { buffered }
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
+
+[<Fact>]
+let ``Should execute buffered with encoding`` () = task {
+    let encoding = Encoding.UTF8
+    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync(encoding)
+    let! actual = command Dummy.Program.FilePath { buffered encoding }
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
+
+[<Fact>]
+let ``Should execute buffered with encoding and cancellation`` () = task {
+    let encoding = Encoding.UTF8
+    use cts = new CancellationTokenSource()
+    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync(encoding, cts.Token)
+    let! actual = command Dummy.Program.FilePath { buffered encoding cts.Token }
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
 
