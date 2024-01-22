@@ -59,14 +59,19 @@ let ``Should configure credentials with builder`` (arg: NonNull<string>) =
 [<Property>]
 let ``Should configure environment variables`` (key: NonNull<string>) (value: NonNull<string>) =
     let cmd = Command(Dummy.Program.FilePath)
-    let expected = cmd.WithEnvironmentVariables((dict [key.Get, value.Get]).AsReadOnly())
-    let actual = cmd |> Cli.env [key.Get, value.Get]
+
+    let expected =
+        cmd.WithEnvironmentVariables((dict [ key.Get, value.Get ]).AsReadOnly())
+
+    let actual = cmd |> Cli.env [ key.Get, value.Get ]
     expected.EnvironmentVariables.SequenceEqual(actual.EnvironmentVariables)
 
 [<Property>]
 let ``Should configure environment variables with builder`` (key: NonNull<string>) (value: NonNull<string>) =
     let cmd = Command(Dummy.Program.FilePath)
-    let expected = cmd.WithEnvironmentVariables(fun b -> b.Set(key.Get, value.Get) |> ignore)
+
+    let expected =
+        cmd.WithEnvironmentVariables(fun b -> b.Set(key.Get, value.Get) |> ignore)
+
     let actual = cmd |> Cli.envf _.Set(key.Get, value.Get)
     expected.EnvironmentVariables.SequenceEqual(actual.EnvironmentVariables)
-
