@@ -101,18 +101,19 @@ let ``Should configure environment variables`` var =
     let actual = command Dummy.Program.FilePath { env [ var ] }
     actual.EnvironmentVariables.SequenceEqual(expected.EnvironmentVariables)
 
-[<Property>]
-let ``Should configure stdin`` (input: NonNull<string>) =
-    let expected =
-        Command(Dummy.Program.FilePath)
-            .WithStandardInputPipe(input.Get |> PipeSource.FromString)
+[<Fact>]
+let ``Should configure stdin`` () = task {
+    let input = PipeSource.FromString "testing"
+    let expected = Command(Dummy.Program.FilePath).WithStandardInputPipe(input)
 
-    let actual = command Dummy.Program.FilePath { stdin (input.Get |> PipeSource.FromString) }
+    let actual = command Dummy.Program.FilePath { stdin input }
+
     let a, b = new MemoryStream(), new MemoryStream()
-    expected.StandardInputPipe.CopyToAsync(a).Wait()
-    actual.StandardInputPipe.CopyToAsync(b).Wait()
+    do! expected.StandardInputPipe.CopyToAsync(a)
+    do! actual.StandardInputPipe.CopyToAsync(b)
 
-    a.ToArray() = b.ToArray()
+    Assert.Equal<byte>(a.ToArray(), b.ToArray())
+}
 
 [<Fact>]
 let ``Should configure stdout`` () = task {
