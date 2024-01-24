@@ -4,6 +4,7 @@ open System.Collections.Generic
 open System.Linq
 open CliWrap
 open CliWrap.Tests
+open Xunit
 open FsCheck
 open FsCheck.Xunit
 open UnMango.CliWrap.FSharp
@@ -75,3 +76,11 @@ let ``Should configure environment variables with builder`` (key: NonNull<string
 
     let actual = cmd |> Cli.envf _.Set(key.Get, value.Get)
     expected.EnvironmentVariables.SequenceEqual(actual.EnvironmentVariables)
+
+[<Fact>]
+let ``Should execute asynchronously`` = async {
+    let cmd = Command(Dummy.Program.FilePath)
+    let! expected = cmd.ExecuteAsync() |> CommandTask.op_Implicit |> Async.AwaitTask
+    let! actual = cmd |> Cli.exec
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
