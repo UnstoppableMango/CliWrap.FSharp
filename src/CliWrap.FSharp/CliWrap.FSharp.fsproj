@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<PackageReference Include="CliWrap" Version="3.6.6"/>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all"/>
-		<PackageReference Include="MinVer" Version="4.3.0" PrivateAssets="all"/>
+		<PackageReference Include="MinVer" Version="5.0.0" PrivateAssets="all"/>
 	</ItemGroup>
 
 </Project>
