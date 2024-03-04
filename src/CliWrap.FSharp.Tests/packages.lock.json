@@ -29,9 +29,9 @@
       },
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[8.0.101, )",
-        "resolved": "8.0.101",
-        "contentHash": "sOLz3O4BOxnTKfd5OChdRmDUy4Id0GfoEClRG4nzIod8LY1LJZcNyygKAV0A78XOLh8yvhA5hsDYKZXGCR9blw=="
+        "requested": "[8.0.200, )",
+        "resolved": "8.0.200",
+        "contentHash": "qnxoF3Fu0HzfOeYdrwmQOsLP1v+OtOMSIYkNVUwf6nGqWzL03Hh4r6VFCvCb54jlsgtt3WADVYkKkrgdeY5kiQ=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -59,6 +59,11 @@
         "requested": "[2.5.6, )",
         "resolved": "2.5.6",
         "contentHash": "CW6uhMXNaQQNMSG1IWhHkBT+V5eqHqn7MP0zfNMhU9wS/sgKX7FGL3rzoaUgt26wkY3bpf7pDVw3IjXhwfiP4w=="
+      },
+      "CliFx": {
+        "type": "Transitive",
+        "resolved": "2.3.5",
+        "contentHash": "WaZDt7FC1ViEzS5m7w7lOWT/aluZ28fFkPcRdkQ+7DowqjTmr5YZswNIDqSuBDaeGXPe8VzTZKMltKrXhIOt9Q=="
       },
       "CliWrap": {
         "type": "Transitive",
@@ -91,6 +96,11 @@
         "type": "Transitive",
         "resolved": "13.0.1",
         "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
+      },
+      "System.Memory": {
+        "type": "Transitive",
+        "resolved": "4.5.5",
+        "contentHash": "XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw=="
       },
       "System.Reflection.Metadata": {
         "type": "Transitive",
@@ -137,11 +147,18 @@
           "xunit.extensibility.core": "[2.6.6]"
         }
       },
+      "cliwrap.tests.dummy": {
+        "type": "Project",
+        "dependencies": {
+          "CliFx": "[2.3.5, )",
+          "System.Memory": "[4.5.5, )"
+        }
+      },
       "UnMango.CliWrap.FSharp": {
         "type": "Project",
         "dependencies": {
           "CliWrap": "[3.6.6, )",
-          "FSharp.Core": "[8.0.101, )"
+          "FSharp.Core": "[8.0.200, )"
         }
       }
     }
