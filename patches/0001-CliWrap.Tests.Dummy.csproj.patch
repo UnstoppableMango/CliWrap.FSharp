@@ -1,0 +1,13 @@
+5,6c5,6
+<     <TargetFrameworks>net8.0</TargetFrameworks>
+<     <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(TargetFrameworks);net48</TargetFrameworks>
+---
+>     <TargetFramework>net8.0</TargetFramework>
+>     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+11d10
+<     <PackageReference Include="CSharpier.MsBuild" Version="0.27.0" PrivateAssets="all" />
+16c15
+< </Project>
+\ No newline at end of file
+---
+> </Project>
