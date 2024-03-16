@@ -1,5 +1,5 @@
 diff --git a/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj b/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj
-index db18fb3..f11cddf 100644
+index db18fb3..99290aa 100644
 --- a/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj
 +++ b/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj
 @@ -2,15 +2,14 @@
@@ -7,8 +7,9 @@ index db18fb3..f11cddf 100644
    <PropertyGroup>
      <OutputType>Exe</OutputType>
 -    <TargetFrameworks>net8.0</TargetFrameworks>
+-    <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(TargetFrameworks);net48</TargetFrameworks>
 +    <TargetFramework>net8.0</TargetFramework>
-     <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(TargetFrameworks);net48</TargetFrameworks>
++    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
    </PropertyGroup>
  
    <ItemGroup>

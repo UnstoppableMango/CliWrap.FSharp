@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{BE2AB152
 		global.json = global.json
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 		Directory.Build.props = Directory.Build.props
+		scripts\update-vendored-code.sh = scripts\update-vendored-code.sh
+		patches\dummy.patch = patches\dummy.patch
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{FE346152-5716-4224-9B25-C6B3815C70CA}"
@@ -38,11 +40,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{BC5059
 		.fantomasignore = .fantomasignore
 		.git-blame-ignore-revs = .git-blame-ignore-revs
 		.gitmodules = .gitmodules
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{85223DF2-CAD6-4978-A180-B19DE2BB9F41}"
-	ProjectSection(SolutionItems) = preProject
-		scripts\update-vendored-code.sh = scripts\update-vendored-code.sh
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliWrap.Tests.Dummy", "src\CliWrap.Tests.Dummy\CliWrap.Tests.Dummy.csproj", "{26F29434-8760-4387-BF01-4FB1FA65426E}"
