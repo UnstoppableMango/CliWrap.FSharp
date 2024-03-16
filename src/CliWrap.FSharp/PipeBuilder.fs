@@ -53,10 +53,8 @@ type PipeBuilder() =
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     member this.Combine
-        (
-            source: Command,
-            (stdout: string -> CancellationToken -> Task, stderr: string -> CancellationToken -> Task)
-        ) =
+        (source: Command, (stdout: string -> CancellationToken -> Task, stderr: string -> CancellationToken -> Task))
+        =
         this.Combine(source, (PipeTarget.ToDelegate(stdout), PipeTarget.ToDelegate(stderr)))
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
