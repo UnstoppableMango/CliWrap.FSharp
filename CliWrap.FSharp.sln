@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{BE2AB152
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 		Directory.Build.props = Directory.Build.props
 		scripts\update-vendored-code.sh = scripts\update-vendored-code.sh
-		patches\dummy.patch = patches\dummy.patch
+		patches\0001-CliWrap.Tests.Dummy.csproj.patch = patches\0001-CliWrap.Tests.Dummy.csproj.patch
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{FE346152-5716-4224-9B25-C6B3815C70CA}"

@@ -3,7 +3,7 @@
 <     <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(TargetFrameworks);net48</TargetFrameworks>
 ---
 >     <TargetFramework>net8.0</TargetFramework>
->     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+>     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
 11d10
 <     <PackageReference Include="CSharpier.MsBuild" Version="0.27.0" PrivateAssets="all" />
 16c15
