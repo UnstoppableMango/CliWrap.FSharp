@@ -5,7 +5,6 @@ open System.Linq
 open System.Text
 open System.Threading
 open CliWrap
-open CliWrap.Tests
 open Xunit
 open FsCheck
 open FsCheck.Xunit
@@ -40,7 +39,7 @@ let ``Should create command the long way``
 
 [<Property>]
 let ``Should configure a single argument`` (arg: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithArguments(arg.Get)
 
     let actual = cmd |> Cli.arg arg.Get
@@ -49,7 +48,7 @@ let ``Should configure a single argument`` (arg: NonNull<string>) =
 
 [<Property>]
 let ``Should configure arguments`` (arg: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithArguments([ arg.Get ])
 
     let actual = cmd |> Cli.args [ arg.Get ]
@@ -58,7 +57,7 @@ let ``Should configure arguments`` (arg: NonNull<string>) =
 
 [<Property>]
 let ``Should configure arguments with escape`` (arg: NonNull<string>) escape =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithArguments([ arg.Get ], escape)
 
     let actual = cmd |> Cli.argse [ arg.Get ] escape
@@ -67,7 +66,7 @@ let ``Should configure arguments with escape`` (arg: NonNull<string>) escape =
 
 [<Property>]
 let ``Should configure arguments with builder`` (arg: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithArguments(fun b -> b.Add(arg.Get) |> ignore)
 
     let actual = cmd |> Cli.argsf _.Add(arg.Get)
@@ -76,7 +75,7 @@ let ``Should configure arguments with builder`` (arg: NonNull<string>) =
 
 [<Property>]
 let ``Should configure credentials`` (arg: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithCredentials(Credentials(arg.Get))
 
     let actual = cmd |> Cli.creds (Credentials(arg.Get))
@@ -85,7 +84,7 @@ let ``Should configure credentials`` (arg: NonNull<string>) =
 
 [<Property>]
 let ``Should configure credentials with builder`` (arg: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithCredentials(fun b -> b.SetUserName(arg.Get) |> ignore)
 
     let actual = cmd |> Cli.credsf _.SetUserName(arg.Get)
@@ -94,7 +93,7 @@ let ``Should configure credentials with builder`` (arg: NonNull<string>) =
 
 [<Property>]
 let ``Should configure environment variables`` (key: NonNull<string>) (value: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
 
     let expected =
         cmd.WithEnvironmentVariables((dict [ key.Get, value.Get ]).AsReadOnly())
@@ -104,7 +103,7 @@ let ``Should configure environment variables`` (key: NonNull<string>) (value: No
 
 [<Property>]
 let ``Should configure environment variables with builder`` (key: NonNull<string>) (value: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
 
     let expected =
         cmd.WithEnvironmentVariables(fun b -> b.Set(key.Get, value.Get) |> ignore)
@@ -114,7 +113,7 @@ let ``Should configure environment variables with builder`` (key: NonNull<string
 
 [<Fact>]
 let ``Should execute asynchronously`` () = task {
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let! expected = cmd.ExecuteAsync()
 
     let! actual = cmd |> Cli.exec
@@ -125,7 +124,7 @@ let ``Should execute asynchronously`` () = task {
 [<Fact>]
 let ``Should execute asynchronously with cancellation`` () = task {
     use cts = new CancellationTokenSource()
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let! expected = cmd.ExecuteAsync(cts.Token)
 
     let! actual = cmd |> Cli.Task.exec cts.Token
@@ -137,7 +136,7 @@ let ``Should execute asynchronously with cancellation`` () = task {
 let ``Should execute asynchronously with forceful and graceful tokens`` () = task {
     use forceful = new CancellationTokenSource()
     use graceful = new CancellationTokenSource()
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let! expected = cmd.ExecuteAsync(forceful.Token, graceful.Token)
 
     let! actual = cmd |> Cli.Task.execf forceful.Token graceful.Token
@@ -148,7 +147,7 @@ let ``Should execute asynchronously with forceful and graceful tokens`` () = tas
 [<Property>]
 let ``Should configure stdin`` (value: NonNull<string>) =
     let input = PipeSource.FromString value.Get
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithStandardInputPipe(input)
 
     let actual = cmd |> Cli.stdin input
@@ -158,7 +157,7 @@ let ``Should configure stdin`` (value: NonNull<string>) =
 [<Property>]
 let ``Should configure stdout`` () =
     let pipe = PipeTarget.ToStringBuilder(StringBuilder())
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithStandardOutputPipe(pipe)
 
     let actual = cmd |> Cli.stdout pipe
@@ -168,7 +167,7 @@ let ``Should configure stdout`` () =
 [<Property>]
 let ``Should configure stderr`` () =
     let pipe = PipeTarget.ToStringBuilder(StringBuilder())
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithStandardErrorPipe(pipe)
 
     let actual = cmd |> Cli.stderr pipe
@@ -177,7 +176,7 @@ let ``Should configure stderr`` () =
 
 [<Property>]
 let ``Should configure target file`` (file: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithTargetFile(file.Get)
 
     let actual = cmd |> Cli.target file.Get
@@ -186,7 +185,7 @@ let ``Should configure target file`` (file: NonNull<string>) =
 
 [<Property>]
 let ``Should configure validation`` () =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithValidation(CommandResultValidation.None)
 
     let actual = cmd |> Cli.validation CommandResultValidation.None
@@ -195,7 +194,7 @@ let ``Should configure validation`` () =
 
 [<Property>]
 let ``Should configure working directory`` (dir: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath)
+    let cmd = Command(Tests.Dummy.Program.FilePath)
     let expected = cmd.WithWorkingDirectory(dir.Get)
 
     let actual = cmd |> Cli.workDir dir.Get
@@ -204,7 +203,7 @@ let ``Should configure working directory`` (dir: NonNull<string>) =
 
 [<Property>]
 let ``Should convert to string`` (arg: NonNull<string>) =
-    let cmd = Command(Dummy.Program.FilePath).WithArguments([ arg.Get ])
+    let cmd = Command(Tests.Dummy.Program.FilePath).WithArguments([ arg.Get ])
     let expected = cmd.ToString()
 
     let actual = cmd |> Cli.toString

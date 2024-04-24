@@ -60,11 +60,6 @@
         "resolved": "2.5.7",
         "contentHash": "31Rl7dBJriX0DNwZfDp8gqFOPsiM0c9kqpcH/HvNi9vDp+K7Ydf42H7mVIvYT918Ywzn1ymLg1c4DDC6iU754w=="
       },
-      "CliFx": {
-        "type": "Transitive",
-        "resolved": "2.3.5",
-        "contentHash": "WaZDt7FC1ViEzS5m7w7lOWT/aluZ28fFkPcRdkQ+7DowqjTmr5YZswNIDqSuBDaeGXPe8VzTZKMltKrXhIOt9Q=="
-      },
       "CliWrap": {
         "type": "Transitive",
         "resolved": "3.6.6",
@@ -97,10 +92,10 @@
         "resolved": "13.0.1",
         "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
       },
-      "System.Memory": {
+      "System.CommandLine": {
         "type": "Transitive",
-        "resolved": "4.5.5",
-        "contentHash": "XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw=="
+        "resolved": "2.0.0-beta4.22272.1",
+        "contentHash": "1uqED/q2H0kKoLJ4+hI2iPSBSEdTuhfCYADeJrAqERmiGQ2NNacYKRNEQ+gFbU4glgVyK8rxI+ZOe1onEtr/Pg=="
       },
       "System.Reflection.Metadata": {
         "type": "Transitive",
@@ -147,11 +142,11 @@
           "xunit.extensibility.core": "[2.7.0]"
         }
       },
-      "cliwrap.tests.dummy": {
+      "cliwrap.fsharp.tests.dummy": {
         "type": "Project",
         "dependencies": {
-          "CliFx": "[2.3.5, )",
-          "System.Memory": "[4.5.5, )"
+          "FSharp.Core": "[8.0.200, )",
+          "System.CommandLine": "[2.0.0-beta4.22272.1, )"
         }
       },
       "UnMango.CliWrap.FSharp": {

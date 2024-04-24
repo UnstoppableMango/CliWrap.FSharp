@@ -7,7 +7,6 @@ open System.Text
 open System.Threading
 open CliWrap
 open CliWrap.Buffered
-open CliWrap.Tests
 open Xunit
 open FsCheck
 open FsCheck.Xunit
@@ -22,22 +21,22 @@ let ``Should configure target file path`` target =
 [<Property>]
 let ``Should configure args`` (a: NonNull<string> list) =
     let input = a |> List.map _.Get
-    let expected = Command(Dummy.Program.FilePath).WithArguments(input)
-    let actual = command Dummy.Program.FilePath { args input }
+    let expected = Command(Tests.Dummy.Program.FilePath).WithArguments(input)
+    let actual = command Tests.Dummy.Program.FilePath { args input }
     actual.Arguments = expected.Arguments
 
 [<Property>]
 let ``Should configure string args`` (a: NonNull<string>) =
-    let expected = Command(Dummy.Program.FilePath).WithArguments(a.Get)
-    let actual = command Dummy.Program.FilePath { args a.Get }
+    let expected = Command(Tests.Dummy.Program.FilePath).WithArguments(a.Get)
+    let actual = command Tests.Dummy.Program.FilePath { args a.Get }
     actual.Arguments = expected.Arguments
 
 [<Fact>]
 let ``Should execute CommandTask asynchronously`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
+    let! expected = Command(Tests.Dummy.Program.FilePath).ExecuteAsync()
 
     let! actual =
-        command Dummy.Program.FilePath {
+        command Tests.Dummy.Program.FilePath {
             exec
             async
         }
@@ -48,38 +47,38 @@ let ``Should execute CommandTask asynchronously`` () = task {
 
 [<Fact>]
 let ``Should execute asynchronously`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
-    let! actual = command Dummy.Program.FilePath { async } |> Async.StartAsTask
+    let! expected = Command(Tests.Dummy.Program.FilePath).ExecuteAsync()
+    let! actual = command Tests.Dummy.Program.FilePath { async } |> Async.StartAsTask
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute asynchronously with cancellation`` () = task {
     use cts = new CancellationTokenSource()
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync(cts.Token)
-    let! actual = command Dummy.Program.FilePath { async cts.Token } |> Async.StartAsTask
+    let! expected = Command(Tests.Dummy.Program.FilePath).ExecuteAsync(cts.Token)
+    let! actual = command Tests.Dummy.Program.FilePath { async cts.Token } |> Async.StartAsTask
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute asynchronously as task`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
-    let! actual = command Dummy.Program.FilePath { exec }
+    let! expected = Command(Tests.Dummy.Program.FilePath).ExecuteAsync()
+    let! actual = command Tests.Dummy.Program.FilePath { exec }
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute buffered`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync()
-    let! actual = command Dummy.Program.FilePath { buffered }
+    let! expected = Command(Tests.Dummy.Program.FilePath).ExecuteBufferedAsync()
+    let! actual = command Tests.Dummy.Program.FilePath { buffered }
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute buffered with encoding`` () = task {
     let encoding = Encoding.UTF8
-    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync(encoding)
-    let! actual = command Dummy.Program.FilePath { buffered encoding }
+    let! expected = Command(Tests.Dummy.Program.FilePath).ExecuteBufferedAsync(encoding)
+    let! actual = command Tests.Dummy.Program.FilePath { buffered encoding }
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
 
@@ -87,26 +86,26 @@ let ``Should execute buffered with encoding`` () = task {
 let ``Should execute buffered with encoding and cancellation`` () = task {
     let encoding = Encoding.UTF8
     use cts = new CancellationTokenSource()
-    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync(encoding, cts.Token)
-    let! actual = command Dummy.Program.FilePath { buffered encoding cts.Token }
+    let! expected = Command(Tests.Dummy.Program.FilePath).ExecuteBufferedAsync(encoding, cts.Token)
+    let! actual = command Tests.Dummy.Program.FilePath { buffered encoding cts.Token }
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
 
 [<Property>]
 let ``Should configure environment variables`` var =
     let expected =
-        Command(Dummy.Program.FilePath)
+        Command(Tests.Dummy.Program.FilePath)
             .WithEnvironmentVariables((dict [ var ]).AsReadOnly())
 
-    let actual = command Dummy.Program.FilePath { env [ var ] }
+    let actual = command Tests.Dummy.Program.FilePath { env [ var ] }
     actual.EnvironmentVariables.SequenceEqual(expected.EnvironmentVariables)
 
 [<Fact>]
 let ``Should configure stdin`` () = task {
     let input = PipeSource.FromString "testing"
-    let expected = Command(Dummy.Program.FilePath).WithStandardInputPipe(input)
+    let expected = Command(Tests.Dummy.Program.FilePath).WithStandardInputPipe(input)
 
-    let actual = command Dummy.Program.FilePath { stdin input }
+    let actual = command Tests.Dummy.Program.FilePath { stdin input }
 
     let a, b = new MemoryStream(), new MemoryStream()
     do! expected.StandardInputPipe.CopyToAsync(a)
@@ -120,12 +119,12 @@ let ``Should configure stdout`` () = task {
     let a, b = StringBuilder(), StringBuilder()
 
     let! _ =
-        Command(Dummy.Program.FilePath)
+        Command(Tests.Dummy.Program.FilePath)
             .WithArguments([ "generate binary"; "--target"; "all" ])
             .WithStandardOutputPipe(PipeTarget.ToStringBuilder(a))
             .ExecuteAsync()
 
-    let! _ = command Dummy.Program.FilePath {
+    let! _ = command Tests.Dummy.Program.FilePath {
         args [ "generate binary"; "--target"; "all" ]
         stdout (PipeTarget.ToStringBuilder(b))
         exec
@@ -139,12 +138,12 @@ let ``Should configure stderr`` () = task {
     let a, b = StringBuilder(), StringBuilder()
 
     let! _ =
-        Command(Dummy.Program.FilePath)
+        Command(Tests.Dummy.Program.FilePath)
             .WithArguments([ "generate binary"; "--target"; "all" ])
             .WithStandardErrorPipe(PipeTarget.ToStringBuilder(a))
             .ExecuteAsync()
 
-    let! _ = command Dummy.Program.FilePath {
+    let! _ = command Tests.Dummy.Program.FilePath {
         args [ "generate binary"; "--target"; "all" ]
         validation CommandResultValidation.None
         stderr (PipeTarget.ToStringBuilder(b))
@@ -156,6 +155,6 @@ let ``Should configure stderr`` () = task {
 
 [<Property>]
 let ``Should configure working directory`` directory =
-    let expected = Command(Dummy.Program.FilePath).WithWorkingDirectory(directory)
-    let actual = command Dummy.Program.FilePath { workingDirectory directory }
+    let expected = Command(Tests.Dummy.Program.FilePath).WithWorkingDirectory(directory)
+    let actual = command Tests.Dummy.Program.FilePath { workingDirectory directory }
     actual.WorkingDirPath = expected.WorkingDirPath
