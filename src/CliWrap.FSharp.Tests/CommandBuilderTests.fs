@@ -120,12 +120,12 @@ let ``Should configure stdout`` () = task {
 
     let! _ =
         Command(Tests.Dummy.Program.FilePath)
-            .WithArguments([ "generate binary"; "--target"; "all" ])
+            .WithArguments([ "generate"; "binary"; "--target"; "all" ])
             .WithStandardOutputPipe(PipeTarget.ToStringBuilder(a))
             .ExecuteAsync()
 
     let! _ = command Tests.Dummy.Program.FilePath {
-        args [ "generate binary"; "--target"; "all" ]
+        args [ "generate"; "binary"; "--target"; "all" ]
         stdout (PipeTarget.ToStringBuilder(b))
         exec
     }
@@ -139,12 +139,12 @@ let ``Should configure stderr`` () = task {
 
     let! _ =
         Command(Tests.Dummy.Program.FilePath)
-            .WithArguments([ "generate binary"; "--target"; "all" ])
+            .WithArguments([ "generate"; "binary"; "--target"; "all" ])
             .WithStandardErrorPipe(PipeTarget.ToStringBuilder(a))
             .ExecuteAsync()
 
     let! _ = command Tests.Dummy.Program.FilePath {
-        args [ "generate binary"; "--target"; "all" ]
+        args [ "generate"; "binary"; "--target"; "all" ]
         validation CommandResultValidation.None
         stderr (PipeTarget.ToStringBuilder(b))
         exec
