@@ -1,0 +1,16 @@
+diff --git a/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj b/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj
+index 519b854..0bdb228 100644
+--- a/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj
++++ b/CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj
+@@ -8,9 +8,8 @@
+ 
+   <ItemGroup>
+     <PackageReference Include="CliFx" Version="2.3.5" />
+-    <PackageReference Include="CSharpier.MsBuild" Version="0.28.2" PrivateAssets="all" />
+     <PackageReference Include="PolyShim" Version="1.12.0" PrivateAssets="all" />
+     <PackageReference Include="System.Memory" Version="4.5.5" />
+   </ItemGroup>
+ 
+-</Project>
+\ No newline at end of file
++</Project>
