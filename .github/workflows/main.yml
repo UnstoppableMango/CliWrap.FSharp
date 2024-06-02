@@ -29,9 +29,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore --locked-mode
 
-      # The vendored dummy program uses CSharpier, we don't want to touch it
       - name: Build solution
-        run: dotnet build -c Release --no-restore /p:CSharpier_Bypass=true
+        run: dotnet build -c Release --no-restore
 
       - name: Run tests
         run: dotnet test -c Release --collect:"XPlat Code Coverage" --no-build
