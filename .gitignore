@@ -1,6 +1,5 @@
 # IDE Settings
 .vscode/*
-!.vscode/settings.json
 !.vscode/extensions.json
 .idea/**/workspace.xml
 .idea/**/tasks.xml
