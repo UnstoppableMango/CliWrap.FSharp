@@ -6,7 +6,7 @@ build:
 test:
 	dotnet test
 
-format:
+format: .fantomasignore .config/dotnet-tools.json
 	dotnet fantomas .
 
 prepare_dummy:
