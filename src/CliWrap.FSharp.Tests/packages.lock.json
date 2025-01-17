@@ -29,9 +29,9 @@
       },
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[8.0.401, )",
-        "resolved": "8.0.401",
-        "contentHash": "pvmquLrs82m8WqWB49Gj+hsmnWURkUbc++pJ0P2NdrEv1ZVVrhDNjSiFNP4wW4HiTowwaRhjiBc5IKNV35Vf/A=="
+        "requested": "[8.0.403, )",
+        "resolved": "8.0.403",
+        "contentHash": "t1Pvv2++3zMQKKNuiQc1Lz4TCdaBajgG4mLhOE8AoFzborHQ/JbjIaJr6Mrq8m2z15KLu4r6Qz7E3oeACpljTg=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -158,7 +158,7 @@
         "type": "Project",
         "dependencies": {
           "CliWrap": "[3.6.7, )",
-          "FSharp.Core": "[8.0.401, )"
+          "FSharp.Core": "[8.0.403, )"
         }
       }
     }
