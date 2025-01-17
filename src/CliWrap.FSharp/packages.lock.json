@@ -1,18 +1,18 @@
 {
   "version": 1,
   "dependencies": {
-    "net8.0": {
+    "net9.0": {
       "CliWrap": {
         "type": "Direct",
-        "requested": "[3.6.7, )",
-        "resolved": "3.6.7",
-        "contentHash": "KYhA0OAGmNg22xI2OjkqG0zlgd61OCJOHYb+/uvSILriQNMQNmAjsRj7OqAh9dgltEuNpuPvN9+Y7pMBD/0NyQ=="
+        "requested": "[3.7.1, )",
+        "resolved": "3.7.1",
+        "contentHash": "2f5L/wjalAisJ9NEu9o5liobQQji47evLOYLf2kk1y/MGLmTZWDfGR0d8C5lNuJtUiHCZzBoTfJbizQHZ2rFaw=="
       },
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[8.0.401, )",
-        "resolved": "8.0.401",
-        "contentHash": "pvmquLrs82m8WqWB49Gj+hsmnWURkUbc++pJ0P2NdrEv1ZVVrhDNjSiFNP4wW4HiTowwaRhjiBc5IKNV35Vf/A=="
+        "requested": "[9.0.100, )",
+        "resolved": "9.0.100",
+        "contentHash": "ye8yagHGsH08H2Twno5GRWkSbrMtxK/SWiHuPcF+3nODpW65/VJ8RO0aWxp8n9+KQbmahg90wAEL3TEXjF0r6A=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
