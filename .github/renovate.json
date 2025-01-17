@@ -1,7 +1,7 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": [
-		"config:base"
+		"config:recommended"
 	],
 	"automerge": true,
 	"git-submodules": {
@@ -9,10 +9,10 @@
 	},
 	"packageRules": [
 		{
-			"matchPackagePatterns": [
-				"minver"
-			],
-			"groupName": "minver"
+			"groupName": "minver",
+			"matchPackageNames": [
+				"/minver/"
+			]
 		}
 	]
 }
