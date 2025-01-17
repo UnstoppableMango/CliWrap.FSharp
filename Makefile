@@ -1,7 +1,13 @@
 WORKING_DIR := $(shell git rev-parse --show-toplevel)
 
-all:
+build:
 	dotnet build
+
+test:
+	dotnet test
+
+format:
+	dotnet fantomas .
 
 prepare_dummy:
 	cd vendor/CliWrap && git apply ${WORKING_DIR}/vendor/patches/dummy-program.patch
