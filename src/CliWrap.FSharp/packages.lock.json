@@ -4,9 +4,9 @@
     "net8.0": {
       "CliWrap": {
         "type": "Direct",
-        "requested": "[3.6.7, )",
-        "resolved": "3.6.7",
-        "contentHash": "KYhA0OAGmNg22xI2OjkqG0zlgd61OCJOHYb+/uvSILriQNMQNmAjsRj7OqAh9dgltEuNpuPvN9+Y7pMBD/0NyQ=="
+        "requested": "[3.7.1, )",
+        "resolved": "3.7.1",
+        "contentHash": "2f5L/wjalAisJ9NEu9o5liobQQji47evLOYLf2kk1y/MGLmTZWDfGR0d8C5lNuJtUiHCZzBoTfJbizQHZ2rFaw=="
       },
       "FSharp.Core": {
         "type": "Direct",
