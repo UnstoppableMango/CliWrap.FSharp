@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CliWrap" Version="3.6.7"/>
+		<PackageReference Include="CliWrap" Version="3.7.1" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all"/>
 		<PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all"/>
 	</ItemGroup>
