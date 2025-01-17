@@ -95,8 +95,7 @@ let ``Should execute buffered with encoding and cancellation`` () = task {
 [<Property>]
 let ``Should configure environment variables`` var =
     let expected =
-        Command(Dummy.Program.FilePath)
-            .WithEnvironmentVariables((dict [ var ]).AsReadOnly())
+        Command(Dummy.Program.FilePath).WithEnvironmentVariables((dict [ var ]).AsReadOnly())
 
     let actual = command Dummy.Program.FilePath { env [ var ] }
     actual.EnvironmentVariables.SequenceEqual(expected.EnvironmentVariables)
