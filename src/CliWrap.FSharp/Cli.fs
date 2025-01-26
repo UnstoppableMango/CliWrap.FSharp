@@ -85,7 +85,7 @@ let credsf (f: CredentialsBuilder -> 'a) (command: Command) =
 /// <param name="command">The command to modify.</param>
 /// <returns>A new command with the updated environment variables.</returns>
 let env (env: (string * string) seq) (command: Command) =
-    command.WithEnvironmentVariables((dict env).AsReadOnly())
+    command.WithEnvironmentVariables(readOnlyDict env)
 
 /// <summary>
 /// Creates a copy of this command, setting the environment variables to the value configured by the specified delegate.
