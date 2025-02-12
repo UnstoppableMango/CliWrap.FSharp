@@ -11,7 +11,7 @@ Idiomatic F# support for [CliWrap](https://github.com/Tyrrrz/CliWrap).
 ## Install
 
 - [NuGet](https://nuget.org/packages/UnMango.CliWrap.FSharp): `dotnet add package UnMango.CliWrap.FSharp`
-- [GitHub Packages](): `dotnet add package UnMango.CliWrap.FSharp -s github`
+- [GitHub Packages](https://github.com/UnstoppableMango/CliWrap.FSharp/pkgs/nuget/UnMango.CliWrap.FSharp): `dotnet add package UnMango.CliWrap.FSharp -s github`
   - [Authenticating to GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry#authenticating-to-github-packages)
   - [Installing from GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry#installing-a-package)
 
