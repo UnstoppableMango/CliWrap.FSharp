@@ -13,6 +13,10 @@
 			"matchPackageNames": [
 				"/minver/"
 			]
+		},
+		{
+			"matchPackageNames": ["dotnet-sdk"],
+			"versioning": "same-major"
 		}
 	]
 }
