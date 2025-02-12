@@ -9,6 +9,12 @@ test:
 format: .fantomasignore .config/dotnet-tools.json
 	dotnet fantomas .
 
+trimmable:
+	dotnet publish examples/CliWrap.FSharp.Trimming -c Release --use-current-runtime
+
+aot:
+	dotnet publish examples/CliWrap.FSharp.Aot -c Release --use-current-runtime
+
 prepare_dummy:
 	cd vendor/CliWrap && git apply ${WORKING_DIR}/vendor/patches/dummy-program.patch
 

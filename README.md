@@ -153,6 +153,12 @@ let main args =
   cmd.ExecuteAsync()
 ```
 
+## AOT Compatibility
+
+Trimming is supported, but FSharp.Core still has some work to do before full AOT is supported.
+
+<https://github.com/dotnet/fsharp/issues/13398>
+
 ## Inspirations
 
 The idea to abuse F# computation expressions was inspired by [Akkling.Hocon](https://github.com/Horusiath/Akkling/tree/master/src/Akkling.Hocon) and [FsHttp](https://github.com/fsprojects/FsHttp).
