@@ -100,3 +100,12 @@ jobs:
           dotnet nuget push "$PACKAGE_PATTERN" \
             --source ${{ matrix.source }} \
             --skip-duplicate
+
+  # Ensure the devcontainer can build the library
+  devcontainer:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: devcontainers/ci@v0.3
+        with:
+          runCmd: make build
