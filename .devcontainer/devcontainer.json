@@ -1,12 +1,13 @@
 {
 	"name": "CliWrap.FSharp",
-	"image": "mcr.microsoft.com/devcontainers/dotnet:1.3.6-8.0-bookworm-slim",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:dev-9.0-noble",
 	"containerUser": "vscode",
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"Ionide.Ionide-fsharp",
-				"EditorConfig.EditorConfig"
+				"EditorConfig.EditorConfig",
+				"github.vscode-github-actions"
 			]
 		}
 	}
