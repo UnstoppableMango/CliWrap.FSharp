@@ -106,6 +106,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: tree:0
+          submodules: true
+
       - uses: devcontainers/ci@v0.3
         with:
           runCmd: make build
