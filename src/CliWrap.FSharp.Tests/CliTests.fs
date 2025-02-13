@@ -28,13 +28,14 @@ let ``Should create command the long way``
     let input = PipeSource.FromString stdin.Get
     let output = PipeTarget.ToStringBuilder(StringBuilder())
     let err = PipeTarget.ToStringBuilder(StringBuilder())
+    let policy = ResourcePolicy()
     let creds = Credentials(domain.Get)
     let envs = (dict [ "test", "test" ]).AsReadOnly()
     let validation = CommandResultValidation.None
     let expected = Command(target)
 
     let actual =
-        Cli.commandv target args.Get workDir.Get creds envs validation input output err
+        Cli.commandv target args.Get workDir.Get policy creds envs validation input output err
 
     expected.TargetFilePath = actual.TargetFilePath
 

@@ -1,6 +1,5 @@
 module UnMango.CliWrap.FSharp.Cli
 
-open System.Collections.Generic
 open CliWrap
 open CliWrap.Builders
 
@@ -48,6 +47,7 @@ let argsf (f: ArgumentsBuilder -> 'a) (command: Command) =
 /// <param name="target">The target executable or script file.</param>
 /// <param name="args">The arguments to be passed to the target.</param>
 /// <param name="workDir">The working directory for the command.</param>
+/// <param name="policy">The resource policy to use for the command.</param>
 /// <param name="creds">The credentials to use for the command.</param>
 /// <param name="env">The environment variables for the command.</param>
 /// <param name="v">The validation for the command.</param>
@@ -58,8 +58,8 @@ let argsf (f: ArgumentsBuilder -> 'a) (command: Command) =
 /// <remarks>
 /// v = verbose. Idk why you would use this, but it's there if you want to
 /// </remarks>
-let commandv target args workDir creds env v stdin stdout stderr =
-    Command(target, args, workDir, creds, env, v, stdin, stdout, stderr)
+let commandv target args workDir policy creds env v stdin stdout stderr =
+    Command(target, args, workDir, policy, creds, env, v, stdin, stdout, stderr)
 
 /// <summary>
 /// Creates a copy of this command, setting the user credentials to the specified value.
