@@ -16,13 +16,13 @@
       },
       "CliWrap": {
         "type": "Transitive",
-        "resolved": "3.8.0",
-        "contentHash": "BWQ71JuSq+sqg/ou5zDcUIIUMgHmZnsDALl5EvA19Qb5osGht8MlNo9xYFiek6CjQIzifqdmwb0aVkXdSC6g/A=="
+        "resolved": "3.8.1",
+        "contentHash": "iSjGhNhIB0gg2ihaMNZ5ZKx1B29/i5F9dvFxa2f8mLCiHluXKHUXUpvg0abEZ0vwMpo5u9PNVdWTVyhFLKZihQ=="
       },
       "UnMango.CliWrap.FSharp": {
         "type": "Project",
         "dependencies": {
-          "CliWrap": "[3.8.0, )",
+          "CliWrap": "[3.8.1, )",
           "FSharp.Core": "[9.0.101, )"
         }
       }
