@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.0": {
       "CliWrap": {
         "type": "Direct",
-        "requested": "[3.8.0, )",
-        "resolved": "3.8.0",
-        "contentHash": "BWQ71JuSq+sqg/ou5zDcUIIUMgHmZnsDALl5EvA19Qb5osGht8MlNo9xYFiek6CjQIzifqdmwb0aVkXdSC6g/A==",
+        "requested": "[3.8.1, )",
+        "resolved": "3.8.1",
+        "contentHash": "iSjGhNhIB0gg2ihaMNZ5ZKx1B29/i5F9dvFxa2f8mLCiHluXKHUXUpvg0abEZ0vwMpo5u9PNVdWTVyhFLKZihQ==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "9.0.1",
           "System.Management": "9.0.1",
@@ -118,9 +118,9 @@
     ".NETStandard,Version=v2.1": {
       "CliWrap": {
         "type": "Direct",
-        "requested": "[3.8.0, )",
-        "resolved": "3.8.0",
-        "contentHash": "BWQ71JuSq+sqg/ou5zDcUIIUMgHmZnsDALl5EvA19Qb5osGht8MlNo9xYFiek6CjQIzifqdmwb0aVkXdSC6g/A==",
+        "requested": "[3.8.1, )",
+        "resolved": "3.8.1",
+        "contentHash": "iSjGhNhIB0gg2ihaMNZ5ZKx1B29/i5F9dvFxa2f8mLCiHluXKHUXUpvg0abEZ0vwMpo5u9PNVdWTVyhFLKZihQ==",
         "dependencies": {
           "System.Management": "9.0.1"
         }
@@ -174,9 +174,9 @@
     "net8.0": {
       "CliWrap": {
         "type": "Direct",
-        "requested": "[3.8.0, )",
-        "resolved": "3.8.0",
-        "contentHash": "BWQ71JuSq+sqg/ou5zDcUIIUMgHmZnsDALl5EvA19Qb5osGht8MlNo9xYFiek6CjQIzifqdmwb0aVkXdSC6g/A=="
+        "requested": "[3.8.1, )",
+        "resolved": "3.8.1",
+        "contentHash": "iSjGhNhIB0gg2ihaMNZ5ZKx1B29/i5F9dvFxa2f8mLCiHluXKHUXUpvg0abEZ0vwMpo5u9PNVdWTVyhFLKZihQ=="
       },
       "FSharp.Core": {
         "type": "Direct",
@@ -220,9 +220,9 @@
     "net9.0": {
       "CliWrap": {
         "type": "Direct",
-        "requested": "[3.8.0, )",
-        "resolved": "3.8.0",
-        "contentHash": "BWQ71JuSq+sqg/ou5zDcUIIUMgHmZnsDALl5EvA19Qb5osGht8MlNo9xYFiek6CjQIzifqdmwb0aVkXdSC6g/A=="
+        "requested": "[3.8.1, )",
+        "resolved": "3.8.1",
+        "contentHash": "iSjGhNhIB0gg2ihaMNZ5ZKx1B29/i5F9dvFxa2f8mLCiHluXKHUXUpvg0abEZ0vwMpo5u9PNVdWTVyhFLKZihQ=="
       },
       "FSharp.Core": {
         "type": "Direct",
