@@ -10,9 +10,9 @@
       },
       "FsCheck": {
         "type": "Direct",
-        "requested": "[3.1.0, )",
-        "resolved": "3.1.0",
-        "contentHash": "PbPqufRGxtcVuQ4oriwn5/G+WBh5wIiKE6LS6Z8QvC6iUdMDvjo0YbczXavXF+1TFkQ49r3N1HdfBSn/WE0KAw==",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "NrPg83xMofIEjInYxPqnZQGv6q/xUKCP67yWJ7kUKu+vjpguQvzsqhWQfLYOanVIqUqXa54ot67cOPJ3twdYLA==",
         "dependencies": {
           "FSharp.Core": "5.0.2"
         }
