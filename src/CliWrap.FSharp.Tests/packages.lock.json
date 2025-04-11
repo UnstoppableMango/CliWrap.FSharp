@@ -19,12 +19,12 @@
       },
       "FsCheck.Xunit": {
         "type": "Direct",
-        "requested": "[3.1.0, )",
-        "resolved": "3.1.0",
-        "contentHash": "OX/psz0WCBWWVEPy/NtLTqvk/JuzgQNK07lV5674PNKhqLoWoCOHW0j9IL2l56UN1gpCFTzI526TubshJByVqA==",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "/4zV+MiFI7xn3HNHKms99z67kI05k8jnJ1mcWIt7m/IeFyNl8cyDEdxglL2oYS5JFzLmndTC8caqvFWSpz09yw==",
         "dependencies": {
           "FSharp.Core": "5.0.2",
-          "FsCheck": "[3.1.0]",
+          "FsCheck": "[3.2.0]",
           "xunit.extensibility.execution": "[2.4.1, 3.0.0)"
         }
       },
