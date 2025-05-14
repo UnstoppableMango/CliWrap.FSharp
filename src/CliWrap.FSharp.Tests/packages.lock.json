@@ -63,8 +63,8 @@
       },
       "CliFx": {
         "type": "Transitive",
-        "resolved": "2.3.5",
-        "contentHash": "WaZDt7FC1ViEzS5m7w7lOWT/aluZ28fFkPcRdkQ+7DowqjTmr5YZswNIDqSuBDaeGXPe8VzTZKMltKrXhIOt9Q=="
+        "resolved": "2.3.6",
+        "contentHash": "7Q6rbhCxpEoAtPrcBm4sJ4QlDeY+0Dp4in0oXAxrJJ/4L1LV/YkDQSqfUMwK56GbnpUo4fIrpOxoxM+ta44B1g=="
       },
       "CliWrap": {
         "type": "Transitive",
@@ -151,7 +151,7 @@
       "cliwrap.tests.dummy": {
         "type": "Project",
         "dependencies": {
-          "CliFx": "[2.3.5, )",
+          "CliFx": "[2.3.6, )",
           "System.Memory": "[4.6.1, )"
         }
       },
