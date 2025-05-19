@@ -100,8 +100,8 @@
       },
       "System.Memory": {
         "type": "Transitive",
-        "resolved": "4.6.1",
-        "contentHash": "D7hi21hWJygTUz7fsA0LTCmoxpCTSgUuuVr93CAe9l0sulFaC7zuE1kZU3MdXmet7+MTMVD5ZWyQ4Lqcqura1A=="
+        "resolved": "4.6.3",
+        "contentHash": "qdcDOgnFZY40+Q9876JUHnlHu7bosOHX8XISRoH94fwk6hgaeQGSgfZd8srWRZNt5bV9ZW2TljcegDNxsf+96A=="
       },
       "System.Reflection.Metadata": {
         "type": "Transitive",
@@ -152,7 +152,7 @@
         "type": "Project",
         "dependencies": {
           "CliFx": "[2.3.6, )",
-          "System.Memory": "[4.6.1, )"
+          "System.Memory": "[4.6.3, )"
         }
       },
       "UnMango.CliWrap.FSharp": {
