@@ -4,15 +4,15 @@
     "net9.0": {
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[9.0.303, )",
-        "resolved": "9.0.303",
-        "contentHash": "6JlV8aD8qQvcmfoe/PMOxCHXc0uX4lR23u0fAyQtnVQxYULLoTZgwgZHSnRcuUHOvS3wULFWcwdnP1iwslH60g=="
+        "requested": "[10.0.100-beta.25277.114, )",
+        "resolved": "10.0.100-beta.25277.114",
+        "contentHash": "Wn91scgdmSD8QoKKZG7ZIz6YPJabBnfPM9sGjbTo76FeoTkX+QPXhNxGMyfwTq5YQBVf7mFr5z1HDSr/Co5nqw=="
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[9.0.9, )",
-        "resolved": "9.0.9",
-        "contentHash": "cHi1os/s6aobEgNkbOh/jW+ru//rHuedvj4PmTh2mMY7et/mJjqphBeXeKCesDvMd0+E2JyX9EPZZC4VRKslXg=="
+        "requested": "[9.0.5, )",
+        "resolved": "9.0.5",
+        "contentHash": "4L7wbb3Y4BJgIeSnmAf/C6S/qCs9rT1b0dX72uj3qo0qvUH7D0U1tU5ZlC7A3Wb8E/dXK4caOi4JkdLTVJaXhw=="
       },
       "CliWrap": {
         "type": "Transitive",
@@ -23,7 +23,7 @@
         "type": "Project",
         "dependencies": {
           "CliWrap": "[3.9.0, )",
-          "FSharp.Core": "[9.0.303, )"
+          "FSharp.Core": "[10.0.100-beta.25277.114, )"
         }
       }
     }
