@@ -4,9 +4,9 @@
     "net9.0": {
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[9.0.303, )",
-        "resolved": "9.0.303",
-        "contentHash": "6JlV8aD8qQvcmfoe/PMOxCHXc0uX4lR23u0fAyQtnVQxYULLoTZgwgZHSnRcuUHOvS3wULFWcwdnP1iwslH60g=="
+        "requested": "[10.0.100-preview7.25451.107, )",
+        "resolved": "10.0.100-preview7.25451.107",
+        "contentHash": "W820VS2tv/JrAjb1u3+DUYl1bMhIbTmVZ43HBAZJsuVILnUX5RbrBzoU75cCAQSYtV9VjQN1Qh5pysbocxVBeg=="
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
@@ -23,9 +23,10 @@
         "type": "Project",
         "dependencies": {
           "CliWrap": "[3.9.0, )",
-          "FSharp.Core": "[9.0.303, )"
+          "FSharp.Core": "[10.0.100-preview7.25451.107, )"
         }
       }
-    }
+    },
+    "net9.0/linux-x64": {}
   }
 }
