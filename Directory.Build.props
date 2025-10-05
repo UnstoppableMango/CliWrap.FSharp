@@ -5,6 +5,7 @@
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<PackageProjectUrl>https://github.com/UnstoppableMango/CliWrap.FSharp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/UnstoppableMango/CliWrap.FSharp</RepositoryUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<DebugType>portable</DebugType>
 		<IncludeSource>true</IncludeSource>
