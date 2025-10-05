@@ -14,8 +14,7 @@
 bin/
 obj/
 *.nupkg
+.fake/
 
 # User Specific
 *.user
-
-.fake
