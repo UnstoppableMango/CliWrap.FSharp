@@ -1,26 +1,31 @@
-WORKING_DIR := $(shell git rev-parse --show-toplevel)
+DOTNET   ?= dotnet
+FANTOMAS ?= $(DOTNET) fantomas
+NPX      ?= npx
 
 build:
-	dotnet build
+	$(DOTNET) build
 
 test:
-	dotnet test
+	$(DOTNET) test
 
-format: .fantomasignore .config/dotnet-tools.json
-	dotnet fantomas .
+format fmt: .fantomasignore .config/dotnet-tools.json
+	$(FANTOMAS) .
 
 trimmable:
-	dotnet publish examples/CliWrap.FSharp.Trimming -c Release --use-current-runtime
+	$(DOTNET) publish examples/CliWrap.FSharp.Trimming -c Release --use-current-runtime
 
 aot:
-	dotnet publish examples/CliWrap.FSharp.Aot -c Release --use-current-runtime
+	$(DOTNET) publish examples/CliWrap.FSharp.Aot -c Release --use-current-runtime
 
 prepare_dummy:
-	cd vendor/CliWrap && git apply ${WORKING_DIR}/vendor/patches/dummy-program.patch
+	cd vendor/CliWrap && git apply ${CURDIR}/vendor/patches/dummy-program.patch
 
 dummy_patch:
-	cd vendor/CliWrap && git diff > ${WORKING_DIR}/vendor/patches/dummy-program.patch
+	cd vendor/CliWrap && git diff > ${CURDIR}/vendor/patches/dummy-program.patch
 
 dummy_program: prepare_dummy
 	cp -r vendor/CliWrap/CliWrap.Tests.Dummy src
 	cd vendor/CliWrap && git reset --hard
+
+devcontainer:
+	$(NPX) @devcontainers/cli build . --workspace-folder .
