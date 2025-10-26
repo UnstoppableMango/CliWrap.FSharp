@@ -1,6 +1,6 @@
 {
 	"name": "CliWrap.FSharp",
-	"image": "mcr.microsoft.com/devcontainers/dotnet:dev-9.0-noble",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:dev-10.0-noble",
 	"containerUser": "vscode",
 	"customizations": {
 		"vscode": {
