@@ -10,29 +10,29 @@
       },
       "FsCheck": {
         "type": "Direct",
-        "requested": "[3.3.1, )",
-        "resolved": "3.3.1",
-        "contentHash": "2GSfwL+PoslUKqN/ztsIArkasSUqVijyny/SxwZUy4AdR6fQ1JUC5JAm5Sdsk6uP/T+DLV+GOrBeZ5xnJQzJ5w==",
+        "requested": "[3.3.2, )",
+        "resolved": "3.3.2",
+        "contentHash": "JlK719ZlP/ofbsN0qXYrfqbe2SCgp4D1BEyJynkzyurMI2JqUkWgZHXgEu0pXVdj35zU/GWsXrGYA68sSdAmHQ==",
         "dependencies": {
           "FSharp.Core": "5.0.2"
         }
       },
       "FsCheck.Xunit": {
         "type": "Direct",
-        "requested": "[3.3.1, )",
-        "resolved": "3.3.1",
-        "contentHash": "5NVsI6u2qZmIQNYL9EoHS8DNN2kd5tygcXWq6MxscubsLcvwgB3+ragBtdlOrJcyUXrq2ZT8yk/K0SyAhovitg==",
+        "requested": "[3.3.2, )",
+        "resolved": "3.3.2",
+        "contentHash": "SR7GKDMMP4Dq9ZDZ0D5joxLU7dgZEXUHtIRYUoeTeiHmzp6LhDclEDINzk5ymPG7ytbdCNaLKKlPKj/+w/ejQw==",
         "dependencies": {
           "FSharp.Core": "5.0.2",
-          "FsCheck": "[3.3.1]",
+          "FsCheck": "[3.3.2]",
           "xunit.extensibility.execution": "[2.4.1, 3.0.0)"
         }
       },
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[10.0.100-preview7.25451.107, )",
-        "resolved": "10.0.100-preview7.25451.107",
-        "contentHash": "W820VS2tv/JrAjb1u3+DUYl1bMhIbTmVZ43HBAZJsuVILnUX5RbrBzoU75cCAQSYtV9VjQN1Qh5pysbocxVBeg=="
+        "requested": "[10.0.100, )",
+        "resolved": "10.0.100",
+        "contentHash": "vWHaY4Pk7mUv5gJN9+rbods+QnPjhrw3sdGw2R9pFLIBzHkkN26eMgubPHZVoS7xwLA9TZuoHGLrboY5QOBcdA=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -145,7 +145,7 @@
         "type": "Project",
         "dependencies": {
           "CliWrap": "[3.9.0, )",
-          "FSharp.Core": "[10.0.100-preview7.25451.107, )"
+          "FSharp.Core": "[10.0.100, )"
         }
       }
     }
