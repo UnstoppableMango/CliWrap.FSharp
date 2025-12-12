@@ -51,7 +51,7 @@ jobs:
       - name: Upload artifact
         id: upload
         if: github.event_name == 'push'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: nuget
           path: out/*.nupkg
@@ -72,7 +72,7 @@ jobs:
     permissions:
       packages: write
     steps:
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: nuget
 
