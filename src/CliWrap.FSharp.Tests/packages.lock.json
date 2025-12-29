@@ -32,7 +32,7 @@
         "type": "Direct",
         "requested": "[10.0.101, )",
         "resolved": "10.0.101",
-        "contentHash": "V67cyT+mkIF4UXHPKif+kzKiWZrTXFx4kmMqXqUdJdwbykxURkNlK9mY27ba6rRT37F1cAjd+vZs2MSfKuE8PQ=="
+        "contentHash": "vI+jT7iwaSiYENtsjAhlLfu1BYH9z4r6QdHjTGsJxrLrBuwVj4Vm+4MzywbKlhFWGH+jD2MO6HOaBrZK0Zd3hA=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
