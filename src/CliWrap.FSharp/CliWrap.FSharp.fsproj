@@ -24,7 +24,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CliWrap" Version="3.10.0" />
-		<PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all"/>
+		<PackageReference Include="MinVer" Version="6.1.0" PrivateAssets="all"/>
 	</ItemGroup>
 
 </Project>
