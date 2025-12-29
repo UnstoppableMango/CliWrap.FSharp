@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="CliFx" Version="2.3.6" />
-    <PackageReference Include="PolyShim" Version="1.15.0" PrivateAssets="all" />
+    <PackageReference Include="PolyShim" Version="2.4.0" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
