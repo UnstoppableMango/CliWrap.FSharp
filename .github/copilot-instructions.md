@@ -10,8 +10,10 @@ This repository provides idiomatic F# support for [CliWrap](https://github.com/T
 
 ## Code Style and Formatting
 
-- Use **spaces for indentation** in F# files (`.fs`, `.fsx`)
-- Use **tabs for indentation** in other files
+- Use **spaces for indentation** in `.fs` files (4 spaces)
+- Use **tabs for indentation** in other files (unless specified otherwise in `.editorconfig`)
+- YAML files (`.yml`) use 2 spaces for indentation
+- Markdown files (`.md`) use spaces for indentation
 - Run `dotnet fantomas .` or `make format` to format code before committing
 - Follow the `.editorconfig` settings strictly
 - F# newlines before multiline computation expressions are disabled (`fsharp_newline_before_multiline_computation_expression = false`)

@@ -1,10 +1,10 @@
 ---
-applyTo: "**/*.fs,**/*.fsi,**/*.fsx"
+applyTo: "**/*.fs"
 ---
 
 # F# Source File Instructions
 
-These instructions apply to all F# source files (`.fs`, `.fsi`, `.fsx`).
+These instructions apply to all F# implementation files (`.fs`).
 
 ## Formatting
 
