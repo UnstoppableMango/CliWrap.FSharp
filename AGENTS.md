@@ -9,8 +9,8 @@ CliWrap.FSharp is an F# wrapper library for CliWrap, providing idiomatic F# supp
 ## Development Environment
 
 **Prerequisites:**
-- .NET SDK (version specified in `global.json`)
-- F# 6.0 or later
+- .NET SDK (version specified in `global.json`, currently .NET 10 preview)
+- F# compiler (bundled with .NET SDK)
 - Fantomas for code formatting
 
 **Setup:**
