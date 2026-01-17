@@ -149,7 +149,7 @@ let ``Should configure arguments`` () =
 - Review existing issues for similar problems
 - Check CliWrap documentation for underlying behavior
 - F# style questions: reference [F# Style Guide](https://docs.microsoft.com/en-us/dotnet/fsharp/style-guide/)
-- Test with the dummy program in `vendor/CliWrap/CliWrap.Tests.Dummy`
+- Test with the dummy program in `src/CliWrap.Tests.Dummy`
 
 ## Contribution Guidelines
 
