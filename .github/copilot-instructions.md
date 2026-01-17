@@ -10,7 +10,7 @@ This repository provides idiomatic F# support for [CliWrap](https://github.com/T
 
 ## Code Style and Formatting
 
-- Use **spaces for indentation** in `.fs` files (4 spaces)
+- Use **4 spaces for indentation** in `.fs` files (standard F# convention)
 - Use **tabs for indentation** in other files (unless specified otherwise in `.editorconfig`)
 - YAML files (`.yml`) use 2 spaces for indentation
 - Markdown files (`.md`) use spaces for indentation

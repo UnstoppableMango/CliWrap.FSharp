@@ -35,7 +35,7 @@ These instructions apply to all test files.
 
 ## Test Data
 
-- Use the CliWrap test dummy program from `vendor/CliWrap/CliWrap.Tests.Dummy` when available
+- Use the CliWrap test dummy program from `src/CliWrap.Tests.Dummy` when available
 - Reference it as `Dummy.Program.FilePath` from `CliWrap.Tests` namespace
 - Create minimal test data that clearly demonstrates the test scenario
 - Avoid complex test setup; prefer simple, readable tests
