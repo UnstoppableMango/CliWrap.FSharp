@@ -1,6 +1,6 @@
 {
 	"name": "CliWrap.FSharp",
-	"image": "mcr.microsoft.com/devcontainers/dotnet:2.0.3-10.0-noble",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:2.0.4-10.0-noble",
 	"remoteUser": "root",
 	"customizations": {
 		"vscode": {
