@@ -1,4 +1,5 @@
 <Project>
+	<Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="2.0.2" />
 	<PropertyGroup>
 		<Authors>UnstoppableMango</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -10,9 +11,6 @@
 		<DebugType>portable</DebugType>
 		<IncludeSource>true</IncludeSource>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
-
-		<!-- https://github.com/NuGet/Home/issues/7921#issuecomment-478152479 -->
-		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -22,6 +20,10 @@
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 		<CSharpier_Bypass>true</CSharpier_Bypass>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DotNet.ReproducibleBuilds" Version="2.0.2" PrivateAssets="All"/>
+	</ItemGroup>
 
 	<PropertyGroup>
 		<MinVerTagPrefix>v</MinVerTagPrefix>
