@@ -11,12 +11,20 @@
 		{
 			"groupName": "minver",
 			"matchPackageNames": [
-				"/minver/"
+				"minver",
+				"minver-cli"
 			]
 		},
 		{
 			"matchPackageNames": ["dotnet-sdk"],
 			"versioning": "same-major"
+		},
+		{
+			"groupName": "dotnet",
+			"matchPackageNames": [
+				"dotnet-sdk",
+				"mcr.microsoft.com/devcontainers/dotnet"
+			]
 		}
 	]
 }
