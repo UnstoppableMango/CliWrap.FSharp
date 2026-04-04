@@ -1,0 +1,92 @@
+[
+  {
+    "pname": "CliWrap",
+    "version": "3.10.1",
+    "hash": "sha256-uH4SXiMkUIPw5RRyKtDTTCSkkr3BhBAPrxnC4O4ES4c="
+  },
+  {
+    "pname": "DotNet.ReproducibleBuilds",
+    "version": "2.0.2",
+    "hash": "sha256-8cez3r8io8FmMtND049BdBHI6Dq4f7HkFUbS6kQuysE="
+  },
+  {
+    "pname": "DotNet.ReproducibleBuilds.Isolated",
+    "version": "2.0.2",
+    "hash": "sha256-ZT5g4sYLY9KwSgvOrnHcHmRShurddqV4/T92RdzNY6E="
+  },
+  {
+    "pname": "fantomas",
+    "version": "7.0.5",
+    "hash": "sha256-fseS0ORahl/iK/uZmGOooTmrny8YL1KEwNNq27VxLj0="
+  },
+  {
+    "pname": "FSharp.Core",
+    "version": "10.1.201",
+    "hash": "sha256-NzxdRJgL+5RQpUm8Y6Mc0w7sakxqThv6qHpP+u0x5x0="
+  },
+  {
+    "pname": "Microsoft.Bcl.AsyncInterfaces",
+    "version": "10.0.3",
+    "hash": "sha256-+wTcmczUD1qSnnWZ1miijr62/glcRbNWRpEZh/OBU2g="
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
+  },
+  {
+    "pname": "MinVer",
+    "version": "7.0.0",
+    "hash": "sha256-cj7+c2Mhn88ljnLepg/0HMPJto5yTTSbspia/TRu1es="
+  },
+  {
+    "pname": "minver-cli",
+    "version": "7.0.0",
+    "hash": "sha256-qkCEEOkF377Q2lLSCvVyEoKWjLvJONX46/pQ/lsr1/g="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
+  },
+  {
+    "pname": "NETStandard.Library.Ref",
+    "version": "2.1.0",
+    "hash": "sha256-Ruovy9EKgXaFuFr3zgw5fRKUS9yBIJ4nLeHgXv0zx4o="
+  },
+  {
+    "pname": "System.Buffers",
+    "version": "4.6.1",
+    "hash": "sha256-sARR6R0Bb77Aka0eNh86cBXh2R1AR/fkinRFWypnPXk="
+  },
+  {
+    "pname": "System.CodeDom",
+    "version": "10.0.3",
+    "hash": "sha256-c9nIk2Cllsk8B8ohTwFM37LB2UDtNtoq/O5+yZEW+KA="
+  },
+  {
+    "pname": "System.Management",
+    "version": "10.0.3",
+    "hash": "sha256-aaJZKI0ggMA45U3ZgUMIQYyg3ZoklUluaVoykWb4gyA="
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.6.3",
+    "hash": "sha256-JgeK63WMmumF6L+FH5cwJgYdpqXrSDcgTQwtIgTHKVU="
+  },
+  {
+    "pname": "System.Numerics.Vectors",
+    "version": "4.6.1",
+    "hash": "sha256-K8UAqG3LAvIDLW2Hf54tbp5KeQgOVyObQZhnnUAx8sc="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "6.1.2",
+    "hash": "sha256-X2p/U680Zfkr622oc+vg5JYgbDEzE7mLre5DVaayWTc="
+  },
+  {
+    "pname": "System.Threading.Tasks.Extensions",
+    "version": "4.6.3",
+    "hash": "sha256-GrySx1F6Ah6tfnnQt/PHC+dbzg+sfP47OOFX0yJF/xo="
+  }
+]
