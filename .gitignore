@@ -15,6 +15,7 @@ bin/
 obj/
 *.nupkg
 .fake/
+/result
 
 # User Specific
 *.user

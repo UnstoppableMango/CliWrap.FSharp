@@ -5,6 +5,9 @@ NPX      ?= npx
 build:
 	$(DOTNET) build
 
+check:
+	nix flake check
+
 test:
 	$(DOTNET) test
 
@@ -16,6 +19,9 @@ trimmable:
 
 aot:
 	$(DOTNET) publish examples/CliWrap.FSharp.Aot -c Release --use-current-runtime
+
+update:
+	nix flake update
 
 prepare_dummy:
 	cd vendor/CliWrap && git apply ${CURDIR}/vendor/patches/dummy-program.patch
@@ -29,3 +35,12 @@ dummy_program: prepare_dummy
 
 devcontainer:
 	$(NPX) @devcontainers/cli build . --workspace-folder .
+
+result: src/CliWrap.FSharp/deps.json
+	nix build .#cliwrapFsharp
+
+bin/fetch-deps.sh:
+	nix build .#cliwrapFsharp.fetch-deps --out-link $@
+
+src/CliWrap.FSharp/deps.json: bin/fetch-deps.sh
+	${CURDIR}/$< ${CURDIR}/$@

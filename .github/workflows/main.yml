@@ -2,10 +2,10 @@ name: Build, Test, and Publish
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ["main"]
   push:
-    branches: ['main']
-    tags: ['v*.*.*']
+    branches: ["main"]
+    tags: ["v*.*.*"]
 
 jobs:
   build:
@@ -63,10 +63,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    needs: ['build']
+    needs: ["build"]
     strategy:
       matrix:
-        source: ['nuget', 'github']
+        source: ["nuget", "github"]
     env:
       PACKAGE_PATTERN: UnMango.CliWrap.FSharp.*.nupkg
     permissions:
@@ -115,3 +115,22 @@ jobs:
       - uses: devcontainers/ci@v0.3
         with:
           runCmd: make build
+
+  nix:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: cachix/install-nix-action@v31.10.3
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: cachix/cachix-action@v17
+        with:
+          name: unstoppablemango
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+
+      - run: nix flake check
+      - run: nix build .#
