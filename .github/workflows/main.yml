@@ -130,7 +130,7 @@ jobs:
         with:
           name: unstoppablemango
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - uses: DeterminateSystems/magic-nix-cache-action@v14
 
       - run: nix flake check
       - run: nix build .#
