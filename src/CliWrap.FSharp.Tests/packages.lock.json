@@ -74,8 +74,8 @@
       },
       "CliWrap": {
         "type": "Transitive",
-        "resolved": "3.10.1",
-        "contentHash": "C+WzXwzpQsJVNqvuh19ZO/bw/vR43L+DC/CmvK+PATUBkail2AWYE6an17dOGgWaVGzF9sU28YwRwfNfkPrQdg=="
+        "resolved": "3.10.5",
+        "contentHash": "L5SghZThsAVhV8ucwwW5FLMzKj1Ps57JB8DM2bEjpBNTyGi1EDjDO7Mi39Yx1FoXM2fZ1l9j39xqlPsZI1QCJQ=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -150,7 +150,7 @@
       "UnMango.CliWrap.FSharp": {
         "type": "Project",
         "dependencies": {
-          "CliWrap": "[3.10.1, )",
+          "CliWrap": "[3.10.5, )",
           "FSharp.Core": "[10.1.201, )"
         }
       }
