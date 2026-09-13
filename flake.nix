@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    systems.url = "github:nix-systems/default";
+    systems.url = "github:UnstoppableMango/nix-systems";
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -18,7 +18,10 @@
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
-      imports = [ inputs.treefmt-nix.flakeModule ];
+      imports = [
+        inputs.systems.flakeModule
+        inputs.treefmt-nix.flakeModule
+      ];
 
       perSystem =
         { pkgs, lib, ... }:
