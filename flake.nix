@@ -18,21 +18,21 @@
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
-      imports = [
-        inputs.systems.flakeModule
-        inputs.treefmt-nix.flakeModule
+
+      imports = with inputs; [
+        systems.flakeModule
+        treefmt-nix.flakeModule
       ];
 
       perSystem =
         { pkgs, lib, ... }:
         let
-          dotnetPkg = (
+          dotnet =
             with pkgs.dotnetCorePackages;
             combinePackages [
               sdk_9_0
               sdk_10_0
-            ]
-          );
+            ];
 
           cliwrapFsharp = pkgs.buildDotnetModule rec {
             pname = "CliWrap.FSharp";
@@ -43,7 +43,7 @@
             projectFile = "src/CliWrap.FSharp/CliWrap.FSharp.fsproj";
             nugetDeps = ./src/CliWrap.FSharp/deps.json;
 
-            dotnet-sdk = dotnetPkg;
+            dotnet-sdk = dotnet;
             dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
             dontPublish = true;
             packNupkg = true;
@@ -58,7 +58,7 @@
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               docker
-              dotnetPkg
+              dotnet
               fantomas
               gnumake
               nixfmt
@@ -68,11 +68,14 @@
 
           treefmt.programs = {
             actionlint.enable = true;
+            deadnix.enable = true;
             fantomas = {
               enable = true;
-              dotnet-sdk = dotnetPkg;
+              dotnet-sdk = dotnet;
             };
             nixfmt.enable = true;
+            statix.enable = true;
+            zizmor.enable = true;
           };
         };
     };
