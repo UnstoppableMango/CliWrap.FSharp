@@ -20,6 +20,7 @@
       systems = import inputs.systems;
 
       imports = with inputs; [
+        systems.flakeModule
         treefmt-nix.flakeModule
       ];
 
