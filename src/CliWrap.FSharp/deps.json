@@ -21,8 +21,8 @@
   },
   {
     "pname": "FSharp.Core",
-    "version": "10.1.201",
-    "hash": "sha256-NzxdRJgL+5RQpUm8Y6Mc0w7sakxqThv6qHpP+u0x5x0="
+    "version": "10.1.401",
+    "hash": "sha256-zx9OafwtE1Gvn6mSOskO1GYIhzCgCGfL4OsbOyxolj4="
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
