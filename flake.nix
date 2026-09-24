@@ -26,7 +26,8 @@
       perSystem =
         { pkgs, lib, ... }:
         let
-          dotnet = with pkgs.dotnetCorePackages;
+          dotnet =
+            with pkgs.dotnetCorePackages;
             combinePackages [
               sdk_9_0
               sdk_10_0
