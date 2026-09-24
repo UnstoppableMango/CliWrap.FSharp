@@ -11,8 +11,11 @@ check:
 test:
 	$(DOTNET) test
 
-format fmt: .fantomasignore .config/dotnet-tools.json
-	$(FANTOMAS) .
+format fmt:
+	nix fmt
+
+deps:
+	$(shell nix build .#cliwrapFsharp.fetch-deps --print-out-paths) src/CliWrap.FSharp/deps.json
 
 trimmable:
 	$(DOTNET) publish examples/CliWrap.FSharp.Trimming -c Release --use-current-runtime

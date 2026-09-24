@@ -2,23 +2,27 @@ name: Build, Test, and Publish
 
 on:
   pull_request:
-    branches: ["main"]
   push:
     branches: ["main"]
     tags: ["v*.*.*"]
 
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 0
           filter: tree:0
           submodules: true
+          persist-credentials: false
 
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           global-json-file: global.json
 
@@ -36,7 +40,7 @@ jobs:
         run: dotnet test -c Release --collect:"XPlat Code Coverage" --no-build
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -51,7 +55,7 @@ jobs:
       - name: Upload artifact
         id: upload
         if: github.event_name == 'push'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: nuget
           path: out/*.nupkg
@@ -71,18 +75,26 @@ jobs:
       PACKAGE_PATTERN: UnMango.CliWrap.FSharp.*.nupkg
     permissions:
       packages: write
+      id-token: write
     steps:
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: nuget
 
+      - uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1
+        id: login
+        with:
+          user: UnstoppableMango
+
       - name: Publish to NuGet.org
         if: matrix.source == 'nuget'
-        run: |
+        run: | # zizmor: ignore[use-trusted-publishing] NuGet/login is trusted publishing
           dotnet nuget push "$PACKAGE_PATTERN" \
             --source https://api.nuget.org/v3/index.json \
-            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --api-key "$NUGET_API_KEY" \
             --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
 
       - name: Authenticate to GitHub Packages
         if: matrix.source == 'github'
@@ -96,7 +108,7 @@ jobs:
 
       - name: Publish to GitHub Packages
         if: matrix.source == 'github'
-        run: |
+        run: | # zizmor: ignore[use-trusted-publishing] GitHub Packages has no trusted publishing
           dotnet nuget push "$PACKAGE_PATTERN" \
             --source ${{ matrix.source }} \
             --skip-duplicate
@@ -105,32 +117,37 @@ jobs:
   devcontainer:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 0
           filter: tree:0
           submodules: true
+          persist-credentials: false
 
-      - uses: devcontainers/ci@v0.3
+      - uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3
         with:
           runCmd: make build
 
   nix:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
 
-      - uses: cachix/install-nix-action@v31.10.6
+      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: cachix/cachix-action@v17
+      - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
         with:
           name: unstoppablemango
-
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - run: nix flake check
       - run: nix build .#
