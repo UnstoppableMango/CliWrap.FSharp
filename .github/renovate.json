@@ -1,7 +1,7 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": [
-		"config:recommended"
+		"github>UnstoppableMango/renovate-config"
 	],
 	"automerge": true,
 	"git-submodules": {
@@ -16,7 +16,9 @@
 			]
 		},
 		{
-			"matchPackageNames": ["dotnet-sdk"],
+			"matchPackageNames": [
+				"dotnet-sdk"
+			],
 			"versioning": "same-major"
 		},
 		{
