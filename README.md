@@ -5,6 +5,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/UnstoppableMango/CliWrap.FSharp)](https://github.com/UnstoppableMango/CliWrap.FSharp/releases)
 [![NuGet Version](https://img.shields.io/nuget/v/UnMango.CliWrap.FSharp)](https://nuget.org/packages/UnMango.CliWrap.FSharp)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/UnMango.CliWrap.FSharp)](https://nuget.org/packages/UnMango.CliWrap.FSharp)
+[![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/UnstoppableMango/project/CliWrap.FSharp/badge)](https://hercules-ci.com/github/UnstoppableMango/CliWrap.FSharp)
 
 Idiomatic F# support for [CliWrap](https://github.com/Tyrrrz/CliWrap).
 
