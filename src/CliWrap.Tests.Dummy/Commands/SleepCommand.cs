@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using CliFx;
-using CliFx.Attributes;
+using CliFx.Binding;
 using CliFx.Infrastructure;
 
 namespace CliWrap.Tests.Dummy.Commands;
 
 [Command("sleep")]
-public class SleepCommand : ICommand
+public partial class SleepCommand : ICommand
 {
     [CommandParameter(0)]
-    public TimeSpan Duration { get; init; } = TimeSpan.FromSeconds(1);
+    public TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(1);
 
     public async ValueTask ExecuteAsync(IConsole console)
     {

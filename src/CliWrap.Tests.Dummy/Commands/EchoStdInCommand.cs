@@ -1,21 +1,21 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Threading.Tasks;
 using CliFx;
-using CliFx.Attributes;
+using CliFx.Binding;
 using CliFx.Infrastructure;
 using CliWrap.Tests.Dummy.Commands.Shared;
 
 namespace CliWrap.Tests.Dummy.Commands;
 
 [Command("echo stdin")]
-public class EchoStdInCommand : ICommand
+public partial class EchoStdInCommand : ICommand
 {
     [CommandOption("target")]
-    public OutputTarget Target { get; init; } = OutputTarget.StdOut;
+    public OutputTarget Target { get; set; } = OutputTarget.StdOut;
 
     [CommandOption("length")]
-    public long Length { get; init; } = long.MaxValue;
+    public long Length { get; set; } = long.MaxValue;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {

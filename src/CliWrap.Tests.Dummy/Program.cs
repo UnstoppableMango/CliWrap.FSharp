@@ -1,9 +1,11 @@
-﻿using System;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CliFx;
+
+[assembly: ExcludeFromCodeCoverage]
 
 namespace CliWrap.Tests.Dummy;
 
@@ -13,7 +15,7 @@ public static class Program
     public static string FilePath { get; } =
         Path.ChangeExtension(
             Assembly.GetExecutingAssembly().Location,
-            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "exe" : null
+            OperatingSystem.IsWindows() ? "exe" : null
         );
 
     public static async Task<int> Main(string[] args)
@@ -24,7 +26,7 @@ public static class Program
             "false"
         );
 
-        return await new CliApplicationBuilder()
+        return await new CommandLineApplicationBuilder()
             .AddCommandsFromThisAssembly()
             .Build()
             .RunAsync(args);

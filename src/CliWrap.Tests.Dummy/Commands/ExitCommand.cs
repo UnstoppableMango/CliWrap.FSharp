@@ -1,16 +1,15 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using CliFx;
-using CliFx.Attributes;
-using CliFx.Exceptions;
+using CliFx.Binding;
 using CliFx.Infrastructure;
 
 namespace CliWrap.Tests.Dummy.Commands;
 
 [Command("exit")]
-public class ExitCommand : ICommand
+public partial class ExitCommand : ICommand
 {
     [CommandParameter(0)]
-    public int ExitCode { get; init; }
+    public int ExitCode { get; set; }
 
     public ValueTask ExecuteAsync(IConsole console)
     {

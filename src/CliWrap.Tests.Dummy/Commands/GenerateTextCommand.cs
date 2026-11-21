@@ -1,43 +1,56 @@
-﻿using System;
+using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CliFx;
-using CliFx.Attributes;
+using CliFx.Binding;
 using CliFx.Infrastructure;
 using CliWrap.Tests.Dummy.Commands.Shared;
 
 namespace CliWrap.Tests.Dummy.Commands;
 
 [Command("generate text")]
-public class GenerateTextCommand : ICommand
+public partial class GenerateTextCommand : ICommand
 {
     // Tests rely on the random seed being fixed
     private readonly Random _random = new(1234567);
-    private readonly char[] _allowedChars = Enumerable.Range(32, 94).Select(i => (char)i).ToArray();
+    private static readonly char[] AllowedChars = Enumerable
+        .Range(32, 94)
+        .Select(i => (char)i)
+        .ToArray();
 
     [CommandOption("target")]
-    public OutputTarget Target { get; init; } = OutputTarget.StdOut;
+    public OutputTarget Target { get; set; } = OutputTarget.StdOut;
 
     [CommandOption("length")]
-    public int Length { get; init; } = 100_000;
+    public int Length { get; set; } = 100_000;
 
     [CommandOption("lines")]
-    public int LinesCount { get; init; } = 1;
+    public int LinesCount { get; set; } = 1;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        for (var line = 0; line < LinesCount; line++)
-        {
-            var buffer = new StringBuilder(Length);
+        if (Length <= 0 || LinesCount <= 0)
+            return;
 
-            for (var i = 0; i < Length; i++)
-            {
-                buffer.Append(_allowedChars[_random.Next(0, _allowedChars.Length)]);
-            }
+        var lineLength = LinesCount > 0 ? Length / LinesCount : 0;
+
+        for (var lineNumber = 0; lineNumber < LinesCount; lineNumber++)
+        {
+            var currentLineLength =
+                lineNumber < LinesCount - 1
+                    ? lineLength
+                    // Place any remaining characters in the last line so that the total output length
+                    // is always equal to Length.
+                    : Length - lineLength * lineNumber;
+
+            var line = string.Create(
+                currentLineLength,
+                _random,
+                (buffer, random) => random.GetItems(AllowedChars, buffer)
+            );
 
             foreach (var writer in console.GetWriters(Target))
-                await writer.WriteLineAsync(buffer.ToString());
+                await writer.WriteLineAsync(line);
         }
     }
 }
