@@ -87,10 +87,8 @@ let ``Should execute buffered with encoding`` () = task {
 let ``Should execute buffered with encoding and cancellation`` () = task {
     let encoding = Encoding.UTF8
     use cts = new CancellationTokenSource()
-
-    let! expected =
-        Command(Dummy.Program.FilePath).ExecuteBufferedAsync(encoding, cts.Token)
-
+    let cmd = Command(Dummy.Program.FilePath)
+    let! expected = cmd.ExecuteBufferedAsync(encoding, cts.Token)
     let! actual = command Dummy.Program.FilePath { buffered encoding cts.Token }
     Assert.Equal(expected.ExitCode, actual.ExitCode)
 }
