@@ -32,6 +32,7 @@
             combinePackages [
               sdk_9_0
               sdk_10_0
+              sdk_11_0
             ];
 
           cliwrapFsharp = pkgs.buildDotnetModule rec {
