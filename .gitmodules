@@ -1,4 +1,4 @@
 [submodule "vendor/CliWrap"]
 	path = vendor/CliWrap
 	url = https://github.com/Tyrrrz/CliWrap
-	branch = master
+	branch = prime
