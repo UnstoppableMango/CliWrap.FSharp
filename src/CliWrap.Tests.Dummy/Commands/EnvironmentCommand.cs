@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CliFx;
-using CliFx.Attributes;
+using CliFx.Binding;
 using CliFx.Infrastructure;
 
 namespace CliWrap.Tests.Dummy.Commands;
 
 [Command("env")]
-public class EnvironmentCommand : ICommand
+public partial class EnvironmentCommand : ICommand
 {
     [CommandParameter(0)]
-    public IReadOnlyList<string> Names { get; init; } = Array.Empty<string>();
+    public IReadOnlyList<string> Names { get; set; } = [];
 
     public async ValueTask ExecuteAsync(IConsole console)
     {

@@ -1,14 +1,14 @@
-﻿using System.Buffers;
+using System.Buffers;
 using System.Globalization;
 using System.Threading.Tasks;
 using CliFx;
-using CliFx.Attributes;
+using CliFx.Binding;
 using CliFx.Infrastructure;
 
 namespace CliWrap.Tests.Dummy.Commands;
 
 [Command("length stdin")]
-public class LengthStdInCommand : ICommand
+public partial class LengthStdInCommand : ICommand
 {
     public async ValueTask ExecuteAsync(IConsole console)
     {

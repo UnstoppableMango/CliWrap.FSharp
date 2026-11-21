@@ -1,27 +1,27 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Threading.Tasks;
 using CliFx;
-using CliFx.Attributes;
+using CliFx.Binding;
 using CliFx.Infrastructure;
 using CliWrap.Tests.Dummy.Commands.Shared;
 
 namespace CliWrap.Tests.Dummy.Commands;
 
 [Command("generate binary")]
-public class GenerateBinaryCommand : ICommand
+public partial class GenerateBinaryCommand : ICommand
 {
     // Tests rely on the random seed being fixed
     private readonly Random _random = new(1234567);
 
     [CommandOption("target")]
-    public OutputTarget Target { get; init; } = OutputTarget.StdOut;
+    public OutputTarget Target { get; set; } = OutputTarget.StdOut;
 
     [CommandOption("length")]
-    public long Length { get; init; } = 100_000;
+    public long Length { get; set; } = 100_000;
 
     [CommandOption("buffer")]
-    public int BufferSize { get; init; } = 1024;
+    public int BufferSize { get; set; } = 1024;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
