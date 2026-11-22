@@ -4,7 +4,7 @@ NPX      ?= npx
 NIX      ?= nix
 
 # Upstream CliWrap source for the Dummy program, pinned by the `cliwrap` flake input.
-# See docs/adr/0001-upstream-source-from-flake-input.md
+# See docs/adr/0002-upstream-source-from-flake-input.md
 UPSTREAM_DIR    := vendor/CliWrap
 UPSTREAM_STAMP  := $(UPSTREAM_DIR)/.upstream-version
 CLIWRAP_FSPROJ  := src/CliWrap.FSharp/CliWrap.FSharp.fsproj

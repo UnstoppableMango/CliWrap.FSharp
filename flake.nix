@@ -44,7 +44,7 @@
 
           cliwrapFsharp = pkgs.buildDotnetModule rec {
             pname = "CliWrap.FSharp";
-            version = "0.0.12";
+            version = (lib.importJSON ./.release-please-manifest.json).".";
             MinVerVersionOverride = version;
 
             src = lib.cleanSource ./.;

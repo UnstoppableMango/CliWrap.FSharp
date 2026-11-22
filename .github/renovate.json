@@ -16,12 +16,13 @@
 	],
 	"packageRules": [
 		{
-			"description": "The cliwrap flake input must match the CliWrap package version",
+			"description": "CliWrap is the only runtime dependency, so its bumps cut a release. The cliwrap flake input must match the package version, so both are bumped together.",
 			"groupName": "CliWrap",
 			"matchPackageNames": [
 				"CliWrap",
 				"Tyrrrz/CliWrap"
-			]
+			],
+			"semanticCommitType": "fix"
 		},
 		{
 			"groupName": "minver",
