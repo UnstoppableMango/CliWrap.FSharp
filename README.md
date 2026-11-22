@@ -3,6 +3,7 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/UnstoppableMango/CliWrap.FSharp/ci.yml?branch=main)](https://github.com/UnstoppableMango/CliWrap.FSharp/actions/workflows/ci.yml)
 [![Codecov](https://img.shields.io/codecov/c/github/UnstoppableMango/CliWrap.FSharp)](https://app.codecov.io/gh/UnstoppableMango/CliWrap.FSharp)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/UnstoppableMango/CliWrap.FSharp/badge)](https://scorecard.dev/viewer/?uri=github.com/UnstoppableMango/CliWrap.FSharp)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12371/badge)](https://www.bestpractices.dev/projects/12371)
 [![GitHub Release](https://img.shields.io/github/v/release/UnstoppableMango/CliWrap.FSharp)](https://github.com/UnstoppableMango/CliWrap.FSharp/releases)
 [![NuGet Version](https://img.shields.io/nuget/v/UnMango.CliWrap.FSharp)](https://nuget.org/packages/UnMango.CliWrap.FSharp)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/UnMango.CliWrap.FSharp)](https://nuget.org/packages/UnMango.CliWrap.FSharp)
