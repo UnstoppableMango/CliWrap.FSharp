@@ -5,7 +5,7 @@ module Equivalence
 open CliWrap
 open Xunit
 
-let private environment (command: Command) =
+let private environment (command: ICommandConfiguration) =
     command.EnvironmentVariables
     |> Seq.map (fun kv -> kv.Key, kv.Value)
     |> Seq.sortBy fst
@@ -19,7 +19,7 @@ let private resourcePolicy (p: ResourcePolicy) =
 
 /// The names of the configuration properties that differ between two commands.
 /// Pipes are compared by reference, since they carry no comparable state.
-let differences (expected: Command) (actual: Command) : string list =
+let differences (expected: ICommandConfiguration) (actual: ICommandConfiguration) : string list =
     [
         if expected.TargetFilePath <> actual.TargetFilePath then
             "TargetFilePath"
@@ -44,5 +44,5 @@ let differences (expected: Command) (actual: Command) : string list =
     ]
 
 /// Fails, naming each differing property, unless both commands have the same configuration.
-let assertEquivalent (expected: Command) (actual: Command) =
+let assertEquivalent (expected: ICommandConfiguration) (actual: ICommandConfiguration) =
     Assert.Equal<string list>([], differences expected actual)
