@@ -79,6 +79,14 @@
             fantomas = {
               enable = true;
               dotnet-sdk = dotnet;
+              # Keep the version equal to fantomas in .config/dotnet-tools.json, which CI's format check uses.
+              package = pkgs.buildDotnetGlobalTool {
+                pname = "fantomas";
+                version = "8.1.3";
+                nugetHash = "sha256-qEbMjuW7wxJib1aenmWhRFvmYeeeKK8KgYmXK83trD8=";
+                dotnet-sdk = dotnet;
+                dotnet-runtime = dotnet;
+              };
             };
             nixfmt.enable = true;
             statix.enable = true;
