@@ -74,8 +74,7 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Restore dependencies
-        run: dotnet restore src/CliWrap.FSharp --locked-mode
+      - run: dotnet restore src/CliWrap.FSharp --locked-mode
 
       # This run checked out the release PR's merge commit before its tag existed,
       # so MinVer alone would compute a prerelease version.
