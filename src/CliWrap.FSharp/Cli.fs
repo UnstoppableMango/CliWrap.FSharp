@@ -6,6 +6,7 @@ open System.Threading
 open CliWrap
 open CliWrap.Buffered
 open CliWrap.Builders
+open CliWrap.EventStream
 
 /// <summary>
 /// Creates a copy of this command, setting the arguments to the specified value.
@@ -148,6 +149,85 @@ let execBufferede (encoding: Encoding) (command: Command) =
     command.ExecuteBufferedAsync(encoding)
     |> CommandTask.op_Implicit
     |> Internal.Async.awaitTaskUnwrapped
+
+/// <summary>
+/// Executes the command as a pull-based event stream.
+/// </summary>
+/// <param name="cancellationToken">The cancellation token. Cancelling it forcefully terminates the process.</param>
+/// <param name="command">The command to execute.</param>
+/// <returns>The command's events, starting with <c>Started</c> and ending with <c>Exited</c>.</returns>
+/// <remarks>
+/// The command does not start until the sequence is enumerated.
+/// Abandoning the enumeration also forcefully terminates the process.
+/// Match the events with the <c>Started</c>, <c>StdOut</c>, <c>StdErr</c> and <c>Exited</c> active pattern.
+/// </remarks>
+let listen (cancellationToken: CancellationToken) (command: Command) = command.ListenAsync(cancellationToken)
+
+/// <summary>
+/// Executes the command as a pull-based event stream, decoding standard output and standard error with the specified encoding.
+/// </summary>
+/// <param name="encoding">The encoding used to decode standard output and standard error.</param>
+/// <param name="cancellationToken">The cancellation token. Cancelling it forcefully terminates the process.</param>
+/// <param name="command">The command to execute.</param>
+/// <returns>The command's events, starting with <c>Started</c> and ending with <c>Exited</c>.</returns>
+/// <remarks>
+/// The command does not start until the sequence is enumerated.
+/// Abandoning the enumeration also forcefully terminates the process.
+/// </remarks>
+let listene (encoding: Encoding) (cancellationToken: CancellationToken) (command: Command) =
+    command.ListenAsync(encoding, cancellationToken)
+
+/// <summary>
+/// Executes the command as a pull-based event stream, with separate forceful and graceful cancellation.
+/// </summary>
+/// <param name="forceful">The cancellation token to forcefully exit.</param>
+/// <param name="graceful">The cancellation token to gracefully exit.</param>
+/// <param name="command">The command to execute.</param>
+/// <returns>The command's events, starting with <c>Started</c> and ending with <c>Exited</c>.</returns>
+/// <remarks>
+/// The command does not start until the sequence is enumerated.
+/// Abandoning the enumeration also forcefully terminates the process.
+/// </remarks>
+let listenf (forceful: CancellationToken) (graceful: CancellationToken) (command: Command) =
+    command.ListenAsync(Encoding.Default, Encoding.Default, forceful, graceful)
+
+/// <summary>
+/// Executes the command as a push-based event stream.
+/// </summary>
+/// <param name="cancellationToken">The cancellation token. Cancelling it forcefully terminates the process.</param>
+/// <param name="command">The command to execute.</param>
+/// <returns>An observable of the command's events, starting with <c>Started</c> and ending with <c>Exited</c>.</returns>
+/// <remarks>
+/// The command starts once per subscription. Unsubscribing forcefully terminates the process.
+/// Match the events with the <c>Started</c>, <c>StdOut</c>, <c>StdErr</c> and <c>Exited</c> active pattern.
+/// </remarks>
+let observe (cancellationToken: CancellationToken) (command: Command) = command.Observe(cancellationToken)
+
+/// <summary>
+/// Executes the command as a push-based event stream, decoding standard output and standard error with the specified encoding.
+/// </summary>
+/// <param name="encoding">The encoding used to decode standard output and standard error.</param>
+/// <param name="cancellationToken">The cancellation token. Cancelling it forcefully terminates the process.</param>
+/// <param name="command">The command to execute.</param>
+/// <returns>An observable of the command's events, starting with <c>Started</c> and ending with <c>Exited</c>.</returns>
+/// <remarks>
+/// The command starts once per subscription. Unsubscribing forcefully terminates the process.
+/// </remarks>
+let observee (encoding: Encoding) (cancellationToken: CancellationToken) (command: Command) =
+    command.Observe(encoding, cancellationToken)
+
+/// <summary>
+/// Executes the command as a push-based event stream, with separate forceful and graceful cancellation.
+/// </summary>
+/// <param name="forceful">The cancellation token to forcefully exit.</param>
+/// <param name="graceful">The cancellation token to gracefully exit.</param>
+/// <param name="command">The command to execute.</param>
+/// <returns>An observable of the command's events, starting with <c>Started</c> and ending with <c>Exited</c>.</returns>
+/// <remarks>
+/// The command starts once per subscription. Unsubscribing forcefully terminates the process.
+/// </remarks>
+let observef (forceful: CancellationToken) (graceful: CancellationToken) (command: Command) =
+    command.Observe(Encoding.Default, Encoding.Default, forceful, graceful)
 
 /// <summary>
 /// Creates a copy of this command, setting the standard input pipe to the specified source.
