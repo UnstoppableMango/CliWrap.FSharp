@@ -51,6 +51,28 @@ _Avoid_: conformance test, parity test
 Upstream's small command-line program that Conformance specs and Equivalence checks run, built from the Upstream source of the Baseline release.
 _Avoid_: dummy CLI, test CLI, fake, reference program
 
+### Running a command
+
+**Execution**:
+Running a command once and getting a single result when it finishes (plain, buffered, or with an event stream).
+_Avoid_: Run, invoke
+
+**Event stream**:
+Running a command so that its lifecycle arrives as a sequence of command events, rather than a single result.
+_Avoid_: Output stream, log stream
+
+**Observe**:
+The push style of event stream: subscribers receive command events as they happen.
+_Avoid_: Subscribe, watch
+
+**Listen**:
+The pull style of event stream: the caller asks for the next command event when ready.
+_Avoid_: Poll, iterate, stream
+
+**Command event**:
+One step in a command's lifecycle: started (with a process id), a standard output line, a standard error line, or exited (with an exit code).
+_Avoid_: Message, notification, output event
+
 ## Relationships
 
 - Parity is done when each newly wrapped member is checked by Conformance specs.

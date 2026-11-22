@@ -1,10 +1,14 @@
 [<AutoOpen>]
 module UnMango.CliWrap.FSharp.CommandBuilder
 
+open System
+open System.Collections.Generic
 open System.ComponentModel
 open System.Text
+open System.Threading
 open CliWrap
 open CliWrap.Buffered
+open CliWrap.EventStream
 
 type CommandBuilder(target: string) =
     [<CustomOperation("args")>]
@@ -43,6 +47,48 @@ type CommandBuilder(target: string) =
     [<CustomOperation("exec")>]
     member _.Exec(command: Command, cancellationToken) = command.ExecuteAsync(cancellationToken)
 
+    [<CustomOperation("listen")>]
+    member _.Listen(command: Command) = command.ListenAsync()
+
+    [<CustomOperation("listen")>]
+    member _.Listen(command: Command, cancellationToken: CancellationToken) = Cli.listen cancellationToken command
+
+    [<CustomOperation("listen")>]
+    member _.Listen(command: Command, encoding: Encoding, cancellationToken: CancellationToken) =
+        Cli.listene encoding cancellationToken command
+
+    [<CustomOperation("listen")>]
+    member _.Listen
+        (
+            command: Command,
+            standardOutputEncoding: Encoding,
+            standardErrorEncoding: Encoding,
+            forceful: CancellationToken,
+            graceful: CancellationToken
+        ) =
+        command.ListenAsync(standardOutputEncoding, standardErrorEncoding, forceful, graceful)
+
+    [<CustomOperation("observe")>]
+    member _.Observe(command: Command) = command.Observe()
+
+    [<CustomOperation("observe")>]
+    member _.Observe(command: Command, cancellationToken: CancellationToken) = Cli.observe cancellationToken command
+
+    [<CustomOperation("observe")>]
+    member _.Observe(command: Command, encoding: Encoding, cancellationToken: CancellationToken) =
+        Cli.observee encoding cancellationToken command
+
+    [<CustomOperation("observe")>]
+    member _.Observe
+        (
+            command: Command,
+            standardOutputEncoding: Encoding,
+            standardErrorEncoding: Encoding,
+            forceful: CancellationToken,
+            graceful: CancellationToken
+        ) =
+        command.Observe(standardOutputEncoding, standardErrorEncoding, forceful, graceful)
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     member _.Run(command: Command) = command
 
@@ -51,6 +97,12 @@ type CommandBuilder(target: string) =
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     member _.Run<'T>(task: Async<'T>) = task
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    member _.Run(events: IObservable<CommandEvent>) = events
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    member _.Run(events: IAsyncEnumerable<CommandEvent>) = events
 
     [<CustomOperation("stderr")>]
     member _.StdErr(command: Command, pipe) = Cli.stderr pipe command
