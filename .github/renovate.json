@@ -4,10 +4,25 @@
 		"github>UnstoppableMango/renovate-config"
 	],
 	"automerge": true,
-	"git-submodules": {
-		"enabled": true
-	},
+	"customManagers": [
+		{
+			"customType": "regex",
+			"description": "Upstream CliWrap source for the Dummy program (cliwrap flake input)",
+			"managerFilePatterns": ["/^flake\\.nix$/"],
+			"matchStrings": ["\"github:Tyrrrz/CliWrap/(?<currentValue>[^\"]+)\""],
+			"depNameTemplate": "Tyrrrz/CliWrap",
+			"datasourceTemplate": "github-tags"
+		}
+	],
 	"packageRules": [
+		{
+			"description": "The cliwrap flake input must match the CliWrap package version",
+			"groupName": "CliWrap",
+			"matchPackageNames": [
+				"CliWrap",
+				"Tyrrrz/CliWrap"
+			]
+		},
 		{
 			"groupName": "minver",
 			"matchPackageNames": [

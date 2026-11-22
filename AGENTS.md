@@ -22,8 +22,9 @@ All library code is in `src/CliWrap.FSharp/`:
 3. **`PipeBuilder.fs`**: the `pipeline { }` computation expression.
 4. **`CommandBuilder.fs`**: the `command { }` computation expression.
 
-Tests are in `src/CliWrap.FSharp.Tests/`. `src/CliWrap.Tests.Dummy/` is a test fixture
-copied from upstream CliWrap via the `vendor/CliWrap` submodule.
+Tests are in `src/CliWrap.FSharp.Tests/`. They run upstream CliWrap's Dummy program from
+`vendor/CliWrap`, which `make vendor` copies from the `cliwrap` flake input. Run
+`make vendor` once before plain `dotnet` commands.
 
 ## Agent workflow
 

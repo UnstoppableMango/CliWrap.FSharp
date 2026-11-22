@@ -25,11 +25,12 @@ environments come pre-configured:
 - **Dev container:** open the repository in VS Code or GitHub Codespaces.
 - **Nix:** `nix develop` gives you the SDK and tools; `nix flake check` runs the Nix checks.
 
-Clone with submodules, then restore:
+Clone, copy the upstream CliWrap source (this needs Nix with flakes enabled), then restore:
 
 ```bash
-git clone --recurse-submodules https://github.com/UnstoppableMango/CliWrap.FSharp
+git clone https://github.com/UnstoppableMango/CliWrap.FSharp
 cd CliWrap.FSharp
+make vendor
 dotnet tool restore
 dotnet restore --locked-mode
 ```
@@ -88,8 +89,8 @@ Tests live in `src/CliWrap.FSharp.Tests/` and use:
 - **xUnit** `[<Fact>]` for unit tests and **FsCheck** `[<Property>]` for property tests.
 - Descriptive backtick names, such as ``` ``Should configure arguments`` ```.
 - Arrange, act, assert, with clear names like `expected` and `actual`.
-- Real implementations over mocks. For tests that run a process, use the dummy
-  program in `src/CliWrap.Tests.Dummy` (`Dummy.Program.FilePath`).
+- Real implementations over mocks. For tests that run a process, use upstream's Dummy
+  program (`Dummy.Program.FilePath`), built from `vendor/CliWrap/CliWrap.Tests.Dummy`.
 
 Coverage is collected in CI and reported to Codecov. Aim for meaningful tests of the
 public API and its edge cases rather than a coverage number.
@@ -124,15 +125,18 @@ commit bumps the patch version and cuts a release.
    formatting, and validates the dev container and Nix builds.
 5. The PR title should be a conventional commit message, since PRs are squash-merged.
 
-## Vendored CliWrap test dummy
+## Upstream CliWrap source
 
-`vendor/CliWrap` is a git submodule of upstream CliWrap, used only to produce the test
-dummy program in `src/CliWrap.Tests.Dummy`. It is not shipped. To refresh it:
+Tests run upstream CliWrap's Dummy program, built from upstream's source at the same
+release as the CliWrap package the library wraps. That source comes from the `cliwrap`
+flake input in `flake.nix`, and `make vendor` copies it into the gitignored
+`vendor/CliWrap`. `make build` and `make test` do this for you; plain `dotnet` commands
+fail with a reminder when it is missing or out of date. Nothing from upstream is checked
+in or shipped. See [ADR 0001](docs/adr/0001-upstream-source-from-flake-input.md).
 
-```bash
-git submodule update --remote vendor/CliWrap
-make dummy_program
-```
+When CliWrap is bumped, the `cliwrap` tag in `flake.nix` must match the new
+`CliWrap` PackageReference. Renovate bumps both in one PR, and `make vendor` fails if
+they differ.
 
 ## Releases
 
