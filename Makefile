@@ -2,7 +2,7 @@ DOTNET   ?= dotnet
 FANTOMAS ?= $(DOTNET) fantomas
 NPX      ?= npx
 
-.PHONY: build check test format fmt deps trimmable aot update vendor devcontainer
+.PHONY: build check test format fmt deps trimmable aot update vendor analyze devcontainer
 
 build: vendor
 	$(DOTNET) build
@@ -32,6 +32,9 @@ vendor: vendor/CliWrap/.upstream-version
 
 vendor/CliWrap/.upstream-version: flake.nix flake.lock scripts/vendor.sh
 	scripts/vendor.sh
+
+analyze: vendor
+	DOTNET="$(DOTNET)" .config/analyzers/analyze.sh
 
 devcontainer:
 	$(NPX) @devcontainers/cli build . --workspace-folder .

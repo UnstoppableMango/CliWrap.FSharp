@@ -37,7 +37,7 @@ let private exitCode = 3
 let ``Should execute CommandTask asynchronously`` () = task {
     let! actual =
         command Dummy.Program.FilePath {
-            args [ "exit"; string exitCode ]
+            args [ "exit"; $"%d{exitCode}" ]
             validation CommandResultValidation.None
             exec
             async
@@ -51,7 +51,7 @@ let ``Should execute CommandTask asynchronously`` () = task {
 let ``Should execute asynchronously`` () = task {
     let! actual =
         command Dummy.Program.FilePath {
-            args [ "exit"; string exitCode ]
+            args [ "exit"; $"%d{exitCode}" ]
             validation CommandResultValidation.None
             async
         }
@@ -66,7 +66,7 @@ let ``Should execute asynchronously with cancellation`` () = task {
 
     let! actual =
         command Dummy.Program.FilePath {
-            args [ "exit"; string exitCode ]
+            args [ "exit"; $"%d{exitCode}" ]
             validation CommandResultValidation.None
             async cts.Token
         }
@@ -78,7 +78,7 @@ let ``Should execute asynchronously with cancellation`` () = task {
 [<Fact>]
 let ``Should execute asynchronously as task`` () = task {
     let! actual = command Dummy.Program.FilePath {
-        args [ "exit"; string exitCode ]
+        args [ "exit"; $"%d{exitCode}" ]
         validation CommandResultValidation.None
         exec
     }
@@ -89,7 +89,7 @@ let ``Should execute asynchronously as task`` () = task {
 [<Fact>]
 let ``Should raise the command's own error when executing asynchronously`` () = task {
     let run = command Dummy.Program.FilePath {
-        args [ "exit"; string exitCode ]
+        args [ "exit"; $"%d{exitCode}" ]
         async
     }
 

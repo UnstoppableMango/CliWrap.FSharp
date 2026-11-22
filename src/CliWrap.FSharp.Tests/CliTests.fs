@@ -270,7 +270,7 @@ let ``Should match a successful result`` () = task {
 
     match result with
     | CommandResult.Succeeded -> ()
-    | CommandResult.Failed code -> failwith $"Expected success, got exit code {code}"
+    | CommandResult.Failed code -> failwith $"Expected success, got exit code %d{code}"
 }
 
 [<Fact>]

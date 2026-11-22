@@ -20,7 +20,7 @@ let ``I can execute a command with a custom working directory`` () = task {
     let normalize (path: string) =
         let full = Path.GetFullPath(path)
 
-        if full.StartsWith("/private/") then
+        if full.StartsWith("/private/", StringComparison.Ordinal) then
             full.Substring("/private".Length)
         else
             full
@@ -43,9 +43,9 @@ let ``I can execute a command with additional environment variables`` () = task 
 [<Fact(Timeout = 15000)>]
 let ``I can execute a command with some environment variables overwritten`` () = task {
     let key = Guid.NewGuid()
-    let variableToKeep = $"CLIWRAP_TEST_KEEP_{key}"
-    let variableToOverwrite = $"CLIWRAP_TEST_OVERWRITE_{key}"
-    let variableToUnset = $"CLIWRAP_TEST_UNSET_{key}"
+    let variableToKeep = $"CLIWRAP_TEST_KEEP_%O{key}"
+    let variableToOverwrite = $"CLIWRAP_TEST_OVERWRITE_%O{key}"
+    let variableToUnset = $"CLIWRAP_TEST_UNSET_%O{key}"
 
     use _ = tempEnvironmentVariable variableToKeep "keep"
     use _ = tempEnvironmentVariable variableToOverwrite "overwrite"

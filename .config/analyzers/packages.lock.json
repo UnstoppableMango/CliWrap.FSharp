@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "DotNet.ReproducibleBuilds": {
+        "type": "Direct",
+        "requested": "[2.0.5, )",
+        "resolved": "2.0.5",
+        "contentHash": "8LrlvI1KpjjJ4VGSqZ16yoOCKlQnYS+Y8rYNifNrscmVh5anJcF9E4e0NiDP30BHBMUbkoJ5KdcxoRWM7Pz9Aw=="
+      },
+      "G-Research.FSharp.Analyzers": {
+        "type": "Direct",
+        "requested": "[0.28.0, )",
+        "resolved": "0.28.0",
+        "contentHash": "ePoubbnNE40ttNs6cchaeb/1/3egVyw68N3//2rpk1z+p/64104gAcUCVt9m6pxR2cGyWdIzePjiD8uKS0i0Bw=="
+      },
+      "Ionide.Analyzers": {
+        "type": "Direct",
+        "requested": "[0.22.0, )",
+        "resolved": "0.22.0",
+        "contentHash": "Lja7U1yPgqftL54Q/La0oZ6wEbn8xkYeMdYWXgSwzKNE5ThfAbS8Jumt6Q9BHbWsHlRwXsdHS6CeI47ZnY4xug=="
+      }
+    }
+  }
+}

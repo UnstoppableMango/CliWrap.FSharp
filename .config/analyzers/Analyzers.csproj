@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- Restore-only, so analyzer packages stay out of the library's lock file and Nix deps. -->
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+		<NoWarn>$(NoWarn);NU1702</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="G-Research.FSharp.Analyzers" Version="0.28.0" GeneratePathProperty="true" PrivateAssets="all" IncludeAssets="none" />
+		<PackageReference Include="Ionide.Analyzers" Version="0.22.0" GeneratePathProperty="true" PrivateAssets="all" IncludeAssets="none" />
+	</ItemGroup>
+
+</Project>
