@@ -98,6 +98,7 @@ let ``Should configure arguments`` () =
 ### Releasing
 Releases are driven by [release-please](https://github.com/googleapis/release-please) and conventional commits.
 - Commit types decide the next version. Before 1.0, a breaking change or `feat` bumps the minor and `fix` bumps the patch.
+- Security fixes use the `security` type, with the GHSA or CVE id in the body. They bump the patch and get their own "Security" changelog section. release-please matches sections by type only, so `fix(security)` would land under Bug Fixes.
 - `chore`, `test`, `ci`, `build` and `refactor` commits don't cut a release and are hidden from the changelog.
 - Renovate commits CliWrap bumps as `fix(deps)`, since it's the only runtime dependency. Other dependency bumps are `chore(deps)`.
 - Merging the release PR by hand creates the `vX.Y.Z` tag and GitHub Release, and publishes the package. Nothing is published from `main` otherwise.
