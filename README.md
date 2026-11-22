@@ -61,6 +61,23 @@ let main args = task {
 }
 ```
 
+Buffered execution captures standard output and standard error, and the `CommandResult` active patterns match on the result.
+
+```fsharp
+let main args = async {
+  let! result =
+    Cli.wrap "git"
+    |> Cli.args [ "status"; "--short" ]
+    |> Cli.resourcePolicyf _.SetPriority(ProcessPriorityClass.BelowNormal)
+    |> Cli.validation CommandResultValidation.None
+    |> Cli.execBuffered
+
+  match result with
+  | CommandResult.Buffered(0, stdout, _) -> printfn "%s" stdout
+  | CommandResult.Buffered(code, _, stderr) -> eprintfn "git exited with %i: %s" code stderr
+}
+```
+
 The core of the package is a simple computation expression that wraps `CliWrap.Command`.
 It attempts to mimic the builder pattern and `.With*` style methods.
 

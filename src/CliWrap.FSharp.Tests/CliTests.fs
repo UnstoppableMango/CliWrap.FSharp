@@ -1,10 +1,13 @@
 module CliTests
 
+open System
 open System.Collections.Generic
+open System.Diagnostics
 open System.Linq
 open System.Text
 open System.Threading
 open CliWrap
+open CliWrap.Buffered
 open CliWrap.Tests
 open Xunit
 open FsCheck
@@ -93,6 +96,24 @@ let ``Should configure credentials with builder`` (arg: NonNull<string>) =
 
     expected.Credentials.UserName = actual.Credentials.UserName
 
+[<Fact>]
+let ``Should configure resource policy`` () =
+    let policy = ResourcePolicy(ProcessPriorityClass.BelowNormal)
+    let cmd = Command(Dummy.Program.FilePath)
+
+    let actual = cmd |> Cli.resourcePolicy policy
+
+    Assert.Same(policy, actual.ResourcePolicy)
+
+[<Fact>]
+let ``Should configure resource policy with builder`` () =
+    let cmd = Command(Dummy.Program.FilePath)
+
+    let actual =
+        cmd |> Cli.resourcePolicyf _.SetPriority(ProcessPriorityClass.BelowNormal)
+
+    Assert.Equal(Nullable ProcessPriorityClass.BelowNormal, actual.ResourcePolicy.Priority)
+
 [<Property>]
 let ``Should configure environment variables`` (key: NonNull<string>) (value: NonNull<string>) =
     let cmd = Command(Dummy.Program.FilePath)
@@ -144,6 +165,145 @@ let ``Should execute asynchronously with forceful and graceful tokens`` () = tas
     let! actual = cmd |> Cli.Task.execf forceful.Token graceful.Token
 
     Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
+
+let private sleepCommand (output: StringBuilder) =
+    Command(Dummy.Program.FilePath)
+        .WithArguments([ "sleep"; "00:00:20" ])
+        .WithStandardOutputPipe(PipeTarget.ToStringBuilder(output))
+
+[<Fact>]
+let ``Should cancel gracefully with the graceful token`` () = task {
+    use forceful = new CancellationTokenSource()
+    use graceful = new CancellationTokenSource(TimeSpan.FromSeconds(1.0))
+    let output = StringBuilder()
+
+    let! _ =
+        Assert.ThrowsAnyAsync<OperationCanceledException>(fun () ->
+            (sleepCommand output |> Cli.Task.execf forceful.Token graceful.Token).Task :> Tasks.Task)
+
+    Assert.Contains("Canceled.", output.ToString())
+}
+
+[<Fact>]
+let ``Should cancel forcefully with the forceful token`` () = task {
+    use forceful = new CancellationTokenSource(TimeSpan.FromSeconds(1.0))
+    use graceful = new CancellationTokenSource()
+    let output = StringBuilder()
+
+    let! _ =
+        Assert.ThrowsAnyAsync<OperationCanceledException>(fun () ->
+            (sleepCommand output |> Cli.Task.execf forceful.Token graceful.Token).Task :> Tasks.Task)
+
+    Assert.DoesNotContain("Canceled.", output.ToString())
+}
+
+[<Fact>]
+let ``Should configure the process before execution`` () = task {
+    let output = StringBuilder()
+
+    let cmd =
+        Command(Dummy.Program.FilePath)
+            .WithArguments([ "env"; "CLIWRAP_FSHARP_TEST" ])
+            .WithStandardOutputPipe(PipeTarget.ToStringBuilder(output))
+
+    let mutable configured = false
+
+    let! _ =
+        cmd
+        |> Cli.Task.execp
+            (fun psi -> psi.Environment["CLIWRAP_FSHARP_TEST"] <- "from-psi")
+            (fun _ -> configured <- true)
+            CancellationToken.None
+            CancellationToken.None
+
+    Assert.Contains("from-psi", output.ToString())
+    Assert.True(configured)
+}
+
+let private echoCommand =
+    Command(Dummy.Program.FilePath).WithArguments([ "echo"; "hello" ])
+
+[<Fact>]
+let ``Should execute buffered`` () = task {
+    let! expected = echoCommand.ExecuteBufferedAsync()
+
+    let! actual = echoCommand |> Cli.execBuffered
+
+    Assert.Equal(expected.ExitCode, actual.ExitCode)
+    Assert.Equal(expected.StandardOutput, actual.StandardOutput)
+    Assert.Contains("hello", actual.StandardOutput)
+}
+
+[<Fact>]
+let ``Should execute buffered with encoding`` () = task {
+    let! actual = echoCommand |> Cli.execBufferede Encoding.UTF8
+
+    Assert.Contains("hello", actual.StandardOutput)
+}
+
+[<Fact>]
+let ``Should execute buffered with cancellation`` () = task {
+    use cts = new CancellationTokenSource()
+
+    let! actual = echoCommand |> Cli.Task.execBuffered cts.Token
+
+    Assert.Contains("hello", actual.StandardOutput)
+}
+
+[<Fact>]
+let ``Should execute buffered with encoding and cancellation`` () = task {
+    use cts = new CancellationTokenSource()
+
+    let! actual = echoCommand |> Cli.Task.execBufferede Encoding.UTF8 cts.Token
+
+    Assert.Contains("hello", actual.StandardOutput)
+}
+
+[<Fact>]
+let ``Should execute buffered with separate encodings and forceful and graceful tokens`` () = task {
+    use forceful = new CancellationTokenSource()
+    use graceful = new CancellationTokenSource()
+
+    let! actual =
+        echoCommand
+        |> Cli.Task.execBufferedf Encoding.UTF8 Encoding.UTF8 forceful.Token graceful.Token
+
+    Assert.Contains("hello", actual.StandardOutput)
+}
+
+[<Fact>]
+let ``Should match a successful result`` () = task {
+    let! result = Command(Dummy.Program.FilePath).ExecuteAsync()
+
+    match result with
+    | CommandResult.Succeeded -> ()
+    | CommandResult.Failed code -> failwith $"Expected success, got exit code {code}"
+}
+
+[<Fact>]
+let ``Should match a failed result with its exit code`` () = task {
+    let! result =
+        Command(Dummy.Program.FilePath)
+            .WithArguments([ "exit"; "3" ])
+            .WithValidation(CommandResultValidation.None)
+            .ExecuteAsync()
+
+    match result with
+    | CommandResult.Succeeded -> failwith "Expected failure"
+    | CommandResult.Failed code -> Assert.Equal(3, code)
+}
+
+[<Fact>]
+let ``Should deconstruct a buffered result`` () = task {
+    let! result = echoCommand.ExecuteBufferedAsync()
+
+    let (CommandResult.Buffered(exitCode, stdout, stderr)) = result
+
+    Assert.Equal(0, exitCode)
+    Assert.Contains("hello", stdout)
+    Assert.Equal(result.StandardOutput, stdout)
+    Assert.Equal(result.StandardError, stderr)
 }
 
 [<Property>]
