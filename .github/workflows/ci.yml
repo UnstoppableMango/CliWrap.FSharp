@@ -4,7 +4,6 @@ on:
   pull_request:
   push:
     branches: ["main"]
-    tags: ["v*.*.*"]
 
 permissions: {}
 
@@ -48,26 +47,52 @@ jobs:
         if: github.event_name == 'pull_request'
         run: dotnet fantomas --check src
 
+  release:
+    if: github.event_name == 'push'
+    needs: ["build"]
+    permissions: {}
+    uses: unmango/actions/.github/workflows/release-please.yml@e8bbcbd12a2c521c5cb36957c00a7a8f4fe2e766 # v2.0.0
+    with:
+      config-file: release-please-config.json
+      manifest-file: .release-please-manifest.json
+      app-client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+    secrets:
+      app-private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+  pack:
+    runs-on: ubuntu-latest
+    if: needs.release.outputs.release_created == 'true'
+    needs: ["release"]
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6
+        with:
+          global-json-file: global.json
+
+      - run: dotnet restore src/CliWrap.FSharp --locked-mode
+
+      # This run checked out the release PR's merge commit before its tag existed,
+      # so MinVer alone would compute a prerelease version.
       - name: Package library
-        if: github.event_name == 'push'
-        run: dotnet pack src/CliWrap.FSharp -c Release -o out --no-build
+        run: dotnet pack src/CliWrap.FSharp -c Release -o out --no-restore -p:MinVerVersionOverride="$VERSION"
+        env:
+          VERSION: ${{ needs.release.outputs.version }}
 
       - name: Upload artifact
-        id: upload
-        if: github.event_name == 'push'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: nuget
           path: out/*.nupkg
           if-no-files-found: error
 
-    outputs:
-      artifact-id: ${{ steps.upload.outputs.artifact-id }}
-
   publish:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    needs: ["build"]
+    needs: ["pack"]
     strategy:
       matrix:
         source: ["nuget", "github"]

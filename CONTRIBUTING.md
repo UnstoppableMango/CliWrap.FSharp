@@ -138,7 +138,17 @@ make dummy_program
 
 Versions follow [Semantic Versioning](https://semver.org/). Releases are cut by
 [release-please](https://github.com/googleapis/release-please): it keeps a release PR
-open that updates `CHANGELOG.md` from the conventional commits on `main`. Merging that
-PR tags the release (`v*.*.*`), and MinVer derives the package version from the tag.
-The tag build packs and publishes the package to NuGet.org (via trusted publishing)
-and GitHub Packages.
+open that updates `CHANGELOG.md` from the conventional commits on `main`.
+
+- Before 1.0, a breaking change or `feat` bumps the minor version, and `fix` or
+  `security` bumps the patch. Hidden commit types don't cut a release.
+- Renovate commits CliWrap bumps as `fix(deps)`, since it's the only runtime
+  dependency, so they cut a release. Other dependency bumps are hidden `chore(deps)`.
+- The maintainer merges the release PR by hand. Merging it creates the `v*.*.*` tag and
+  GitHub Release, and the same CI run packs the package with that version and publishes
+  it to NuGet.org (via trusted publishing) and GitHub Packages. Nothing is published
+  from `main` otherwise.
+- The current version lives in `.release-please-manifest.json`, which `flake.nix` also
+  reads. Don't edit it by hand.
+- Publishing stays in `ci.yml` because of trusted publishing; see
+  [ADR 0001](docs/adr/0001-publish-from-ci-workflow.md).

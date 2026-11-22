@@ -9,6 +9,13 @@
 	},
 	"packageRules": [
 		{
+			"description": "CliWrap is the only runtime dependency, so its bumps cut a release",
+			"matchPackageNames": [
+				"CliWrap"
+			],
+			"semanticCommitType": "fix"
+		},
+		{
 			"groupName": "minver",
 			"matchPackageNames": [
 				"minver",
