@@ -124,7 +124,9 @@ let envf (f: EnvironmentVariablesBuilder -> 'a) (command: Command) =
 /// <param name="command">The command to execute.</param>
 /// <returns>An <see cref="Async{CommandResult}"/> representing the asynchronous operation.</returns>
 let exec (command: Command) =
-    command.ExecuteAsync() |> CommandTask.op_Implicit |> Async.AwaitTask
+    command.ExecuteAsync()
+    |> CommandTask.op_Implicit
+    |> Internal.Async.awaitTaskUnwrapped
 
 /// <summary>
 /// Executes the command asynchronously, buffering standard output and standard error in memory.
@@ -132,7 +134,9 @@ let exec (command: Command) =
 /// <param name="command">The command to execute.</param>
 /// <returns>An <see cref="Async{BufferedCommandResult}"/> representing the asynchronous operation.</returns>
 let execBuffered (command: Command) =
-    command.ExecuteBufferedAsync() |> CommandTask.op_Implicit |> Async.AwaitTask
+    command.ExecuteBufferedAsync()
+    |> CommandTask.op_Implicit
+    |> Internal.Async.awaitTaskUnwrapped
 
 /// <summary>
 /// Executes the command asynchronously, buffering standard output and standard error in memory
@@ -144,7 +148,7 @@ let execBuffered (command: Command) =
 let execBufferede (encoding: Encoding) (command: Command) =
     command.ExecuteBufferedAsync(encoding)
     |> CommandTask.op_Implicit
-    |> Async.AwaitTask
+    |> Internal.Async.awaitTaskUnwrapped
 
 /// <summary>
 /// Executes the command as a pull-based event stream.

@@ -88,6 +88,9 @@ Tests live in `src/CliWrap.FSharp.Tests/` and use:
 
 - **xUnit** `[<Fact>]` for unit tests and **FsCheck** `[<Property>]` for property tests.
 - Descriptive backtick names, such as ``` ``Should configure arguments`` ```.
+- Conformance specs in `src/CliWrap.FSharp.Tests/Conformance/` are ports of upstream
+  CliWrap's behavioral specs. They keep upstream's file names and test names (``` ``I can ...`` ```),
+  so after a CliWrap bump you can compare them with upstream's spec files at the new tag.
 - Arrange, act, assert, with clear names like `expected` and `actual`.
 - Real implementations over mocks.
   For tests that run a process, use upstream's Dummy program (`Dummy.Program.FilePath`), built from `vendor/CliWrap/CliWrap.Tests.Dummy`.

@@ -19,7 +19,7 @@ type CommandBuilder(target: string) =
 
     [<CustomOperation("async")>]
     member _.Async<'T>(task: CommandTask<'T>) =
-        task |> CommandTask.op_Implicit |> Async.AwaitTask
+        task |> CommandTask.op_Implicit |> Internal.Async.awaitTaskUnwrapped
 
     [<CustomOperation("async")>]
     member this.Async(command: Command) = this.Async(command.ExecuteAsync())

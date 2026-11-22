@@ -3,7 +3,6 @@ module CliTests
 open System
 open System.Collections.Generic
 open System.Diagnostics
-open System.Linq
 open System.Text
 open System.Threading
 open CliWrap
@@ -18,7 +17,7 @@ open UnMango.CliWrap.FSharp
 let ``Should create command`` target =
     let expected = Command(target)
     let actual = Cli.wrap target
-    expected.TargetFilePath = actual.TargetFilePath
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should create command the long way``
@@ -35,12 +34,23 @@ let ``Should create command the long way``
     let creds = Credentials(domain.Get)
     let envs = (dict [ "test", "test" ]).AsReadOnly()
     let validation = CommandResultValidation.None
-    let expected = Command(target)
+
+    let expected =
+        Command(target)
+            .WithArguments(args.Get)
+            .WithWorkingDirectory(workDir.Get)
+            .WithResourcePolicy(policy)
+            .WithCredentials(creds)
+            .WithEnvironmentVariables(envs)
+            .WithValidation(validation)
+            .WithStandardInputPipe(input)
+            .WithStandardOutputPipe(output)
+            .WithStandardErrorPipe(err)
 
     let actual =
         Cli.commandv target args.Get workDir.Get policy creds envs validation input output err
 
-    expected.TargetFilePath = actual.TargetFilePath
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure a single argument`` (arg: NonNull<string>) =
@@ -49,7 +59,7 @@ let ``Should configure a single argument`` (arg: NonNull<string>) =
 
     let actual = cmd |> Cli.arg arg.Get
 
-    expected.Arguments = actual.Arguments
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure arguments`` (arg: NonNull<string>) =
@@ -58,7 +68,7 @@ let ``Should configure arguments`` (arg: NonNull<string>) =
 
     let actual = cmd |> Cli.args [ arg.Get ]
 
-    expected.Arguments = actual.Arguments
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure arguments with escape`` (arg: NonNull<string>) escape =
@@ -67,7 +77,7 @@ let ``Should configure arguments with escape`` (arg: NonNull<string>) escape =
 
     let actual = cmd |> Cli.argse [ arg.Get ] escape
 
-    expected.Arguments = actual.Arguments
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure arguments with builder`` (arg: NonNull<string>) =
@@ -76,7 +86,7 @@ let ``Should configure arguments with builder`` (arg: NonNull<string>) =
 
     let actual = cmd |> Cli.argsf _.Add(arg.Get)
 
-    expected.Arguments = actual.Arguments
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure credentials`` (arg: NonNull<string>) =
@@ -85,7 +95,7 @@ let ``Should configure credentials`` (arg: NonNull<string>) =
 
     let actual = cmd |> Cli.creds (Credentials(arg.Get))
 
-    expected.Credentials.Domain = actual.Credentials.Domain
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure credentials with builder`` (arg: NonNull<string>) =
@@ -94,25 +104,29 @@ let ``Should configure credentials with builder`` (arg: NonNull<string>) =
 
     let actual = cmd |> Cli.credsf _.SetUserName(arg.Get)
 
-    expected.Credentials.UserName = actual.Credentials.UserName
+    Equivalence.assertEquivalent expected actual
 
 [<Fact>]
 let ``Should configure resource policy`` () =
     let policy = ResourcePolicy(ProcessPriorityClass.BelowNormal)
     let cmd = Command(Dummy.Program.FilePath)
+    let expected = cmd.WithResourcePolicy(policy)
 
     let actual = cmd |> Cli.resourcePolicy policy
 
-    Assert.Same(policy, actual.ResourcePolicy)
+    Equivalence.assertEquivalent expected actual
 
 [<Fact>]
 let ``Should configure resource policy with builder`` () =
     let cmd = Command(Dummy.Program.FilePath)
 
+    let expected =
+        cmd.WithResourcePolicy(fun b -> b.SetPriority(ProcessPriorityClass.BelowNormal) |> ignore)
+
     let actual =
         cmd |> Cli.resourcePolicyf _.SetPriority(ProcessPriorityClass.BelowNormal)
 
-    Assert.Equal(Nullable ProcessPriorityClass.BelowNormal, actual.ResourcePolicy.Priority)
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure environment variables`` (key: NonNull<string>) (value: NonNull<string>) =
@@ -122,7 +136,7 @@ let ``Should configure environment variables`` (key: NonNull<string>) (value: No
         cmd.WithEnvironmentVariables((dict [ key.Get, value.Get ]).AsReadOnly())
 
     let actual = cmd |> Cli.env [ key.Get, value.Get ]
-    expected.EnvironmentVariables.SequenceEqual(actual.EnvironmentVariables)
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure environment variables with builder`` (key: NonNull<string>) (value: NonNull<string>) =
@@ -132,40 +146,7 @@ let ``Should configure environment variables with builder`` (key: NonNull<string
         cmd.WithEnvironmentVariables(fun b -> b.Set(key.Get, value.Get) |> ignore)
 
     let actual = cmd |> Cli.envf _.Set(key.Get, value.Get)
-    expected.EnvironmentVariables.SequenceEqual(actual.EnvironmentVariables)
-
-[<Fact>]
-let ``Should execute asynchronously`` () = task {
-    let cmd = Command(Dummy.Program.FilePath)
-    let! expected = cmd.ExecuteAsync()
-
-    let! actual = cmd |> Cli.exec
-
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
-}
-
-[<Fact>]
-let ``Should execute asynchronously with cancellation`` () = task {
-    use cts = new CancellationTokenSource()
-    let cmd = Command(Dummy.Program.FilePath)
-    let! expected = cmd.ExecuteAsync(cts.Token)
-
-    let! actual = cmd |> Cli.Task.exec cts.Token
-
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
-}
-
-[<Fact>]
-let ``Should execute asynchronously with forceful and graceful tokens`` () = task {
-    use forceful = new CancellationTokenSource()
-    use graceful = new CancellationTokenSource()
-    let cmd = Command(Dummy.Program.FilePath)
-    let! expected = cmd.ExecuteAsync(forceful.Token, graceful.Token)
-
-    let! actual = cmd |> Cli.Task.execf forceful.Token graceful.Token
-
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
-}
+    Equivalence.assertEquivalent expected actual
 
 let private sleepCommand (output: StringBuilder) =
     Command(Dummy.Program.FilePath)
@@ -243,6 +224,17 @@ let ``Should execute buffered with encoding`` () = task {
 }
 
 [<Fact>]
+let ``Should raise the command's own error when executing buffered with encoding`` () = task {
+    let failing = Command(Dummy.Program.FilePath).WithArguments([ "exit"; "3" ])
+
+    let! error =
+        Assert.ThrowsAsync<CliWrap.Exceptions.CommandExecutionException>(fun () ->
+            failing |> Cli.execBufferede Encoding.UTF8 |> Async.StartAsTask :> Tasks.Task)
+
+    Assert.Equal(3, error.ExitCode)
+}
+
+[<Fact>]
 let ``Should execute buffered with cancellation`` () = task {
     use cts = new CancellationTokenSource()
 
@@ -314,7 +306,7 @@ let ``Should configure stdin`` (value: NonNull<string>) =
 
     let actual = cmd |> Cli.stdin input
 
-    expected.StandardInputPipe = actual.StandardInputPipe
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure stdout`` () =
@@ -324,7 +316,7 @@ let ``Should configure stdout`` () =
 
     let actual = cmd |> Cli.stdout pipe
 
-    expected.StandardOutputPipe = actual.StandardOutputPipe
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure stderr`` () =
@@ -334,7 +326,7 @@ let ``Should configure stderr`` () =
 
     let actual = cmd |> Cli.stderr pipe
 
-    expected.StandardOutputPipe = actual.StandardOutputPipe
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure target file`` (file: NonNull<string>) =
@@ -343,7 +335,7 @@ let ``Should configure target file`` (file: NonNull<string>) =
 
     let actual = cmd |> Cli.target file.Get
 
-    expected.TargetFilePath = actual.TargetFilePath
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure validation`` () =
@@ -352,7 +344,7 @@ let ``Should configure validation`` () =
 
     let actual = cmd |> Cli.validation CommandResultValidation.None
 
-    expected.Validation = actual.Validation
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure working directory`` (dir: NonNull<string>) =
@@ -361,7 +353,7 @@ let ``Should configure working directory`` (dir: NonNull<string>) =
 
     let actual = cmd |> Cli.workDir dir.Get
 
-    expected.WorkingDirPath = actual.WorkingDirPath
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should convert to string`` (arg: NonNull<string>) =

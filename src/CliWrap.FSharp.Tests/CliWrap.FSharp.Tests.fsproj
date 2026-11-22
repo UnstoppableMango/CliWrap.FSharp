@@ -9,6 +9,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="Equivalence.fs" />
+		<Compile Include="EquivalenceTests.fs" />
+		<Compile Include="Conformance/Support.fs" />
+		<Compile Include="Conformance/ConfigurationSpecs.fs" />
+		<Compile Include="Conformance/ExecutionSpecs.fs" />
+		<Compile Include="Conformance/EnvironmentSpecs.fs" />
+		<Compile Include="Conformance/CredentialsSpecs.fs" />
+		<Compile Include="Conformance/PathResolutionSpecs.fs" />
+		<Compile Include="Conformance/BufferingSpecs.fs" />
+		<Compile Include="Conformance/ValidationSpecs.fs" />
+		<Compile Include="Conformance/LineBreakSpecs.fs" />
+		<Compile Include="Conformance/ResourcePolicySpecs.fs" />
+		<Compile Include="Conformance/PipingSpecs.fs" />
+		<Compile Include="Conformance/PullEventStreamSpecs.fs" />
+		<Compile Include="Conformance/PushEventStreamSpecs.fs" />
 		<Compile Include="CliTests.fs" />
 		<Compile Include="CommandBuilderTests.fs"/>
 		<Compile Include="EventStreamTests.fs" />

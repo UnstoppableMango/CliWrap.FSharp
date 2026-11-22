@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<Compile Include="CommandResult.fs" />
+		<Compile Include="Internal.fs" />
 		<Compile Include="CommandEvent.fs" />
 		<Compile Include="Cli.fs" />
 		<Compile Include="Pipes.fs" />
