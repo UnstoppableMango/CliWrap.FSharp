@@ -40,8 +40,17 @@ vendor: $(UPSTREAM_STAMP)
 
 # The source is copied, not linked: the store path is read-only and the
 # Dummy program builds bin/ and obj/ next to its sources.
+#
+# A tag bump in flake.nix (as Renovate makes) relocks the input first. Only then, since
+# `nix flake lock` opens the repository as a flake, which fails in a dev container where
+# the checkout belongs to another user.
 $(UPSTREAM_STAMP): flake.nix flake.lock $(CLIWRAP_FSPROJ)
-	$(NIX) flake lock
+	@want="$$(sed -n 's|.*"github:Tyrrrz/CliWrap/\([^"]*\)".*|\1|p' flake.nix)"; \
+	locked="$$($(NIX) eval --raw --impure --expr '$(FLAKE_LOCK_NODE).original.ref')"; \
+	if [ "$$want" != "$$locked" ]; then \
+		echo "Relocking the cliwrap input: $$locked -> $$want"; \
+		$(NIX) flake lock || exit 1; \
+	fi
 	@tag="$$($(NIX) eval --raw --impure --expr '$(FLAKE_LOCK_NODE).original.ref')"; \
 	pkg="$$(sed -n 's/.*Include="CliWrap" Version="\([^"]*\)".*/\1/p' $(CLIWRAP_FSPROJ))"; \
 	if [ "$$tag" != "$$pkg" ]; then \
