@@ -43,7 +43,6 @@ Renovate opens dependency update PRs automatically.
 | ---------------------------- | -------------------------------------------------------- |
 | Build                        | `make build` or `dotnet build`                           |
 | Test                         | `make test` or `dotnet test`                             |
-| Test with coverage (as CI does) | `make coverage`                                      |
 | Format                       | `dotnet fantomas src` (or `make format` with Nix)        |
 | Check formatting (as CI does) | `dotnet fantomas --check src`                          |
 | Check trimming support       | `make trimmable`                                         |
@@ -95,9 +94,9 @@ Tests live in `src/CliWrap.FSharp.Tests/` and use:
 - Real implementations over mocks.
   For tests that run a process, use upstream's Dummy program (`Dummy.Program.FilePath`), built from `vendor/CliWrap/CliWrap.Tests.Dummy`.
 
-Coverage is collected in CI and reported to Codecov. CI fails when:
+Coverage is collected in CI and reported to Codecov, whose checks fail when:
 
-- line coverage of the library is below **80%** (`make coverage` runs the same check locally),
+- line coverage of the library is below **80%**,
 - total coverage drops more than **1%** below the base commit, or
 - less than **80%** of the lines a pull request adds or changes are covered.
 

@@ -52,9 +52,6 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Check coverage
-        run: scripts/coverage.sh TestResults/*/coverage.cobertura.xml
-
       - name: Lint solution
         if: github.event_name == 'pull_request'
         run: dotnet fantomas --check src

@@ -1,5 +1,5 @@
 # Coverage policy: see "Testing policy" in CONTRIBUTING.md.
-# CI enforces the 80% line coverage floor itself (scripts/coverage.sh); these statuses add the relative checks.
+# Branch coverage is reported but not gated: F# compiles pattern matches and computation expressions to extra branches.
 coverage:
   precision: 2
   round: down
@@ -9,6 +9,9 @@ coverage:
       default:
         target: auto
         threshold: 1%
+      # Fail when total coverage is below 80%.
+      floor:
+        target: 80%
     # Lines a pull request adds or changes.
     patch:
       default:
