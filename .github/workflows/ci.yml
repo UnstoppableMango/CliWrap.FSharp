@@ -47,7 +47,6 @@ jobs:
         if: github.event_name == 'pull_request'
         run: dotnet fantomas --check src
 
-  # Opens or updates the release PR; merging it creates the tag and GitHub Release.
   release:
     if: github.event_name == 'push'
     needs: ["build"]
