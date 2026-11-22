@@ -16,7 +16,6 @@ obj/
 *.nupkg
 .fake/
 /result
-TestResults/
 
 # User Specific
 *.user
