@@ -19,3 +19,6 @@ obj/
 
 # User Specific
 *.user
+
+# Written by `make vendor`
+/vendor/

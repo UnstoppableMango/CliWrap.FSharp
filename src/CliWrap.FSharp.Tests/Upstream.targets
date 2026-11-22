@@ -1,0 +1,23 @@
+<Project>
+
+	<PropertyGroup>
+		<UpstreamDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', '..', '..', 'vendor', 'CliWrap'))</UpstreamDir>
+		<UpstreamDummyProject>$(UpstreamDir)CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj</UpstreamDummyProject>
+		<UpstreamVersionStamp>$(UpstreamDir).upstream-version</UpstreamVersionStamp>
+		<UpstreamVersion Condition="Exists('$(UpstreamVersionStamp)')">$([System.IO.File]::ReadAllText('$(UpstreamVersionStamp)').Trim())</UpstreamVersion>
+		<WrappedCliWrapVersion>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)../CliWrap.FSharp/CliWrap.FSharp.fsproj')), 'Include="CliWrap" Version="([^"]+)"').Groups[1].Value)</WrappedCliWrapVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Upstream's props don't bypass CSharpier. -->
+		<ProjectReference Include="$(UpstreamDummyProject)" AdditionalProperties="CSharpier_Bypass=true" />
+	</ItemGroup>
+
+	<Target Name="CheckUpstreamSource" BeforeTargets="_GenerateRestoreGraph;CollectPackageReferences;ResolveProjectReferences">
+		<Error Condition="!Exists('$(UpstreamVersionStamp)')"
+		       Text="The upstream CliWrap source is missing from $(UpstreamDir). Run 'make vendor' to copy it from the cliwrap flake input." />
+		<Error Condition="Exists('$(UpstreamVersionStamp)') And '$(UpstreamVersion)' != '$(WrappedCliWrapVersion)'"
+		       Text="The upstream CliWrap source in $(UpstreamDir) is $(UpstreamVersion), but the library wraps CliWrap $(WrappedCliWrapVersion). Set the cliwrap tag in flake.nix to $(WrappedCliWrapVersion) and run 'make vendor'." />
+	</Target>
+
+</Project>

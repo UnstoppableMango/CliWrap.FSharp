@@ -17,8 +17,14 @@ jobs:
         with:
           fetch-depth: 0
           filter: tree:0
-          submodules: true
           persist-credentials: false
+
+      - uses: cachix/install-nix-action@bb0495a1086c46893eee56f32fd192dfe4a15bb9 # v32.0.0
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Copy upstream CliWrap source
+        run: make vendor
 
       - name: Setup dotnet
         uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6
@@ -149,7 +155,6 @@ jobs:
         with:
           fetch-depth: 0
           filter: tree:0
-          submodules: true
           persist-credentials: false
 
       - uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3

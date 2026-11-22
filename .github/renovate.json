@@ -4,14 +4,23 @@
 		"github>UnstoppableMango/renovate-config"
 	],
 	"automerge": true,
-	"git-submodules": {
-		"enabled": true
-	},
+	"customManagers": [
+		{
+			"customType": "regex",
+			"description": "Upstream CliWrap source for the Dummy program (cliwrap flake input)",
+			"managerFilePatterns": ["/^flake\\.nix$/"],
+			"matchStrings": ["\"github:Tyrrrz/CliWrap/(?<currentValue>[^\"]+)\""],
+			"depNameTemplate": "Tyrrrz/CliWrap",
+			"datasourceTemplate": "github-tags"
+		}
+	],
 	"packageRules": [
 		{
-			"description": "CliWrap is the only runtime dependency, so its bumps cut a release",
+			"description": "CliWrap is the only runtime dependency, so its bumps cut a release. The cliwrap flake input must match the package version, so both are bumped together.",
+			"groupName": "CliWrap",
 			"matchPackageNames": [
-				"CliWrap"
+				"CliWrap",
+				"Tyrrrz/CliWrap"
 			],
 			"semanticCommitType": "fix"
 		},

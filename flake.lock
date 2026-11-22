@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "cliwrap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787142666,
+        "narHash": "sha256-Nu4QVWwA9HUhOx50pILss5uZm/aUPMdGEMO9rmy/Fjg=",
+        "owner": "Tyrrrz",
+        "repo": "CliWrap",
+        "rev": "45819e3bc44d9be4d778e91a0ec5cf6a5176de56",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Tyrrrz",
+        "ref": "3.10.5",
+        "repo": "CliWrap",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -51,6 +68,7 @@
     },
     "root": {
       "inputs": {
+        "cliwrap": "cliwrap",
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
         "systems": "systems",

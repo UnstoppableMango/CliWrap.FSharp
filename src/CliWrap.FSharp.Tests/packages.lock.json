@@ -69,8 +69,8 @@
       },
       "CliFx": {
         "type": "Transitive",
-        "resolved": "3.0.1",
-        "contentHash": "wYdIZOMl+qnmRlaqiuATHzcRthzjO1XKOSC89M45aVa6+ZBQ4H508KcBQlpGJqLfbnxz3w+r8fBuXYJcsIe1FA=="
+        "resolved": "3.0.0",
+        "contentHash": "pdwqGjsOnD/aHgbFGJJOk1U5JOEsFwVhVMb2LqHUQmPEVSZf2YgyGeZvCtP2SHndBEHxgUVNlNXX37o9uz62bw=="
       },
       "CliWrap": {
         "type": "Transitive",
@@ -167,7 +167,7 @@
       "cliwrap.tests.dummy": {
         "type": "Project",
         "dependencies": {
-          "CliFx": "[3.0.1, )"
+          "CliFx": "[3.0.0, )"
         }
       },
       "UnMango.CliWrap.FSharp": {

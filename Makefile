@@ -2,13 +2,15 @@ DOTNET   ?= dotnet
 FANTOMAS ?= $(DOTNET) fantomas
 NPX      ?= npx
 
-build:
+.PHONY: build check test format fmt deps trimmable aot update vendor devcontainer
+
+build: vendor
 	$(DOTNET) build
 
 check:
 	nix flake check
 
-test:
+test: vendor
 	$(DOTNET) test
 
 format fmt:
@@ -26,15 +28,10 @@ aot:
 update:
 	nix flake update
 
-prepare_dummy:
-	cd vendor/CliWrap && git apply ${CURDIR}/vendor/patches/dummy-program.patch
+vendor: vendor/CliWrap/.upstream-version
 
-dummy_patch:
-	cd vendor/CliWrap && git diff > ${CURDIR}/vendor/patches/dummy-program.patch
-
-dummy_program: prepare_dummy
-	cp -r vendor/CliWrap/CliWrap.Tests.Dummy src
-	cd vendor/CliWrap && git reset --hard
+vendor/CliWrap/.upstream-version: flake.nix flake.lock scripts/vendor.sh
+	scripts/vendor.sh
 
 devcontainer:
 	$(NPX) @devcontainers/cli build . --workspace-folder .

@@ -2,6 +2,11 @@
 	"name": "CliWrap.FSharp",
 	"image": "mcr.microsoft.com/devcontainers/dotnet:dev-11.0-resolute",
 	"remoteUser": "root",
+	"features": {
+		"ghcr.io/devcontainers/features/nix:1": {
+			"extraNixConfig": "experimental-features = nix-command flakes"
+		}
+	},
 	"customizations": {
 		"vscode": {
 			"extensions": [

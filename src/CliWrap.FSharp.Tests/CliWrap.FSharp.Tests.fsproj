@@ -25,7 +25,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\CliWrap.FSharp\CliWrap.FSharp.fsproj"/>
-		<ProjectReference Include="..\CliWrap.Tests.Dummy\CliWrap.Tests.Dummy.csproj" />
 	</ItemGroup>
+
+	<Import Project="Upstream.targets" />
 
 </Project>
