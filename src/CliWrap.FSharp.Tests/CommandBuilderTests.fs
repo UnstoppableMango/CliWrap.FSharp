@@ -1,8 +1,6 @@
 module CommandBuilderTests
 
 open System.Collections.Generic
-open System.IO
-open System.Linq
 open System.Text
 open System.Threading
 open CliWrap
@@ -17,80 +15,108 @@ open UnMango.CliWrap.FSharp
 let ``Should configure target file path`` target =
     let expected = Command(target)
     let actual = command target { args [] }
-    actual.TargetFilePath = expected.TargetFilePath
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure args`` (a: NonNull<string> list) =
     let input = a |> List.map _.Get
     let expected = Command(Dummy.Program.FilePath).WithArguments(input)
     let actual = command Dummy.Program.FilePath { args input }
-    actual.Arguments = expected.Arguments
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure string args`` (a: NonNull<string>) =
     let expected = Command(Dummy.Program.FilePath).WithArguments(a.Get)
     let actual = command Dummy.Program.FilePath { args a.Get }
-    actual.Arguments = expected.Arguments
+    Equivalence.assertEquivalent expected actual
+
+// Each run asks the Dummy program to exit with a non-zero code, so a passing test shows
+// the builder ran the command it configured rather than some default.
+let private exitCode = 3
 
 [<Fact>]
 let ``Should execute CommandTask asynchronously`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
-
     let! actual =
         command Dummy.Program.FilePath {
+            args [ "exit"; string exitCode ]
+            validation CommandResultValidation.None
             exec
             async
         }
         |> Async.StartAsTask
 
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
+    Assert.Equal(exitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute asynchronously`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
-    let! actual = command Dummy.Program.FilePath { async } |> Async.StartAsTask
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
+    let! actual =
+        command Dummy.Program.FilePath {
+            args [ "exit"; string exitCode ]
+            validation CommandResultValidation.None
+            async
+        }
+        |> Async.StartAsTask
+
+    Assert.Equal(exitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute asynchronously with cancellation`` () = task {
     use cts = new CancellationTokenSource()
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync(cts.Token)
-    let! actual = command Dummy.Program.FilePath { async cts.Token } |> Async.StartAsTask
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
+
+    let! actual =
+        command Dummy.Program.FilePath {
+            args [ "exit"; string exitCode ]
+            validation CommandResultValidation.None
+            async cts.Token
+        }
+        |> Async.StartAsTask
+
+    Assert.Equal(exitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute asynchronously as task`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteAsync()
-    let! actual = command Dummy.Program.FilePath { exec }
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
+    let! actual = command Dummy.Program.FilePath {
+        args [ "exit"; string exitCode ]
+        validation CommandResultValidation.None
+        exec
+    }
+
+    Assert.Equal(exitCode, actual.ExitCode)
 }
 
 [<Fact>]
 let ``Should execute buffered`` () = task {
-    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync()
-    let! actual = command Dummy.Program.FilePath { buffered }
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
+    let! actual = command Dummy.Program.FilePath {
+        args [ "echo"; "hello" ]
+        buffered
+    }
+
+    Assert.Equal("hello", actual.StandardOutput.Trim())
 }
 
 [<Fact>]
 let ``Should execute buffered with encoding`` () = task {
-    let encoding = Encoding.UTF8
-    let! expected = Command(Dummy.Program.FilePath).ExecuteBufferedAsync(encoding)
-    let! actual = command Dummy.Program.FilePath { buffered encoding }
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
+    let! actual = command Dummy.Program.FilePath {
+        args [ "echo"; "hello" ]
+        buffered Encoding.UTF8
+    }
+
+    Assert.Equal("hello", actual.StandardOutput.Trim())
 }
 
 [<Fact>]
 let ``Should execute buffered with encoding and cancellation`` () = task {
-    let encoding = Encoding.UTF8
     use cts = new CancellationTokenSource()
-    let cmd = Command(Dummy.Program.FilePath)
-    let! expected = cmd.ExecuteBufferedAsync(encoding, cts.Token)
-    let! actual = command Dummy.Program.FilePath { buffered encoding cts.Token }
-    Assert.Equal(expected.ExitCode, actual.ExitCode)
+
+    let! actual = command Dummy.Program.FilePath {
+        args [ "echo"; "hello" ]
+        buffered Encoding.UTF8 cts.Token
+    }
+
+    Assert.Equal("hello", actual.StandardOutput.Trim())
 }
 
 [<Property>]
@@ -99,63 +125,46 @@ let ``Should configure environment variables`` var =
         Command(Dummy.Program.FilePath).WithEnvironmentVariables((dict [ var ]).AsReadOnly())
 
     let actual = command Dummy.Program.FilePath { env [ var ] }
-    actual.EnvironmentVariables.SequenceEqual(expected.EnvironmentVariables)
+    Equivalence.assertEquivalent expected actual
 
 [<Fact>]
-let ``Should configure stdin`` () = task {
+let ``Should configure stdin`` () =
     let input = PipeSource.FromString "testing"
     let expected = Command(Dummy.Program.FilePath).WithStandardInputPipe(input)
 
     let actual = command Dummy.Program.FilePath { stdin input }
 
-    let a, b = new MemoryStream(), new MemoryStream()
-    do! expected.StandardInputPipe.CopyToAsync(a)
-    do! actual.StandardInputPipe.CopyToAsync(b)
-
-    Assert.Equal<byte>(a.ToArray(), b.ToArray())
-}
+    Equivalence.assertEquivalent expected actual
 
 [<Fact>]
-let ``Should configure stdout`` () = task {
-    let a, b = StringBuilder(), StringBuilder()
+let ``Should configure stdout`` () =
+    let pipe = PipeTarget.ToStringBuilder(StringBuilder())
+    let expected = Command(Dummy.Program.FilePath).WithStandardOutputPipe(pipe)
 
-    let! _ =
-        Command(Dummy.Program.FilePath)
-            .WithArguments([ "generate binary"; "--target"; "all" ])
-            .WithStandardOutputPipe(PipeTarget.ToStringBuilder(a))
-            .ExecuteAsync()
+    let actual = command Dummy.Program.FilePath { stdout pipe }
 
-    let! _ = command Dummy.Program.FilePath {
-        args [ "generate binary"; "--target"; "all" ]
-        stdout (PipeTarget.ToStringBuilder(b))
-        exec
-    }
-
-    Assert.Equal(a.ToString(), b.ToString())
-}
+    Equivalence.assertEquivalent expected actual
 
 [<Fact>]
-let ``Should configure stderr`` () = task {
-    let a, b = StringBuilder(), StringBuilder()
+let ``Should configure stderr`` () =
+    let pipe = PipeTarget.ToStringBuilder(StringBuilder())
+    let expected = Command(Dummy.Program.FilePath).WithStandardErrorPipe(pipe)
 
-    let! _ =
-        Command(Dummy.Program.FilePath)
-            .WithArguments([ "generate binary"; "--target"; "all" ])
-            .WithStandardErrorPipe(PipeTarget.ToStringBuilder(a))
-            .ExecuteAsync()
+    let actual = command Dummy.Program.FilePath { stderr pipe }
 
-    let! _ = command Dummy.Program.FilePath {
-        args [ "generate binary"; "--target"; "all" ]
-        validation CommandResultValidation.None
-        stderr (PipeTarget.ToStringBuilder(b))
-        exec
-    }
+    Equivalence.assertEquivalent expected actual
 
-    Assert.Equal(a.ToString(), b.ToString())
-}
+[<Fact>]
+let ``Should configure validation`` () =
+    let expected =
+        Command(Dummy.Program.FilePath).WithValidation(CommandResultValidation.None)
+
+    let actual = command Dummy.Program.FilePath { validation CommandResultValidation.None }
+
+    Equivalence.assertEquivalent expected actual
 
 [<Property>]
 let ``Should configure working directory`` directory =
     let expected = Command(Dummy.Program.FilePath).WithWorkingDirectory(directory)
     let actual = command Dummy.Program.FilePath { workingDirectory directory }
-    actual.WorkingDirPath = expected.WorkingDirPath
+    Equivalence.assertEquivalent expected actual

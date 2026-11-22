@@ -9,6 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="Equivalence.fs" />
+		<Compile Include="EquivalenceTests.fs" />
 		<Compile Include="CliTests.fs" />
 		<Compile Include="CommandBuilderTests.fs"/>
 		<None Include="packages.lock.json" />
