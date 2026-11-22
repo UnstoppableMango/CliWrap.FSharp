@@ -96,12 +96,13 @@ Tests live in `src/CliWrap.FSharp.Tests/` and use:
 
 Coverage is collected in CI and reported to Codecov, whose checks fail when:
 
-- line coverage of the library is below **65%** (to be raised toward 80% as coverage grows),
+- line coverage of the library is below **65%**,
 - total coverage drops more than **1%** below the base commit, or
 - less than **80%** of the lines a pull request adds or changes are covered.
 
 Branch coverage is reported but not gated, because F# pattern matches and computation expressions compile to branches no test can reach.
-The thresholds are a floor, not a target: aim for meaningful tests of the public API and its edge cases rather than a coverage number.
+The thresholds are a minimum.
+Aim for meaningful tests of the public API and its edge cases.
 
 ## Commit messages
 

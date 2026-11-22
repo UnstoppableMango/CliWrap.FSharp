@@ -1,18 +1,14 @@
-# Coverage policy: see "Testing policy" in CONTRIBUTING.md.
-# Branch coverage is reported but not gated: F# compiles pattern matches and computation expressions to extra branches.
 coverage:
   precision: 2
   round: down
   status:
-    # Fail when total coverage drops more than 1% below the base commit.
     project:
       default:
         target: auto
         threshold: 1%
-      # Fail when total coverage is below 65%. Raise toward 80% as coverage grows.
       floor:
+        # TODO: raise toward 80% as coverage grows.
         target: 65%
-    # Lines a pull request adds or changes.
     patch:
       default:
         target: 80%
