@@ -150,6 +150,56 @@ let main args = async {
 }
 ```
 
+### Event streams
+
+CliWrap's event streams are supported in two styles.
+Both produce the same command events, which you can match with the `Started`, `StdOut`, `StdErr` and `Exited` active pattern.
+
+Observe pushes events to subscribers as an `IObservable<CommandEvent>`, so F#'s `Observable` module works with it.
+
+```fsharp
+// Disposing the subscription stops the process
+let subscription =
+  Cli.wrap "dotnet"
+  |> Cli.args [ "build" ]
+  |> Cli.observe CancellationToken.None
+  |> Observable.subscribe (function
+    | Started pid -> printfn $"Started %d{pid}"
+    | StdOut line -> printfn $"%s{line}"
+    | StdErr line -> eprintfn $"%s{line}"
+    | Exited code -> printfn $"Exited with %d{code}")
+```
+
+Listen pulls events as an `IAsyncEnumerable<CommandEvent>`.
+With [FSharp.Control.TaskSeq](https://github.com/fsprojects/FSharp.Control.TaskSeq) opened, `task` can loop over it.
+
+```fsharp
+open FSharp.Control
+
+let main args = task {
+  use cts = new CancellationTokenSource()
+  let events = command "dotnet" {
+    args [ "build" ]
+    listen cts.Token
+  }
+
+  for event in events do
+    match event with
+    | StdOut line -> printfn $"%s{line}"
+    | _ -> ()
+}
+```
+
+Both styles have the same set of overloads.
+
+| `Cli` | `command { }` | |
+|-------|---------------|-|
+| | `observe` / `listen` | No cancellation |
+| `observe ct` / `listen ct` | `observe ct` / `listen ct` | Cancellation |
+| `observee encoding ct` / `listene encoding ct` | `observe encoding ct` / `listen encoding ct` | One encoding for standard output and standard error |
+| `observef forceful graceful` / `listenf forceful graceful` | | Forceful and graceful cancellation |
+| | `observe stdoutEnc stderrEnc forceful graceful` / `listen ...` | Everything |
+
 CliWrap's piping functionality is supported via the `pipeline` computation expression.
 
 ```fsharp
