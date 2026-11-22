@@ -43,12 +43,17 @@ jobs:
         run: dotnet build -c Release --no-restore
 
       - name: Run tests
-        run: dotnet test -c Release --collect:"XPlat Code Coverage" --no-build
+        run: dotnet test -c Release --collect:"XPlat Code Coverage" --results-directory TestResults --no-build
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7
+        with:
+          files: TestResults/*/coverage.cobertura.xml
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check coverage
+        run: scripts/coverage.sh TestResults/*/coverage.cobertura.xml
 
       - name: Lint solution
         if: github.event_name == 'pull_request'

@@ -1,0 +1,20 @@
+# Coverage policy: see "Testing policy" in CONTRIBUTING.md.
+# CI enforces the 80% line coverage floor itself (scripts/coverage.sh); these statuses add the relative checks.
+coverage:
+  precision: 2
+  round: down
+  status:
+    # Fail when total coverage drops more than 1% below the base commit.
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    # Lines a pull request adds or changes.
+    patch:
+      default:
+        target: 80%
+
+ignore:
+  - "examples"
+  - "src/CliWrap.FSharp.Tests"
+  - "vendor"

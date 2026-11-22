@@ -2,7 +2,7 @@ DOTNET   ?= dotnet
 FANTOMAS ?= $(DOTNET) fantomas
 NPX      ?= npx
 
-.PHONY: build check test format fmt deps trimmable aot update vendor analyze devcontainer
+.PHONY: build check test coverage format fmt deps trimmable aot update vendor analyze devcontainer
 
 build: vendor
 	$(DOTNET) build
@@ -12,6 +12,11 @@ check:
 
 test: vendor
 	$(DOTNET) test
+
+coverage: vendor
+	rm -rf TestResults
+	$(DOTNET) test --collect:"XPlat Code Coverage" --results-directory TestResults
+	scripts/coverage.sh TestResults/*/coverage.cobertura.xml
 
 format fmt:
 	nix fmt
