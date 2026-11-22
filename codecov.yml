@@ -1,0 +1,19 @@
+coverage:
+  precision: 2
+  round: down
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+      floor:
+        # TODO: raise toward 80% as coverage grows.
+        target: 65%
+    patch:
+      default:
+        target: 80%
+
+ignore:
+  - "examples"
+  - "src/CliWrap.FSharp.Tests"
+  - "vendor"

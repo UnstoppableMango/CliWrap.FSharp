@@ -6,6 +6,7 @@
 		<OutputType>Exe</OutputType>
 		<IsTestProject>true</IsTestProject>
 		<RootNamespace>UnMango.CliWrap.FSharp</RootNamespace>
+		<RunSettingsFilePath>$(MSBuildThisFileDirectory)coverage.runsettings</RunSettingsFilePath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,6 +30,7 @@
 		<Compile Include="PipeBuilderTests.fs" />
 		<Compile Include="EventStreamTests.fs" />
 		<None Include="packages.lock.json" />
+		<None Include="coverage.runsettings" />
 	</ItemGroup>
 
 	<ItemGroup>
