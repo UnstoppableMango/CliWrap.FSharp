@@ -20,6 +20,11 @@
     "hash": "sha256-qEbMjuW7wxJib1aenmWhRFvmYeeeKK8KgYmXK83trD8="
   },
   {
+    "pname": "fsharp-analyzers",
+    "version": "0.43.0",
+    "hash": "sha256-m8Vviu6cgYM6PJocm8mmmuVoDyj5CMwtrQCx5iucKUg="
+  },
+  {
     "pname": "FSharp.Core",
     "version": "11.0.101",
     "hash": "sha256-bBQ8ak4ATjILoU68RhtWjGDa6w/No+uNjlz6FCdrmqE="

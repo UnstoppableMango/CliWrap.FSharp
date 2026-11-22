@@ -1,26 +1,24 @@
 # Contributing to CliWrap.FSharp
 
-Thanks for your interest in improving CliWrap.FSharp! This document is the single
-source of truth for how to build, test, format, and submit changes. It applies to
-human and AI contributors alike.
+Thanks for your interest in improving CliWrap.FSharp!
+This document is the single source of truth for how to build, test, format, and submit changes.
+It applies to human and AI contributors alike.
 
-By contributing, you agree that your contributions are licensed under the
-[MIT License](LICENSE) that covers this project.
+By contributing, you agree that your contributions are licensed under the [MIT License](LICENSE) that covers this project.
 
 ## Reporting bugs and requesting features
 
 - **Bugs and feature requests:** open a [GitHub issue](https://github.com/UnstoppableMango/CliWrap.FSharp/issues).
-  Search existing issues first. For bugs, include the package version, target
-  framework, OS, and a minimal F# snippet that reproduces the problem.
-- **Security vulnerabilities:** do **not** open a public issue. Follow [SECURITY.md](SECURITY.md).
-- **Questions about underlying behavior:** check the
-  [CliWrap documentation](https://github.com/Tyrrrz/CliWrap) first, since this library is a
-  thin F# surface over it.
+  Search existing issues first.
+  For bugs, include the package version, target framework, OS, and a minimal F# snippet that reproduces the problem.
+- **Security vulnerabilities:** do **not** open a public issue.
+  Follow [SECURITY.md](SECURITY.md).
+- **Questions about underlying behavior:** check the [CliWrap documentation](https://github.com/Tyrrrz/CliWrap) first, since this library is a thin F# surface over it.
 
 ## Development setup
 
-You need the .NET SDK version pinned in [`global.json`](global.json). Two optional
-environments come pre-configured:
+You need the .NET SDK version pinned in [`global.json`](global.json).
+Two optional environments come pre-configured:
 
 - **Dev container:** open the repository in VS Code or GitHub Codespaces.
 - **Nix:** `nix develop` gives you the SDK and tools; `nix flake check` runs the Nix checks.
@@ -35,8 +33,8 @@ dotnet tool restore
 dotnet restore --locked-mode
 ```
 
-Dependencies are pinned in `packages.lock.json` files. Restore in locked mode, and
-commit lock file changes together with the `.fsproj` change that caused them.
+Dependencies are pinned in `packages.lock.json` files.
+Restore in locked mode, and commit lock file changes together with the `.fsproj` change that caused them.
 Renovate opens dependency update PRs automatically.
 
 ## Build, test, and format
@@ -49,40 +47,41 @@ Renovate opens dependency update PRs automatically.
 | Check formatting (as CI does) | `dotnet fantomas --check src`                          |
 | Check trimming support       | `make trimmable`                                         |
 | Check Native AOT support     | `make aot`                                               |
+| Static analysis (as CI does) | `make analyze`                                           |
 
-CI builds and tests in `Release`. Run `dotnet build -c Release` before opening a PR
-to catch anything that only shows up there.
+CI builds and tests in `Release`, where **every compiler warning is an error**.
+The opt-in F# warnings for unused bindings (FS1182) and malformed XML doc comments (FS3390) are on as well.
+Run `dotnet build -c Release` before opening a PR to catch anything that only shows up there.
 
-A pre-commit hook in `.githooks/` formats staged files. Enable it with
-`git config core.hooksPath .githooks`.
+`make analyze` runs the [G-Research](https://github.com/G-Research/fsharp-analyzers) and [Ionide](https://github.com/ionide/ionide-analyzers) F# analyzers over the library and tests, and treats every finding as an error.
+CI runs it on every build and uploads the results to GitHub code scanning.
+If a finding is a false positive, suppress it on that line with `// fsharpanalyzer: ignore-line <CODE>` and explain why in the PR.
+See [ADR 0003](docs/adr/0003-fsharp-analyzers-for-static-analysis.md) for why these tools were chosen.
+
+A pre-commit hook in `.githooks/` formats staged files.
+Enable it with `git config core.hooksPath .githooks`.
 
 ## Code style
 
-Formatting is enforced by Fantomas and `.editorconfig`: 4 spaces in `.fs` files,
-2 spaces in YAML, tabs elsewhere, final newline, no trailing whitespace. Beyond
-formatting:
+Formatting is enforced by Fantomas and `.editorconfig`: 4 spaces in `.fs` files, 2 spaces in YAML, tabs elsewhere, final newline, no trailing whitespace.
+Beyond formatting:
 
-- **Public API:** every public function and type has XML doc comments (`<summary>`,
-  plus `<param>`, `<returns>`, and `<exception>` where they apply). Prefer explicit
-  type annotations on public signatures.
-- **Naming:** `camelCase` for functions, parameters, and values; `PascalCase` for
-  types, modules, and union cases. Avoid abbreviations except well-known ones like `cmd`.
-- **Style:** prefer immutability, pure functions, and piping (`|>`). Prefer
-  `Result`/`Option` and pattern matching over exceptions for expected errors.
-- **Async:** support both `Async<'T>` and `Task<'T>` where it makes sense, and accept
-  cancellation tokens for async operations.
-- **Wrapping CliWrap:** keep the fluent, pipe-first feel of the `Cli` and `Pipes`
-  modules. Keep computation expression builders focused and document custom operations.
+- **Public API:** every public function and type has XML doc comments (`<summary>`, plus `<param>`, `<returns>`, and `<exception>` where they apply).
+  Prefer explicit type annotations on public signatures.
+- **Naming:** `camelCase` for functions, parameters, and values; `PascalCase` for types, modules, and union cases.
+  Avoid abbreviations except well-known ones like `cmd`.
+- **Style:** prefer immutability, pure functions, and piping (`|>`).
+  Prefer `Result`/`Option` and pattern matching over exceptions for expected errors.
+- **Async:** support both `Async<'T>` and `Task<'T>` where it makes sense, and accept cancellation tokens for async operations.
+- **Wrapping CliWrap:** keep the fluent, pipe-first feel of the `Cli` and `Pipes` modules.
+  Keep computation expression builders focused and document custom operations.
   See [`CONTEXT.md`](CONTEXT.md) for the project's vocabulary.
 - **Resources:** dispose `IDisposable` values with `use`.
-- **Safety:** prefer `Cli.args` (a list) over `Cli.arg` (a single pre-escaped string),
-  never log or expose credentials, and keep the library trimming- and AOT-friendly.
+- **Safety:** prefer `Cli.args` (a list) over `Cli.arg` (a single pre-escaped string), never log or expose credentials, and keep the library trimming- and AOT-friendly.
 
 ## Testing policy
 
-**New functionality must come with automated tests, and bug fixes must come with a
-test that fails without the fix.** Pull requests that change behavior without tests
-will be asked to add them before merging.
+**New functionality must come with automated tests, and bug fixes must come with a test that fails without the fix.** Pull requests that change behavior without tests will be asked to add them before merging.
 
 Tests live in `src/CliWrap.FSharp.Tests/` and use:
 
@@ -95,13 +94,13 @@ Tests live in `src/CliWrap.FSharp.Tests/` and use:
 - Real implementations over mocks.
   For tests that run a process, use upstream's Dummy program (`Dummy.Program.FilePath`), built from `vendor/CliWrap/CliWrap.Tests.Dummy`.
 
-Coverage is collected in CI and reported to Codecov. Aim for meaningful tests of the
-public API and its edge cases rather than a coverage number.
+Coverage is collected in CI and reported to Codecov.
+Aim for meaningful tests of the public API and its edge cases rather than a coverage number.
 
 ## Commit messages
 
-Use [Conventional Commits](https://www.conventionalcommits.org/). Release notes and
-the changelog are generated from commit messages on `main`, so the type matters:
+Use [Conventional Commits](https://www.conventionalcommits.org/).
+Release notes and the changelog are generated from commit messages on `main`, so the type matters:
 
 | Type                                   | Use for                                | In release notes |
 | -------------------------------------- | -------------------------------------- | ---------------- |
@@ -115,17 +114,16 @@ the changelog are generated from commit messages on `main`, so the type matters:
 | `chore:`, `chore(deps):`               | Maintenance and dependency bumps       | Hidden           |
 
 Mark breaking changes with `!` (for example `feat!:`) and a `BREAKING CHANGE:` footer.
-For a vulnerability fix, use the `security:` type (not `fix(security):`, which would land
-under Bug Fixes) and put the advisory ID (GHSA or CVE) in the commit body. A `security:`
-commit bumps the patch version and cuts a release.
+For a vulnerability fix, use the `security:` type (not `fix(security):`, which would land under Bug Fixes) and put the advisory ID (GHSA or CVE) in the commit body.
+A `security:` commit bumps the patch version and cuts a release.
 
 ## Pull requests
 
 1. Keep each PR focused on one change, and describe what changed and why.
 2. Add or update tests per the testing policy, and update `README.md` for user-facing changes.
 3. Make sure the build, tests, and formatting check pass locally.
-4. CI must be green before a PR is merged. It builds, tests with coverage, checks
-   formatting, and validates the dev container and Nix builds.
+4. CI must be green before a PR is merged.
+   It builds with warnings as errors, tests with coverage, runs the F# analyzers, checks formatting, and validates the dev container and Nix builds.
 5. The PR title should be a conventional commit message, since PRs are squash-merged.
 
 ## Upstream CliWrap source
@@ -141,19 +139,16 @@ Renovate bumps both in one PR, and the build fails if they differ.
 
 ## Releases
 
-Versions follow [Semantic Versioning](https://semver.org/). Releases are cut by
-[release-please](https://github.com/googleapis/release-please): it keeps a release PR
-open that updates `CHANGELOG.md` from the conventional commits on `main`.
+Versions follow [Semantic Versioning](https://semver.org/).
+Releases are cut by [release-please](https://github.com/googleapis/release-please): it keeps a release PR open that updates `CHANGELOG.md` from the conventional commits on `main`.
 
-- Before 1.0, a breaking change or `feat` bumps the minor version, and `fix` or
-  `security` bumps the patch. Hidden commit types don't cut a release.
-- Renovate commits CliWrap bumps as `fix(deps)`, since it's the only runtime
-  dependency, so they cut a release. Other dependency bumps are hidden `chore(deps)`.
-- The maintainer merges the release PR by hand. Merging it creates the `v*.*.*` tag and
-  GitHub Release, and the same CI run packs the package with that version and publishes
-  it to NuGet.org (via trusted publishing) and GitHub Packages. Nothing is published
-  from `main` otherwise.
-- The current version lives in `.release-please-manifest.json`, which `flake.nix` also
-  reads. Don't edit it by hand.
-- Publishing stays in `ci.yml` because of trusted publishing; see
-  [ADR 0001](docs/adr/0001-publish-from-ci-workflow.md).
+- Before 1.0, a breaking change or `feat` bumps the minor version, and `fix` or `security` bumps the patch.
+  Hidden commit types don't cut a release.
+- Renovate commits CliWrap bumps as `fix(deps)`, since it's the only runtime dependency, so they cut a release.
+  Other dependency bumps are hidden `chore(deps)`.
+- The maintainer merges the release PR by hand.
+  Merging it creates the `v*.*.*` tag and GitHub Release, and the same CI run packs the package with that version and publishes it to NuGet.org (via trusted publishing) and GitHub Packages.
+  Nothing is published from `main` otherwise.
+- The current version lives in `.release-please-manifest.json`, which `flake.nix` also reads.
+  Don't edit it by hand.
+- Publishing stays in `ci.yml` because of trusted publishing; see [ADR 0001](docs/adr/0001-publish-from-ci-workflow.md).
