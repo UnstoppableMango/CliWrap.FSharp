@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/UnstoppableMango/CliWrap.FSharp/compare/v0.1.0...v0.2.0) (2026-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* a lone target in `pipeline { }` used to capture stderr and now captures stdout.
+
+### Bug Fixes
+
+* keep every stage of a pipeline chain and send a lone target stdout ([#295](https://github.com/UnstoppableMango/CliWrap.FSharp/issues/295)) ([16cf138](https://github.com/UnstoppableMango/CliWrap.FSharp/commit/16cf1382de4eca35e0bf5ded8433268a925d7057))
+* reference FSharp.Core explicitly so locked restores survive SDK roll-forward ([#297](https://github.com/UnstoppableMango/CliWrap.FSharp/issues/297)) ([f10fef3](https://github.com/UnstoppableMango/CliWrap.FSharp/commit/f10fef3acbf18aaa7ed5a6aeec319b9c900077ca)), closes [#248](https://github.com/UnstoppableMango/CliWrap.FSharp/issues/248)
+
 ## [0.1.0](https://github.com/UnstoppableMango/CliWrap.FSharp/compare/v0.0.12...v0.1.0) (2026-11-22)
 
 
