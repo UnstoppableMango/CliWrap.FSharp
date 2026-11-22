@@ -1,5 +1,6 @@
 module CliTests
 
+open System
 open System.Collections.Generic
 open System.Linq
 open System.Text
@@ -144,6 +145,37 @@ let ``Should execute asynchronously with forceful and graceful tokens`` () = tas
     let! actual = cmd |> Cli.Task.execf forceful.Token graceful.Token
 
     Assert.Equal(expected.ExitCode, actual.ExitCode)
+}
+
+let private sleepCommand (output: StringBuilder) =
+    Command(Dummy.Program.FilePath)
+        .WithArguments([ "sleep"; "00:00:20" ])
+        .WithStandardOutputPipe(PipeTarget.ToStringBuilder(output))
+
+[<Fact>]
+let ``Should cancel gracefully with the graceful token`` () = task {
+    use forceful = new CancellationTokenSource()
+    use graceful = new CancellationTokenSource(TimeSpan.FromSeconds(1.0))
+    let output = StringBuilder()
+
+    let! _ =
+        Assert.ThrowsAnyAsync<OperationCanceledException>(fun () ->
+            (sleepCommand output |> Cli.Task.execf forceful.Token graceful.Token).Task :> Tasks.Task)
+
+    Assert.Contains("Canceled.", output.ToString())
+}
+
+[<Fact>]
+let ``Should cancel forcefully with the forceful token`` () = task {
+    use forceful = new CancellationTokenSource(TimeSpan.FromSeconds(1.0))
+    use graceful = new CancellationTokenSource()
+    let output = StringBuilder()
+
+    let! _ =
+        Assert.ThrowsAnyAsync<OperationCanceledException>(fun () ->
+            (sleepCommand output |> Cli.Task.execf forceful.Token graceful.Token).Task :> Tasks.Task)
+
+    Assert.DoesNotContain("Canceled.", output.ToString())
 }
 
 [<Property>]

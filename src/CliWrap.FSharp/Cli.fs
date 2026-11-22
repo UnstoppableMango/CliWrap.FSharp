@@ -1,5 +1,6 @@
 module UnMango.CliWrap.FSharp.Cli
 
+open System.Threading
 open CliWrap
 open CliWrap.Builders
 
@@ -179,7 +180,7 @@ module Task =
     /// <param name="command">The command to execute.</param>
     /// <returns>A task representing the execution of the command.</returns>
     /// <remarks><see cref="CommandTask"/> can be <see cref="await"/>ed like a <see cref="Task"/>.</remarks>
-    let execf forceful graceful (command: Command) =
-        command.ExecuteAsync(graceful, forceful)
+    let execf (forceful: CancellationToken) (graceful: CancellationToken) (command: Command) =
+        command.ExecuteAsync(forceful, graceful)
 
 let toString (command: Command) = command.ToString()
