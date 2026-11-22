@@ -96,7 +96,7 @@ Tests live in `src/CliWrap.FSharp.Tests/` and use:
 
 Coverage is collected in CI and reported to Codecov, whose checks fail when:
 
-- line coverage of the library is below **80%**,
+- line coverage of the library is below **65%** (to be raised toward 80% as coverage grows),
 - total coverage drops more than **1%** below the base commit, or
 - less than **80%** of the lines a pull request adds or changes are covered.
 

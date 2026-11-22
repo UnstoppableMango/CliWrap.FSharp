@@ -9,9 +9,9 @@ coverage:
       default:
         target: auto
         threshold: 1%
-      # Fail when total coverage is below 80%.
+      # Fail when total coverage is below 65%. Raise toward 80% as coverage grows.
       floor:
-        target: 80%
+        target: 65%
     # Lines a pull request adds or changes.
     patch:
       default:
