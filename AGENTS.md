@@ -89,11 +89,20 @@ let ``Should configure arguments`` () =
 - `make trimmable` - Test trimming support
 - `make aot` - Test AOT compilation
 
-### CI Pipeline (`.github/workflows/main.yml`)
+### CI Pipeline (`.github/workflows/ci.yml`)
 1. **Build**: Restore, build, test with code coverage
 2. **Lint**: Check code formatting with Fantomas
-3. **Package**: Create NuGet package
-4. **Publish**: Deploy to NuGet.org and GitHub Packages on tags
+3. **Release**: On `main`, release-please opens or updates the release PR
+4. **Package and Publish**: When a release is created, pack and deploy to NuGet.org and GitHub Packages
+
+### Releasing
+Releases are driven by [release-please](https://github.com/googleapis/release-please) and conventional commits.
+- Commit types decide the next version. Before 1.0, a breaking change or `feat` bumps the minor and `fix` bumps the patch.
+- `chore`, `test`, `ci`, `build` and `refactor` commits don't cut a release and are hidden from the changelog.
+- Renovate commits CliWrap bumps as `fix(deps)`, since it's the only runtime dependency. Other dependency bumps are `chore(deps)`.
+- Merging the release PR by hand creates the `vX.Y.Z` tag and GitHub Release, and publishes the package. Nothing is published from `main` otherwise.
+- The version lives in `.release-please-manifest.json`. MinVer reads it from the tag, and `flake.nix` reads the manifest. Don't edit it by hand.
+- Publishing stays in `ci.yml`. See `docs/adr/0001-publish-from-ci-workflow.md`.
 
 ## Dependencies
 
