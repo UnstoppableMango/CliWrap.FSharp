@@ -88,6 +88,20 @@ let ``Should execute asynchronously as task`` () = task {
 }
 
 [<Fact>]
+let ``Should raise the command's own error when executing asynchronously`` () = task {
+    let run = command Dummy.Program.FilePath {
+        args [ "exit"; string exitCode ]
+        async
+    }
+
+    let! error =
+        Assert.ThrowsAsync<CliWrap.Exceptions.CommandExecutionException>(fun () ->
+            run |> Async.StartAsTask :> System.Threading.Tasks.Task)
+
+    Assert.Equal(exitCode, error.ExitCode)
+}
+
+[<Fact>]
 let ``Should execute buffered`` () = task {
     let! actual = command Dummy.Program.FilePath {
         args [ "echo"; "hello" ]

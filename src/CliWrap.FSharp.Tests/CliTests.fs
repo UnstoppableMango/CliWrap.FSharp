@@ -224,6 +224,17 @@ let ``Should execute buffered with encoding`` () = task {
 }
 
 [<Fact>]
+let ``Should raise the command's own error when executing buffered with encoding`` () = task {
+    let failing = Command(Dummy.Program.FilePath).WithArguments([ "exit"; "3" ])
+
+    let! error =
+        Assert.ThrowsAsync<CliWrap.Exceptions.CommandExecutionException>(fun () ->
+            failing |> Cli.execBufferede Encoding.UTF8 |> Async.StartAsTask :> Tasks.Task)
+
+    Assert.Equal(3, error.ExitCode)
+}
+
+[<Fact>]
 let ``Should execute buffered with cancellation`` () = task {
     use cts = new CancellationTokenSource()
 

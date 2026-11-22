@@ -5,17 +5,18 @@ module Equivalence
 open CliWrap
 open Xunit
 
-let private environment (command: ICommandConfiguration) =
+/// The environment variables as name and value pairs, sorted by name.
+let environmentValues (command: ICommandConfiguration) =
     command.EnvironmentVariables
-    |> Seq.map (fun kv -> kv.Key, kv.Value)
+    |> Seq.map (fun variable -> variable.Key, variable.Value)
     |> Seq.sortBy fst
     |> List.ofSeq
 
-let private credentials (c: Credentials) =
-    c.Domain, c.UserName, c.Password, c.LoadUserProfile
+let credentialValues (credentials: Credentials) =
+    credentials.Domain, credentials.UserName, credentials.Password, credentials.LoadUserProfile
 
-let private resourcePolicy (p: ResourcePolicy) =
-    p.Priority, p.Affinity, p.MinWorkingSet, p.MaxWorkingSet
+let resourcePolicyValues (policy: ResourcePolicy) =
+    policy.Priority, policy.Affinity, policy.MinWorkingSet, policy.MaxWorkingSet
 
 /// The names of the configuration properties that differ between two commands.
 /// Pipes are compared by reference, since they carry no comparable state.
@@ -27,11 +28,14 @@ let differences (expected: ICommandConfiguration) (actual: ICommandConfiguration
             "Arguments"
         if expected.WorkingDirPath <> actual.WorkingDirPath then
             "WorkingDirPath"
-        if resourcePolicy expected.ResourcePolicy <> resourcePolicy actual.ResourcePolicy then
+        if
+            resourcePolicyValues expected.ResourcePolicy
+            <> resourcePolicyValues actual.ResourcePolicy
+        then
             "ResourcePolicy"
-        if credentials expected.Credentials <> credentials actual.Credentials then
+        if credentialValues expected.Credentials <> credentialValues actual.Credentials then
             "Credentials"
-        if environment expected <> environment actual then
+        if environmentValues expected <> environmentValues actual then
             "EnvironmentVariables"
         if expected.Validation <> actual.Validation then
             "Validation"

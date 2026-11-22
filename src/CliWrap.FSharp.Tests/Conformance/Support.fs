@@ -5,6 +5,9 @@ module Conformance.Support
 open System
 open System.Diagnostics
 open System.IO
+open System.Threading
+open System.Threading.Tasks
+open Xunit
 
 /// Whether a process with this id is still running.
 let isRunning (processId: int) =
@@ -14,6 +17,12 @@ let isRunning (processId: int) =
     with
     | :? ArgumentException
     | :? InvalidOperationException -> false
+
+/// Fails unless running the action is canceled by this token.
+let assertCanceledBy (token: CancellationToken) (run: unit -> Task) = task {
+    let! error = Assert.ThrowsAnyAsync<OperationCanceledException>(run)
+    Assert.Equal(token, error.CancellationToken)
+}
 
 /// Splits text into its non-empty lines, like upstream's `ConsistOfLines` assertion.
 let lines (text: string) =

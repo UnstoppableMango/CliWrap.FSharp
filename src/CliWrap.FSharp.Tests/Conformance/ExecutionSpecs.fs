@@ -17,13 +17,6 @@ let private sleeping (output: StringBuilder) =
     |> Cli.args [ "sleep"; "00:00:20" ]
     |> Cli.stdout (PipeTo.string output)
 
-let private assertCanceledBy (token: CancellationToken) (running: CommandTask<CommandResult>) = task {
-    let! ex =
-        Assert.ThrowsAnyAsync<OperationCanceledException>(fun () -> running.Task :> Task)
-
-    Assert.Equal(token, ex.CancellationToken)
-}
-
 [<Fact(Timeout = 15000)>]
 let ``I can execute a command and get its exit code and execution time`` () = task {
     let cmd = Cli.wrap Dummy.Program.FilePath
@@ -98,7 +91,7 @@ let ``I can execute a command and cancel it immediately`` () = task {
 
     let running = sleeping output |> Cli.Task.exec cts.Token
 
-    do! assertCanceledBy cts.Token running
+    do! assertCanceledBy cts.Token (fun () -> running.Task :> Task)
     Assert.False(isRunning running.ProcessId)
     Assert.DoesNotContain("Done.", output.ToString())
 }
@@ -111,7 +104,7 @@ let ``I can execute a command and cancel it after a delay`` () = task {
 
     let running = sleeping output |> Cli.Task.exec cts.Token
 
-    do! assertCanceledBy cts.Token running
+    do! assertCanceledBy cts.Token (fun () -> running.Task :> Task)
     Assert.False(isRunning running.ProcessId)
     Assert.DoesNotContain("Done.", output.ToString())
 }
@@ -136,7 +129,7 @@ let ``I can execute a command and cancel it gracefully after a delay`` () = task
 
     let running = cmd |> Cli.Task.execf CancellationToken.None cts.Token
 
-    do! assertCanceledBy cts.Token running
+    do! assertCanceledBy cts.Token (fun () -> running.Task :> Task)
     Assert.False(isRunning running.ProcessId)
     Assert.Contains("Canceled.", output.ToString())
     Assert.DoesNotContain("Done.", output.ToString())

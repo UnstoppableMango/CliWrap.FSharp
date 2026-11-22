@@ -15,11 +15,11 @@ let private failing () =
 let ``I can try to execute a command and get an error if it returns a non zero exit code`` () = task {
     let cmd = failing ()
 
-    let! ex =
+    let! error =
         Assert.ThrowsAsync<CommandExecutionException>(fun () -> cmd |> Cli.exec |> Async.StartAsTask :> Task)
 
-    Assert.Equal(1, ex.ExitCode)
-    Equivalence.assertEquivalent cmd ex.Command
+    Assert.Equal(1, error.ExitCode)
+    Equivalence.assertEquivalent cmd error.Command
 }
 
 [<Fact(Timeout = 15000)>]
@@ -27,17 +27,17 @@ let ``I can try to execute a command with buffering and get a detailed error if 
     task {
         let cmd = failing ()
 
-        let! ex =
+        let! error =
             Assert.ThrowsAsync<CommandExecutionException>(fun () ->
                 cmd |> Cli.execBuffered |> Async.StartAsTask :> Task)
 
-        Assert.Contains("Exit code set to 1", ex.Message) // expected stderr
-        Assert.Equal(1, ex.ExitCode)
+        Assert.Contains("Exit code set to 1", error.Message) // expected stderr
+        Assert.Equal(1, error.ExitCode)
 
         // Buffered execution adds its own output pipes, which upstream's structural
         // comparison can't see; everything else must match.
         let differences =
-            Equivalence.differences cmd ex.Command
+            Equivalence.differences cmd error.Command
             |> List.except [ "StandardOutputPipe"; "StandardErrorPipe" ]
 
         Assert.Empty(differences)

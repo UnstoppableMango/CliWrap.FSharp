@@ -31,8 +31,8 @@ let private runBuffered (cmd: Command) =
 let private run (cmd: Command) = cmd |> Cli.exec |> Async.StartAsTask
 
 let private assertThrowsContaining (message: string) (run: unit -> Task) = task {
-    let! ex = Assert.ThrowsAnyAsync<Exception>(run)
-    Assert.Contains(message, ex.Message)
+    let! error = Assert.ThrowsAnyAsync<Exception>(run)
+    Assert.Contains(message, error.Message)
 }
 
 /// A temp file path that is deleted, if it exists, when the result is disposed.

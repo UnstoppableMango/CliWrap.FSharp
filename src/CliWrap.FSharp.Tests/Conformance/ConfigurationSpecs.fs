@@ -82,9 +82,6 @@ let ``I can configure the working directory`` () =
 let private expectedPolicy () =
     ResourcePolicy(ProcessPriorityClass.High, 0x1n, 1024n, 2048n)
 
-let private policyValues (p: ResourcePolicy) =
-    p.Priority, p.Affinity, p.MinWorkingSet, p.MaxWorkingSet
-
 [<Fact>]
 let ``I can configure the resource policy`` () =
     let original = Cli.wrap "foo" |> Cli.resourcePolicy ResourcePolicy.Default
@@ -92,7 +89,11 @@ let ``I can configure the resource policy`` () =
     let modified = original |> Cli.resourcePolicy (expectedPolicy ())
 
     Assert.Equal<string list>([ "ResourcePolicy" ], changed original modified)
-    Assert.Equal(policyValues (expectedPolicy ()), policyValues modified.ResourcePolicy)
+
+    Assert.Equal(
+        Equivalence.resourcePolicyValues (expectedPolicy ()),
+        Equivalence.resourcePolicyValues modified.ResourcePolicy
+    )
 
 [<Fact>]
 let ``I can configure the resource policy using a builder`` () =
@@ -104,10 +105,11 @@ let ``I can configure the resource policy using a builder`` () =
             b.SetPriority(ProcessPriorityClass.High).SetAffinity(0x1n).SetMinWorkingSet(1024n).SetMaxWorkingSet(2048n))
 
     Assert.Equal<string list>([ "ResourcePolicy" ], changed original modified)
-    Assert.Equal(policyValues (expectedPolicy ()), policyValues modified.ResourcePolicy)
 
-let private credentialValues (c: Credentials) =
-    c.Domain, c.UserName, c.Password, c.LoadUserProfile
+    Assert.Equal(
+        Equivalence.resourcePolicyValues (expectedPolicy ()),
+        Equivalence.resourcePolicyValues modified.ResourcePolicy
+    )
 
 [<Fact>]
 let ``I can configure the user credentials`` () =
@@ -117,7 +119,7 @@ let ``I can configure the user credentials`` () =
         original |> Cli.creds (Credentials("domain", "username", "password", true))
 
     Assert.Equal<string list>([ "Credentials" ], changed original modified)
-    Assert.Equal(("domain", "username", "password", true), credentialValues modified.Credentials)
+    Assert.Equal(("domain", "username", "password", true), Equivalence.credentialValues modified.Credentials)
 
 [<Fact>]
 let ``I can configure the user credentials using a builder`` () =
@@ -128,10 +130,7 @@ let ``I can configure the user credentials using a builder`` () =
         |> Cli.credsf _.SetDomain("domain").SetUserName("username").SetPassword("password").LoadUserProfile()
 
     Assert.Equal<string list>([ "Credentials" ], changed original modified)
-    Assert.Equal(("domain", "username", "password", true), credentialValues modified.Credentials)
-
-let private environment (cmd: Command) =
-    cmd.EnvironmentVariables |> Seq.map (fun kv -> kv.Key, kv.Value) |> Set.ofSeq
+    Assert.Equal(("domain", "username", "password", true), Equivalence.credentialValues modified.Credentials)
 
 [<Fact>]
 let ``I can configure the environment variables`` () =
@@ -140,7 +139,11 @@ let ``I can configure the environment variables`` () =
     let modified = original |> Cli.env [ "name", "value"; "key", "door" ]
 
     Assert.Equal<string list>([ "EnvironmentVariables" ], changed original modified)
-    Assert.Equal<Set<string * string>>(set [ "name", "value"; "key", "door" ], environment modified)
+
+    Assert.Equal<(string * string) list>(
+        List.sort [ "name", "value"; "key", "door" ],
+        Equivalence.environmentValues modified
+    )
 
 [<Fact>]
 let ``I can configure the environment variables using a builder`` () =
@@ -152,9 +155,9 @@ let ``I can configure the environment variables using a builder`` () =
 
     Assert.Equal<string list>([ "EnvironmentVariables" ], changed original modified)
 
-    Assert.Equal<Set<string * string>>(
-        set [ "name", "value"; "key", "door"; "zzz", "yyy"; "aaa", "bbb" ],
-        environment modified
+    Assert.Equal<(string * string) list>(
+        List.sort [ "name", "value"; "key", "door"; "zzz", "yyy"; "aaa", "bbb" ],
+        Equivalence.environmentValues modified
     )
 
 [<Fact>]

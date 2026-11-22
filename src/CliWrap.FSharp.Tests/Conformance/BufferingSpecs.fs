@@ -9,17 +9,13 @@ open CliWrap.Buffered
 open CliWrap.Tests
 open Xunit
 open UnMango.CliWrap.FSharp
+open Conformance.Support
 
 let private echo text target =
     Cli.wrap Dummy.Program.FilePath |> Cli.args [ "echo"; text; "--target"; target ]
 
 let private sleeping () =
     Cli.wrap Dummy.Program.FilePath |> Cli.args [ "sleep"; "00:00:20" ]
-
-let private assertCanceledBy (token: CancellationToken) (run: unit -> Task) = task {
-    let! ex = Assert.ThrowsAnyAsync<OperationCanceledException>(run)
-    Assert.Equal(token, ex.CancellationToken)
-}
 
 [<Fact(Timeout = 15000)>]
 let ``I can execute a command and get its stdout`` () = task {
