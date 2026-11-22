@@ -5,8 +5,7 @@ open System.Runtime.ExceptionServices
 open System.Threading.Tasks
 
 module Async =
-    /// Like Async.AwaitTask, but a task that faults with a single exception raises that
-    /// exception rather than an AggregateException, the way awaiting the task in C# does.
+    /// Like Async.AwaitTask, but raises a lone inner exception instead of an AggregateException.
     let awaitTaskUnwrapped (task: Task<'T>) : Async<'T> = async {
         try
             return! Async.AwaitTask task

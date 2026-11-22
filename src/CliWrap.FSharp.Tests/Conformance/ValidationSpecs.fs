@@ -34,8 +34,7 @@ let ``I can try to execute a command with buffering and get a detailed error if 
         Assert.Contains("Exit code set to 1", error.Message) // expected stderr
         Assert.Equal(1, error.ExitCode)
 
-        // Buffered execution adds its own output pipes, which upstream's structural
-        // comparison can't see; everything else must match.
+        // Buffered execution adds output pipes that the upstream command doesn't have.
         let differences =
             Equivalence.differences cmd error.Command
             |> List.except [ "StandardOutputPipe"; "StandardErrorPipe" ]

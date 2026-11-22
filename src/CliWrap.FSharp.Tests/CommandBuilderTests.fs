@@ -30,8 +30,7 @@ let ``Should configure string args`` (a: NonNull<string>) =
     let actual = command Dummy.Program.FilePath { args a.Get }
     Equivalence.assertEquivalent expected actual
 
-// Each run asks the Dummy program to exit with a non-zero code, so a passing test shows
-// the builder ran the command it configured rather than some default.
+// A non-zero exit code shows the builder ran its configured command, not a default.
 let private exitCode = 3
 
 [<Fact>]

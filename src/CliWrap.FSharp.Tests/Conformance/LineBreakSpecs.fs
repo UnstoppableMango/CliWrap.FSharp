@@ -1,6 +1,5 @@
 /// Conformance specs ported from upstream's CliWrap.Tests/LineBreakSpecs.cs.
-/// Upstream pipes with `data | cmd | lines.Add`. The `pipeline` builder can't yield a
-/// delegate target, so stdout goes through `Cli.stdout` instead.
+/// The `pipeline` builder can't yield a delegate target, so stdout goes through `Cli.stdout`.
 module Conformance.LineBreakSpecs
 
 open System.Collections.Generic

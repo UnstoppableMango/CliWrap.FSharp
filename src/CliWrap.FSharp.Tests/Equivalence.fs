@@ -1,5 +1,4 @@
-/// Equivalence checks: compare a command built through the F# surface with the one
-/// the matching upstream fluent call builds, across its whole configuration.
+/// Equivalence checks over a command's whole configuration.
 module Equivalence
 
 open CliWrap
@@ -18,8 +17,7 @@ let credentialValues (credentials: Credentials) =
 let resourcePolicyValues (policy: ResourcePolicy) =
     policy.Priority, policy.Affinity, policy.MinWorkingSet, policy.MaxWorkingSet
 
-/// The names of the configuration properties that differ between two commands.
-/// Pipes are compared by reference, since they carry no comparable state.
+/// The configuration properties that differ, comparing pipes by reference.
 let differences (expected: ICommandConfiguration) (actual: ICommandConfiguration) : string list =
     [
         if expected.TargetFilePath <> actual.TargetFilePath then

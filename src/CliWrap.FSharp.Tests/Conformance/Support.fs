@@ -1,5 +1,4 @@
-/// Helpers shared by the conformance specs, standing in for the test utilities
-/// upstream's specs get from PowerKit and their own Utils folder.
+/// Stand-ins for the PowerKit and Utils helpers upstream's specs use.
 module Conformance.Support
 
 open System
