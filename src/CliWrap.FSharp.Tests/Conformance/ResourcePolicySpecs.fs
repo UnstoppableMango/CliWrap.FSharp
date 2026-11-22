@@ -58,19 +58,19 @@ let ``I can execute a command with a custom working set limit`` () = task {
 [<Fact(Timeout = 15000)>]
 let ``I can try to execute a command with a custom resource policy and get an error if the operating system does not support it``
     ()
-    =
-    task {
-        Assert.SkipWhen(
-            OperatingSystem.IsWindows(),
-            "Starting a process with a custom resource policy is fully supported on Windows."
-        )
+    = task {
+    Assert.SkipWhen(
+        OperatingSystem.IsWindows(),
+        "Starting a process with a custom resource policy is fully supported on Windows."
+    )
 
-        let cmd =
-            Cli.wrap Dummy.Program.FilePath |> Cli.resourcePolicyf _.SetMinWorkingSet(1024n * 1024n)
+    let cmd =
+        Cli.wrap Dummy.Program.FilePath
+        |> Cli.resourcePolicyf _.SetMinWorkingSet(1024n * 1024n)
 
-        let! _ =
-            Assert.ThrowsAnyAsync<NotSupportedException>(fun () ->
-                async { return! cmd |> Cli.exec } |> Async.StartAsTask :> Task)
+    let! _ =
+        Assert.ThrowsAnyAsync<NotSupportedException>(fun () ->
+            async { return! cmd |> Cli.exec } |> Async.StartAsTask :> Task)
 
-        ()
-    }
+    ()
+}

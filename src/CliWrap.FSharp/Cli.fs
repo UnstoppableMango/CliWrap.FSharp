@@ -131,7 +131,9 @@ let exec (command: Command) =
 /// <param name="command">The command to execute.</param>
 /// <returns>An <see cref="Async{BufferedCommandResult}"/> representing the asynchronous operation.</returns>
 let execBuffered (command: Command) =
-    command.ExecuteBufferedAsync() |> CommandTask.op_Implicit |> Internal.Async.awaitTask
+    command.ExecuteBufferedAsync()
+    |> CommandTask.op_Implicit
+    |> Internal.Async.awaitTask
 
 /// <summary>
 /// Executes the command asynchronously, buffering standard output and standard error in memory

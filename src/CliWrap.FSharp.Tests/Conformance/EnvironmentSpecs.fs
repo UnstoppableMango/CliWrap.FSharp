@@ -12,8 +12,7 @@ open Conformance.Support
 let ``I can execute a command with a custom working directory`` () = task {
     use dir = new TempDirectory()
 
-    let cmd =
-        Cli.wrap Dummy.Program.FilePath |> Cli.arg "cwd" |> Cli.workDir dir.Path
+    let cmd = Cli.wrap Dummy.Program.FilePath |> Cli.arg "cwd" |> Cli.workDir dir.Path
 
     let! result = cmd |> Cli.execBuffered
 

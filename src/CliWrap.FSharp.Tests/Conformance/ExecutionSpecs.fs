@@ -18,7 +18,9 @@ let private sleeping (output: StringBuilder) =
     |> Cli.stdout (PipeTo.string output)
 
 let private assertCanceledBy (token: CancellationToken) (running: CommandTask<CommandResult>) = task {
-    let! ex = Assert.ThrowsAnyAsync<OperationCanceledException>(fun () -> running.Task :> Task)
+    let! ex =
+        Assert.ThrowsAnyAsync<OperationCanceledException>(fun () -> running.Task :> Task)
+
     Assert.Equal(token, ex.CancellationToken)
 }
 
@@ -65,8 +67,7 @@ let ``I can execute a command with a configured awaiter`` () = task {
 [<Fact(Timeout = 15000)>]
 let ``I can execute a command with manually configured process settings`` () = task {
     let cmd =
-        Cli.wrap Dummy.Program.FilePath
-        |> Cli.validation CommandResultValidation.None
+        Cli.wrap Dummy.Program.FilePath |> Cli.validation CommandResultValidation.None
 
     let! result =
         cmd
@@ -124,12 +125,13 @@ let ``I can execute a command and cancel it gracefully after a delay`` () = task
         Cli.wrap Dummy.Program.FilePath
         |> Cli.args [ "sleep"; "00:00:20" ]
         |> Cli.stdout (
-            PipeTo.all [
-                PipeTo.f (fun line ->
-                    if line.Contains("Sleeping for", StringComparison.OrdinalIgnoreCase) then
-                        cts.CancelAfter(TimeSpan.FromSeconds(0.2)))
-                PipeTo.string output
-            ]
+            PipeTo.all
+                [
+                    PipeTo.f (fun line ->
+                        if line.Contains("Sleeping for", StringComparison.OrdinalIgnoreCase) then
+                            cts.CancelAfter(TimeSpan.FromSeconds(0.2)))
+                    PipeTo.string output
+                ]
         )
 
     let running = cmd |> Cli.Task.execf CancellationToken.None cts.Token

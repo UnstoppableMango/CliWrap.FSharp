@@ -7,7 +7,8 @@ open CliWrap
 open Xunit
 open UnMango.CliWrap.FSharp
 
-let private changed original modified = Equivalence.differences original modified
+let private changed original modified =
+    Equivalence.differences original modified
 
 [<Fact>]
 let ``I can create a command with the default configuration`` () =
@@ -100,11 +101,7 @@ let ``I can configure the resource policy using a builder`` () =
     let modified =
         original
         |> Cli.resourcePolicyf (fun b ->
-            b
-                .SetPriority(ProcessPriorityClass.High)
-                .SetAffinity(0x1n)
-                .SetMinWorkingSet(1024n)
-                .SetMaxWorkingSet(2048n))
+            b.SetPriority(ProcessPriorityClass.High).SetAffinity(0x1n).SetMinWorkingSet(1024n).SetMaxWorkingSet(2048n))
 
     Assert.Equal<string list>([ "ResourcePolicy" ], changed original modified)
     Assert.Equal(policyValues (expectedPolicy ()), policyValues modified.ResourcePolicy)
@@ -151,11 +148,7 @@ let ``I can configure the environment variables using a builder`` () =
 
     let modified =
         original
-        |> Cli.envf (fun b ->
-            b
-                .Set("name", "value")
-                .Set("key", "door")
-                .Set(dict [ "zzz", "yyy"; "aaa", "bbb" ]))
+        |> Cli.envf (fun b -> b.Set("name", "value").Set("key", "door").Set(dict [ "zzz", "yyy"; "aaa", "bbb" ]))
 
     Assert.Equal<string list>([ "EnvironmentVariables" ], changed original modified)
 

@@ -23,9 +23,7 @@ let ``I can try to execute a command and get an error if it returns a non zero e
 }
 
 [<Fact(Timeout = 15000)>]
-let ``I can try to execute a command with buffering and get a detailed error if it returns a non zero exit code``
-    ()
-    =
+let ``I can try to execute a command with buffering and get a detailed error if it returns a non zero exit code`` () =
     task {
         let cmd = failing ()
 

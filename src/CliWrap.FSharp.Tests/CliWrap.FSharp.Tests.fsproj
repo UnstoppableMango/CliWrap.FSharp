@@ -21,6 +21,7 @@
 		<Compile Include="Conformance/ValidationSpecs.fs" />
 		<Compile Include="Conformance/LineBreakSpecs.fs" />
 		<Compile Include="Conformance/ResourcePolicySpecs.fs" />
+		<Compile Include="Conformance/PipingSpecs.fs" />
 		<Compile Include="CliTests.fs" />
 		<Compile Include="CommandBuilderTests.fs"/>
 		<None Include="packages.lock.json" />
