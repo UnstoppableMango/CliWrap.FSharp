@@ -34,4 +34,4 @@ let (|Started|StdOut|StdErr|Exited|) (event: CommandEvent) =
     | :? StandardOutputCommandEvent as e -> StdOut e.Text
     | :? StandardErrorCommandEvent as e -> StdErr e.Text
     | :? ExitedCommandEvent as e -> Exited e.ExitCode
-    | _ -> raise (ArgumentException($"Unknown command event type: {event.GetType().FullName}", nameof event))
+    | _ -> raise (ArgumentException($"Unknown command event type: %s{event.GetType().FullName}", nameof event))

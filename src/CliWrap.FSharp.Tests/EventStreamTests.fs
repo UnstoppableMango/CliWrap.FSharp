@@ -320,7 +320,7 @@ let ``Should stop the process when abandoning the enumeration`` () = task {
     let pid =
         match e.Current with
         | Started pid -> pid
-        | other -> failwith $"expected Started, got {other}"
+        | other -> failwith $"expected Started, got %O{other}"
 
     do! e.DisposeAsync()
     let! exited = hasExited pid
