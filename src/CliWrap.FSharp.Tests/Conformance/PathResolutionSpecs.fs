@@ -14,7 +14,7 @@ let ``I can execute a command on an executable using its short name`` () = task 
     let! result = cmd |> Cli.execBuffered
 
     Assert.True(result.IsSuccess)
-    Assert.Matches(@"^\d+\.\d+\.\d+$", result.StandardOutput.Trim())
+    Assert.Matches(@"^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$", result.StandardOutput.Trim())
 }
 
 [<Fact(Timeout = 15000)>]

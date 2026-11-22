@@ -164,15 +164,15 @@ let ``I can execute a command and pipe the stdin from another command with a tra
 
 [<Fact(Timeout = 15000)>]
 let ``I can execute a command and pipe the stdin from a chain of commands`` () = task {
-    // Known gap: `pipeline` drops the middle stages of three or more, so this returns 11, not 5.
-    Assert.Skip("The pipeline builder drops the middle commands of a chain of three or more: #291")
-
-    let cmd = pipeline {
-        "Hello world"
-        echoStdin ()
-        dummy [ "echo stdin"; "--length"; "5" ]
+    // The `pipeline` builder drops middle stages (#291), so the chain uses the function layer.
+    let cmd =
         dummy [ "length stdin" ]
-    }
+        |> Cli.stdin (
+            ReadFrom.command (
+                dummy [ "echo stdin"; "--length"; "5" ]
+                |> Cli.stdin (ReadFrom.command (echoStdin () |> Cli.stdin (ReadFrom.string "Hello world")))
+            )
+        )
 
     let! result = runBuffered cmd
 

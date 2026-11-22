@@ -16,16 +16,16 @@ let ``I can execute a command with a custom working directory`` () = task {
 
     let! result = cmd |> Cli.execBuffered
 
-    let reported = result.StandardOutput.Trim()
+    // macOS reports temp paths through the /private symlink.
+    let normalize (path: string) =
+        let full = Path.GetFullPath(path)
 
-    // macOS reports temp paths through the /private symlink
-    let reported =
-        if reported.StartsWith("/private") then
-            reported.Substring("/private".Length)
+        if full.StartsWith("/private/") then
+            full.Substring("/private".Length)
         else
-            reported
+            full
 
-    Assert.Equal(Path.GetFullPath(dir.Path), Path.GetFullPath(reported))
+    Assert.Equal(normalize dir.Path, normalize (result.StandardOutput.Trim()))
 }
 
 [<Fact(Timeout = 15000)>]
