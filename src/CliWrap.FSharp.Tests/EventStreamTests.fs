@@ -16,28 +16,30 @@ open UnMango.CliWrap.FSharp
 type private UnknownCommandEvent() =
     inherit CommandEvent()
 
-/// Collects every event from an observed event stream, calling onEvent for each, and completing when the stream does.
-let private collectObservedWith (onEvent: CommandEvent -> unit) (source: IObservable<CommandEvent>) =
+/// Records every event it observes, calling onEvent for each, and completes its task when the stream does.
+type private Collector(onEvent: CommandEvent -> unit) =
     let events = ResizeArray()
 
     let tcs =
         TaskCompletionSource<CommandEvent list>(TaskCreationOptions.RunContinuationsAsynchronously)
 
-    source.Subscribe(
-        { new IObserver<CommandEvent> with
-            member _.OnNext e =
-                onEvent e
-                events.Add e
+    member _.Task = tcs.Task
 
-            member _.OnError ex = tcs.TrySetException ex |> ignore
+    interface IObserver<CommandEvent> with
+        member _.OnNext e =
+            onEvent e
+            events.Add e
 
-            member _.OnCompleted() =
-                tcs.TrySetResult(List.ofSeq events) |> ignore
-        }
-    )
-    |> ignore
+        member _.OnError ex = tcs.TrySetException ex |> ignore
 
-    tcs.Task
+        member _.OnCompleted() =
+            tcs.TrySetResult(List.ofSeq events) |> ignore
+
+/// Collects every event from an observed event stream, calling onEvent for each.
+let private collectObservedWith onEvent (source: IObservable<CommandEvent>) =
+    let collector = Collector(onEvent)
+    source.Subscribe(collector) |> ignore
+    collector.Task
 
 let private collectObserved = collectObservedWith ignore
 
@@ -84,31 +86,29 @@ let private assertCancelled (run: unit -> Task<CommandEvent list>) = task {
     ()
 }
 
-type private Summary =
-    {
-        Started: int list
-        StdOut: string list
-        StdErr: string list
-        Exited: int list
-    }
+let private startedIn events =
+    events
+    |> List.choose (function
+        | Started pid -> Some pid
+        | _ -> None)
 
-let private summarize (events: CommandEvent list) =
-    let folder s e =
-        match e with
-        | Started pid -> { s with Started = s.Started @ [ pid ] }
-        | StdOut line -> { s with StdOut = s.StdOut @ [ line ] }
-        | StdErr line -> { s with StdErr = s.StdErr @ [ line ] }
-        | Exited code -> { s with Exited = s.Exited @ [ code ] }
+let private stdOutIn events =
+    events
+    |> List.choose (function
+        | StdOut line -> Some line
+        | _ -> None)
 
-    List.fold
-        folder
-        {
-            Started = []
-            StdOut = []
-            StdErr = []
-            Exited = []
-        }
-        events
+let private stdErrIn events =
+    events
+    |> List.choose (function
+        | StdErr line -> Some line
+        | _ -> None)
+
+let private exitedIn events =
+    events
+    |> List.choose (function
+        | Exited code -> Some code
+        | _ -> None)
 
 let private lines = 50
 
@@ -143,21 +143,20 @@ let private assertLifecycle (events: CommandEvent list) =
         "last event should be Exited"
     )
 
-    let s = summarize events
-    Assert.Single(s.Started) |> ignore
-    Assert.NotEqual(0, List.head s.Started)
-    Assert.Equal(lines, List.length s.StdOut)
-    Assert.Equal(lines, List.length s.StdErr)
-    Assert.Equal<int list>([ 0 ], s.Exited)
+    let started = startedIn events
+    Assert.Single(started) |> ignore
+    Assert.NotEqual(0, List.head started)
+    Assert.Equal(lines, List.length (stdOutIn events))
+    Assert.Equal(lines, List.length (stdErrIn events))
+    Assert.Equal<int list>([ 0 ], exitedIn events)
 
 /// Asserts the echoed text was decoded with the expected encodings.
 let private assertEchoed (stdout: Encoding) (stderr: Encoding) (events: CommandEvent list) =
     let decode (encoding: Encoding) =
         encoding.GetString(Encoding.UTF8.GetBytes nonAscii)
 
-    let s = summarize events
-    Assert.Equal<string list>([ decode stdout ], s.StdOut)
-    Assert.Equal<string list>([ decode stderr ], s.StdErr)
+    Assert.Equal<string list>([ decode stdout ], stdOutIn events)
+    Assert.Equal<string list>([ decode stderr ], stdErrIn events)
 
 // Active pattern
 
@@ -201,8 +200,8 @@ let ``Should reject unknown command events`` () =
 
 [<Fact>]
 let ``Should observe`` () = task {
-    let! events =
-        dummy generateArgs |> Cli.observe CancellationToken.None |> collectObserved
+    let source = dummy generateArgs |> Cli.observe CancellationToken.None
+    let! events = collectObserved source
 
     assertLifecycle events
 }
@@ -289,8 +288,8 @@ let ``Should observe with graceful cancellation while running`` () = task {
 
 [<Fact>]
 let ``Should listen`` () = task {
-    let! events =
-        dummy generateArgs |> Cli.listen CancellationToken.None |> collectListened
+    let source = dummy generateArgs |> Cli.listen CancellationToken.None
+    let! events = collectListened source
 
     assertLifecycle events
 }
