@@ -1,7 +1,10 @@
 module UnMango.CliWrap.FSharp.Cli
 
+open System.Diagnostics
+open System.Text
 open System.Threading
 open CliWrap
+open CliWrap.Buffered
 open CliWrap.Builders
 
 /// <summary>
@@ -80,6 +83,23 @@ let credsf (f: CredentialsBuilder -> 'a) (command: Command) =
     command.WithCredentials(fun b -> f b |> ignore)
 
 /// <summary>
+/// Creates a copy of this command, setting the resource policy to the specified value.
+/// </summary>
+/// <param name="policy">The resource policy to apply.</param>
+/// <param name="command">The command to apply the resource policy to.</param>
+/// <returns>A copy of the command with the resource policy applied.</returns>
+let resourcePolicy (policy: ResourcePolicy) (command: Command) = command.WithResourcePolicy(policy)
+
+/// <summary>
+/// Creates a copy of this command, setting the resource policy to the value configured by the specified delegate.
+/// </summary>
+/// <param name="f">The function that builds the resource policy with a ResourcePolicyBuilder.</param>
+/// <param name="command">The command to apply the resource policy to.</param>
+/// <returns>A copy of the command with the resource policy applied.</returns>
+let resourcePolicyf (f: ResourcePolicyBuilder -> 'a) (command: Command) =
+    command.WithResourcePolicy(fun b -> f b |> ignore)
+
+/// <summary>
 /// Creates a copy of this command, setting the environment variables to the specified value.
 /// </summary>
 /// <param name="env">A sequence of tuples representing key-value pairs of environment variables.</param>
@@ -104,6 +124,26 @@ let envf (f: EnvironmentVariablesBuilder -> 'a) (command: Command) =
 /// <returns>An <see cref="Async{CommandResult}"/> representing the asynchronous operation.</returns>
 let exec (command: Command) =
     command.ExecuteAsync() |> CommandTask.op_Implicit |> Async.AwaitTask
+
+/// <summary>
+/// Executes the command asynchronously, buffering standard output and standard error in memory.
+/// </summary>
+/// <param name="command">The command to execute.</param>
+/// <returns>An <see cref="Async{BufferedCommandResult}"/> representing the asynchronous operation.</returns>
+let execBuffered (command: Command) =
+    command.ExecuteBufferedAsync() |> CommandTask.op_Implicit |> Async.AwaitTask
+
+/// <summary>
+/// Executes the command asynchronously, buffering standard output and standard error in memory
+/// and decoding both with the specified encoding.
+/// </summary>
+/// <param name="encoding">The encoding used to decode standard output and standard error.</param>
+/// <param name="command">The command to execute.</param>
+/// <returns>An <see cref="Async{BufferedCommandResult}"/> representing the asynchronous operation.</returns>
+let execBufferede (encoding: Encoding) (command: Command) =
+    command.ExecuteBufferedAsync(encoding)
+    |> CommandTask.op_Implicit
+    |> Async.AwaitTask
 
 /// <summary>
 /// Creates a copy of this command, setting the standard input pipe to the specified source.
@@ -182,5 +222,68 @@ module Task =
     /// <remarks><see cref="CommandTask"/> can be <see cref="await"/>ed like a <see cref="Task"/>.</remarks>
     let execf (forceful: CancellationToken) (graceful: CancellationToken) (command: Command) =
         command.ExecuteAsync(forceful, graceful)
+
+    /// <summary>
+    /// Executes the command asynchronously, letting the caller configure the underlying process.
+    /// </summary>
+    /// <param name="configureStartInfo">Configures the <see cref="ProcessStartInfo"/> before the process starts. Pass <c>ignore</c> to skip.</param>
+    /// <param name="configureProcess">Configures the <see cref="Process"/> before it starts. Pass <c>ignore</c> to skip.</param>
+    /// <param name="forceful">The cancellation token to forcefully exit.</param>
+    /// <param name="graceful">The cancellation token to gracefully exit.</param>
+    /// <param name="command">The command to execute.</param>
+    /// <returns>A task representing the execution of the command.</returns>
+    /// <remarks>
+    /// Changes made to the process may break CliWrap's own handling, such as stream redirection.
+    /// <see cref="CommandTask"/> can be <see cref="await"/>ed like a <see cref="Task"/>.
+    /// </remarks>
+    let execp
+        (configureStartInfo: ProcessStartInfo -> unit)
+        (configureProcess: Process -> unit)
+        (forceful: CancellationToken)
+        (graceful: CancellationToken)
+        (command: Command)
+        =
+        command.ExecuteAsync(configureStartInfo, configureProcess, forceful, graceful)
+
+    /// <summary>
+    /// Executes the command asynchronously, buffering standard output and standard error in memory.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <param name="command">The command to execute.</param>
+    /// <returns>A task representing the execution of the command.</returns>
+    /// <remarks><see cref="CommandTask"/> can be <see cref="await"/>ed like a <see cref="Task"/>.</remarks>
+    let execBuffered (cancellationToken: CancellationToken) (command: Command) =
+        command.ExecuteBufferedAsync(cancellationToken)
+
+    /// <summary>
+    /// Executes the command asynchronously, buffering standard output and standard error in memory
+    /// and decoding both with the specified encoding.
+    /// </summary>
+    /// <param name="encoding">The encoding used to decode standard output and standard error.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <param name="command">The command to execute.</param>
+    /// <returns>A task representing the execution of the command.</returns>
+    /// <remarks><see cref="CommandTask"/> can be <see cref="await"/>ed like a <see cref="Task"/>.</remarks>
+    let execBufferede (encoding: Encoding) (cancellationToken: CancellationToken) (command: Command) =
+        command.ExecuteBufferedAsync(encoding, cancellationToken)
+
+    /// <summary>
+    /// Executes the command asynchronously, buffering standard output and standard error in memory.
+    /// </summary>
+    /// <param name="stdoutEncoding">The encoding used to decode standard output.</param>
+    /// <param name="stderrEncoding">The encoding used to decode standard error.</param>
+    /// <param name="forceful">The cancellation token to forcefully exit.</param>
+    /// <param name="graceful">The cancellation token to gracefully exit. Pass <see cref="CancellationToken.None"/> for none.</param>
+    /// <param name="command">The command to execute.</param>
+    /// <returns>A task representing the execution of the command.</returns>
+    /// <remarks><see cref="CommandTask"/> can be <see cref="await"/>ed like a <see cref="Task"/>.</remarks>
+    let execBufferedf
+        (stdoutEncoding: Encoding)
+        (stderrEncoding: Encoding)
+        (forceful: CancellationToken)
+        (graceful: CancellationToken)
+        (command: Command)
+        =
+        command.ExecuteBufferedAsync(stdoutEncoding, stderrEncoding, forceful, graceful)
 
 let toString (command: Command) = command.ToString()
