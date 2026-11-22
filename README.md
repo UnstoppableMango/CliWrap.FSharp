@@ -214,6 +214,26 @@ let main args =
   cmd.ExecuteAsync()
 ```
 
+Each command's standard output is piped into the next command's standard input, in order.
+A leading string, `Stream`, `byte[]`, `ReadOnlyMemory<byte>` or `PipeSource` feeds the first command.
+A single trailing `PipeTarget`, `Stream`, `StringBuilder` or line delegate takes the last command's standard output,
+and a trailing pair of targets takes its standard output and standard error, in that order.
+
+```fsharp
+let main args =
+  let stdout = StringBuilder()
+  let stderr = StringBuilder()
+
+  let cmd = pipeline {
+    "Hello world"
+    Cli.wrap "cat"
+    Cli.wrap "head" |> Cli.args [ "-c"; "5" ]
+    stdout, stderr
+  }
+
+  cmd.ExecuteAsync()
+```
+
 Limited support for piping is available with `|>>`.
 
 ```fsharp

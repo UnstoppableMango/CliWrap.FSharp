@@ -26,6 +26,7 @@
 		<Compile Include="Conformance/PushEventStreamSpecs.fs" />
 		<Compile Include="CliTests.fs" />
 		<Compile Include="CommandBuilderTests.fs"/>
+		<Compile Include="PipeBuilderTests.fs" />
 		<Compile Include="EventStreamTests.fs" />
 		<None Include="packages.lock.json" />
 	</ItemGroup>
