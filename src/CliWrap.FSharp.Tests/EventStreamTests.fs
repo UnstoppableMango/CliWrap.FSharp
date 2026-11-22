@@ -113,7 +113,7 @@ let private exitedIn events =
 let private lines = 50
 
 let private generateArgs =
-    [ "generate text"; "--target"; "all"; "--lines"; string lines ]
+    [ "generate text"; "--target"; "all"; "--lines"; $"%d{lines}" ]
 
 let private sleepArgs = [ "sleep"; "00:00:20" ]
 let private nonAscii = "héllo wörld ✓"
