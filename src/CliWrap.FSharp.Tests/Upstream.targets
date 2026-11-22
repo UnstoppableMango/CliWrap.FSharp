@@ -17,7 +17,7 @@
 		<Error Condition="!Exists('$(UpstreamVersionStamp)')"
 		       Text="The upstream CliWrap source is missing from $(UpstreamDir). Run 'make vendor' to copy it from the cliwrap flake input." />
 		<Error Condition="Exists('$(UpstreamVersionStamp)') And '$(UpstreamVersion)' != '$(WrappedCliWrapVersion)'"
-		       Text="The upstream CliWrap source in $(UpstreamDir) is $(UpstreamVersion), but the library wraps CliWrap $(WrappedCliWrapVersion). Run 'make vendor' to update it." />
+		       Text="The upstream CliWrap source in $(UpstreamDir) is $(UpstreamVersion), but the library wraps CliWrap $(WrappedCliWrapVersion). Set the cliwrap tag in flake.nix to $(WrappedCliWrapVersion) and run 'make vendor'." />
 	</Target>
 
 </Project>

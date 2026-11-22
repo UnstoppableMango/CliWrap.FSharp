@@ -134,7 +134,7 @@ Nothing from upstream is checked in or shipped.
 See [ADR 0002](docs/adr/0002-upstream-source-from-flake-input.md).
 
 When CliWrap is bumped, the `cliwrap` tag in `flake.nix` must match the new `CliWrap` PackageReference.
-Renovate bumps both in one PR, and `make vendor` fails if they differ.
+Renovate bumps both in one PR, and the build fails if they differ.
 
 ## Releases
 
