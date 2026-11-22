@@ -17,6 +17,10 @@
 		<Compile Include="Conformance/EnvironmentSpecs.fs" />
 		<Compile Include="Conformance/CredentialsSpecs.fs" />
 		<Compile Include="Conformance/PathResolutionSpecs.fs" />
+		<Compile Include="Conformance/BufferingSpecs.fs" />
+		<Compile Include="Conformance/ValidationSpecs.fs" />
+		<Compile Include="Conformance/LineBreakSpecs.fs" />
+		<Compile Include="Conformance/ResourcePolicySpecs.fs" />
 		<Compile Include="CliTests.fs" />
 		<Compile Include="CommandBuilderTests.fs"/>
 		<None Include="packages.lock.json" />
