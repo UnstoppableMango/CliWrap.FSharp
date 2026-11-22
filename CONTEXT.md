@@ -51,11 +51,7 @@ _Avoid_: conformance test, parity test
 Upstream's small command-line program that Conformance specs and Equivalence checks run, built from the Upstream source of the Baseline release.
 _Avoid_: dummy CLI, test CLI, fake, reference program
 
-### Running a command
-
-**Execution**:
-Running a command once and getting a single result when it finishes (plain, buffered, or with an event stream).
-_Avoid_: Run, invoke
+### Event streams
 
 **Event stream**:
 Running a command so that its lifecycle arrives as a sequence of command events, rather than a single result.

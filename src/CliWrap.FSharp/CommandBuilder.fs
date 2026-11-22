@@ -47,16 +47,20 @@ type CommandBuilder(target: string) =
     [<CustomOperation("exec")>]
     member _.Exec(command: Command, cancellationToken) = command.ExecuteAsync(cancellationToken)
 
+    /// <summary>Executes the command as a pull-based event stream.</summary>
     [<CustomOperation("listen")>]
     member _.Listen(command: Command) = command.ListenAsync()
 
+    /// <summary>Executes the command as a pull-based event stream. Cancelling the token forcefully terminates the process.</summary>
     [<CustomOperation("listen")>]
     member _.Listen(command: Command, cancellationToken: CancellationToken) = Cli.listen cancellationToken command
 
+    /// <summary>Executes the command as a pull-based event stream, decoding standard output and standard error with the specified encoding.</summary>
     [<CustomOperation("listen")>]
     member _.Listen(command: Command, encoding: Encoding, cancellationToken: CancellationToken) =
         Cli.listene encoding cancellationToken command
 
+    /// <summary>Executes the command as a pull-based event stream, with separate encodings and forceful and graceful cancellation.</summary>
     [<CustomOperation("listen")>]
     member _.Listen
         (
@@ -68,16 +72,20 @@ type CommandBuilder(target: string) =
         ) =
         command.ListenAsync(standardOutputEncoding, standardErrorEncoding, forceful, graceful)
 
+    /// <summary>Executes the command as a push-based event stream.</summary>
     [<CustomOperation("observe")>]
     member _.Observe(command: Command) = command.Observe()
 
+    /// <summary>Executes the command as a push-based event stream. Cancelling the token forcefully terminates the process.</summary>
     [<CustomOperation("observe")>]
     member _.Observe(command: Command, cancellationToken: CancellationToken) = Cli.observe cancellationToken command
 
+    /// <summary>Executes the command as a push-based event stream, decoding standard output and standard error with the specified encoding.</summary>
     [<CustomOperation("observe")>]
     member _.Observe(command: Command, encoding: Encoding, cancellationToken: CancellationToken) =
         Cli.observee encoding cancellationToken command
 
+    /// <summary>Executes the command as a push-based event stream, with separate encodings and forceful and graceful cancellation.</summary>
     [<CustomOperation("observe")>]
     member _.Observe
         (
