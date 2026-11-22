@@ -165,7 +165,7 @@ let ``I can execute a command and pipe the stdin from another command with a tra
 [<Fact(Timeout = 15000)>]
 let ``I can execute a command and pipe the stdin from a chain of commands`` () = task {
     // Known gap: `pipeline` drops the middle stages of three or more, so this returns 11, not 5.
-    Assert.Skip("The pipeline builder drops the middle commands of a chain of three or more.")
+    Assert.Skip("The pipeline builder drops the middle commands of a chain of three or more: #291")
 
     let cmd = pipeline {
         "Hello world"
