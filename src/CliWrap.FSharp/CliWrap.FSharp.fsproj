@@ -27,6 +27,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="CliWrap" Version="3.10.5" />
+		<!-- The lowest FSharp.Core consumers need. Renovate leaves this one alone; raise it on purpose. -->
+		<PackageReference Include="FSharp.Core" Version="6.0.0" />
 		<PackageReference Include="MinVer" Version="8.0.0" PrivateAssets="all"/>
 	</ItemGroup>
 

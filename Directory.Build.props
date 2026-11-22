@@ -34,8 +34,13 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	</PropertyGroup>
 
-	<!-- 1182: unused bindings, 3390: malformed XML docs -->
 	<PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.fsproj'">
+		<!-- 1182: unused bindings, 3390: malformed XML docs -->
 		<OtherFlags>$(OtherFlags) --warnon:1182 --warnon:3390</OtherFlags>
+		<!--
+			The implicit FSharp.Core reference follows the installed SDK. That breaks locked restores when the SDK
+			rolls forward, and makes the package demand the newest FSharp.Core. Each F# project references it explicitly.
+		-->
+		<DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
 	</PropertyGroup>
 </Project>

@@ -16,13 +16,29 @@
 	],
 	"packageRules": [
 		{
-			"description": "CliWrap is the only runtime dependency, so its bumps cut a release. The cliwrap flake input must match the package version, so both are bumped together.",
+			"description": "CliWrap bumps cut a release. The cliwrap flake input must match the package version, so both are bumped together.",
 			"groupName": "CliWrap",
 			"matchPackageNames": [
 				"CliWrap",
 				"Tyrrrz/CliWrap"
 			],
 			"semanticCommitType": "fix"
+		},
+		{
+			"description": "The library's FSharp.Core reference is the minimum version consumers need, so only a maintainer raises it. The tests and examples track the latest.",
+			"matchPackageNames": [
+				"FSharp.Core"
+			],
+			"matchFileNames": [
+				"src/CliWrap.FSharp/CliWrap.FSharp.fsproj"
+			],
+			"enabled": false
+		},
+		{
+			"groupName": "FSharp.Core",
+			"matchPackageNames": [
+				"FSharp.Core"
+			]
 		},
 		{
 			"groupName": "minver",

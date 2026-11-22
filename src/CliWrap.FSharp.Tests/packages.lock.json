@@ -174,7 +174,7 @@
         "type": "Project",
         "dependencies": {
           "CliWrap": "[3.10.5, )",
-          "FSharp.Core": "[11.0.101, )"
+          "FSharp.Core": "[6.0.0, )"
         }
       }
     }
