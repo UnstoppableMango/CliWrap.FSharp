@@ -89,8 +89,8 @@ Tests live in `src/CliWrap.FSharp.Tests/` and use:
 - **xUnit** `[<Fact>]` for unit tests and **FsCheck** `[<Property>]` for property tests.
 - Descriptive backtick names, such as ``` ``Should configure arguments`` ```.
 - Arrange, act, assert, with clear names like `expected` and `actual`.
-- Real implementations over mocks. For tests that run a process, use upstream's Dummy
-  program (`Dummy.Program.FilePath`), built from `vendor/CliWrap/CliWrap.Tests.Dummy`.
+- Real implementations over mocks.
+  For tests that run a process, use upstream's Dummy program (`Dummy.Program.FilePath`), built from `vendor/CliWrap/CliWrap.Tests.Dummy`.
 
 Coverage is collected in CI and reported to Codecov. Aim for meaningful tests of the
 public API and its edge cases rather than a coverage number.
@@ -127,16 +127,14 @@ commit bumps the patch version and cuts a release.
 
 ## Upstream CliWrap source
 
-Tests run upstream CliWrap's Dummy program, built from upstream's source at the same
-release as the CliWrap package the library wraps. That source comes from the `cliwrap`
-flake input in `flake.nix`, and `make vendor` copies it into the gitignored
-`vendor/CliWrap`. `make build` and `make test` do this for you; plain `dotnet` commands
-fail with a reminder when it is missing or out of date. Nothing from upstream is checked
-in or shipped. See [ADR 0002](docs/adr/0002-upstream-source-from-flake-input.md).
+Tests run upstream CliWrap's Dummy program, built from upstream's source at the same release as the CliWrap package the library wraps.
+That source comes from the `cliwrap` flake input in `flake.nix`, and `make vendor` copies it into the gitignored `vendor/CliWrap`.
+`make build` and `make test` do this for you; plain `dotnet` commands fail with a reminder when it is missing or out of date.
+Nothing from upstream is checked in or shipped.
+See [ADR 0002](docs/adr/0002-upstream-source-from-flake-input.md).
 
-When CliWrap is bumped, the `cliwrap` tag in `flake.nix` must match the new
-`CliWrap` PackageReference. Renovate bumps both in one PR, and `make vendor` fails if
-they differ.
+When CliWrap is bumped, the `cliwrap` tag in `flake.nix` must match the new `CliWrap` PackageReference.
+Renovate bumps both in one PR, and `make vendor` fails if they differ.
 
 ## Releases
 

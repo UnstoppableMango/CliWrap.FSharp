@@ -1,8 +1,5 @@
 <Project>
 
-	<!-- Upstream CliWrap's Dummy program, copied from the cliwrap flake input by `make vendor`.
-	     See docs/adr/0002-upstream-source-from-flake-input.md -->
-
 	<PropertyGroup>
 		<UpstreamDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', '..', '..', 'vendor', 'CliWrap'))</UpstreamDir>
 		<UpstreamDummyProject>$(UpstreamDir)CliWrap.Tests.Dummy/CliWrap.Tests.Dummy.csproj</UpstreamDummyProject>
@@ -12,11 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- It builds with upstream's own props, which don't bypass CSharpier like ours do. -->
+		<!-- Upstream's props don't bypass CSharpier. -->
 		<ProjectReference Include="$(UpstreamDummyProject)" AdditionalProperties="CSharpier_Bypass=true" />
 	</ItemGroup>
 
-	<!-- Fail early, with a fix, when the upstream source is missing or doesn't match the wrapped CliWrap. -->
 	<Target Name="CheckUpstreamSource" BeforeTargets="_GenerateRestoreGraph;CollectPackageReferences;ResolveProjectReferences">
 		<Error Condition="!Exists('$(UpstreamVersionStamp)')"
 		       Text="The upstream CliWrap source is missing from $(UpstreamDir). Run 'make vendor' to copy it from the cliwrap flake input." />

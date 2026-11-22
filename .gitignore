@@ -20,5 +20,5 @@ obj/
 # User Specific
 *.user
 
-# Upstream CliWrap source, copied from the flake input by `make vendor`
+# Written by `make vendor`
 /vendor/

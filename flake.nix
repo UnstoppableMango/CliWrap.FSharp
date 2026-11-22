@@ -6,8 +6,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:UnstoppableMango/nix-systems";
 
-    # Upstream CliWrap source for the Dummy program. Keep the tag equal to the
-    # CliWrap PackageReference in src/CliWrap.FSharp/CliWrap.FSharp.fsproj.
+    # Keep the tag equal to the CliWrap PackageReference in src/CliWrap.FSharp/CliWrap.FSharp.fsproj.
     cliwrap = {
       url = "github:Tyrrrz/CliWrap/3.10.5";
       flake = false;

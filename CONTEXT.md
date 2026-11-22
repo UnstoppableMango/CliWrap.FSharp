@@ -11,7 +11,9 @@ The Tyrrrz/CliWrap C# library that CliWrap.FSharp wraps.
 _Avoid_: vendor, core, submodule
 
 **Baseline release**:
-The latest tagged Upstream release that CliWrap.FSharp targets for Parity (currently 3.10.5). It is also the version of the CliWrap package the library depends on. Untagged Upstream work does not count.
+The latest tagged Upstream release that CliWrap.FSharp targets for Parity (currently 3.10.5).
+It is also the version of the CliWrap package the library depends on.
+Untagged Upstream work does not count.
 _Avoid_: prime, latest
 
 **F# surface**:
@@ -19,14 +21,17 @@ The public API this library adds on top of Upstream: the Function layer and the 
 _Avoid_: bindings, F# API layer
 
 **Function layer**:
-The pipe-first functions in the `Cli` and `Pipes` modules. This layer alone must reach Parity.
+The pipe-first functions in the `Cli` and `Pipes` modules.
+This layer alone must reach Parity.
 _Avoid_: core API
 
 **Builders**:
-The `command { }` and `pipeline { }` computation expressions. They cover common paths only, so Parity does not apply to them.
+The `command { }` and `pipeline { }` computation expressions.
+They cover common paths only, so Parity does not apply to them.
 
 **Parity**:
-Every public member of the Baseline release can be reached idiomatically from the F# surface. Parity is about API surface; matching behavior is Conformance.
+Every public member of the Baseline release can be reached idiomatically from the F# surface.
+Parity is about API surface; matching behavior is Conformance.
 _Avoid_: coverage, feature-complete
 
 ### Testing
