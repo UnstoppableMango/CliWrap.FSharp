@@ -177,6 +177,11 @@ Trimming is supported, but FSharp.Core still has some work to do before full AOT
 
 <https://github.com/dotnet/fsharp/issues/13398>
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test, and submit changes.
+To report a security vulnerability, follow [SECURITY.md](SECURITY.md) instead of opening an issue.
+
 ## Inspirations
 
 The idea to abuse F# computation expressions was inspired by [Akkling.Hocon](https://github.com/Horusiath/Akkling/tree/master/src/Akkling.Hocon) and [FsHttp](https://github.com/fsprojects/FsHttp).
