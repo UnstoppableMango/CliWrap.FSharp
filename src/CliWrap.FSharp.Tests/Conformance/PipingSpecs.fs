@@ -34,7 +34,7 @@ let private assertThrowsContaining (message: string) (run: unit -> Task) = task 
 /// A temp file path that is deleted, if it exists, when the result is disposed.
 type private TempFile() =
     let path =
-        Path.Combine(Path.GetTempPath(), $"CliWrap.FSharp.Tests-{Guid.NewGuid()}.tmp")
+        Path.Combine(Path.GetTempPath(), $"CliWrap.FSharp.Tests-%O{Guid.NewGuid()}.tmp")
 
     member _.Path = path
 

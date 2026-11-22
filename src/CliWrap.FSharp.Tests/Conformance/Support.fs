@@ -43,7 +43,7 @@ let tempEnvironmentVariable (name: string) (value: string) =
 
 /// Appends a directory to PATH until the result is disposed.
 let extendPath (path: string) =
-    tempEnvironmentVariable "PATH" (Environment.GetEnvironmentVariable("PATH") + string Path.PathSeparator + path)
+    tempEnvironmentVariable "PATH" (Environment.GetEnvironmentVariable("PATH") + $"%c{Path.PathSeparator}" + path)
 
 /// A directory under the system temp folder that is deleted when the result is disposed.
 type TempDirectory() =
